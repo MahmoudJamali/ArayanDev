@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - ArayanDev</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/ArayanDev.styles.css" asp-append-version="true" />
+</head>
+<body>
+	<header>
+		<ul class="navbar-nav ms-auto">
+			<li id="auth-links" class="nav-item">
+				<a class="nav-link" href="/auth/login">ورود</a>
+				<a class="nav-link" href="/auth/register">ثبت‌نام</a>
+			</li>
+			<li id="user-menu" class="nav-item dropdown d-none">
+				<a class="nav-link dropdown-toggle text-success" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+					👤 <span id="user-fullname"></span>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+					<li><a class="dropdown-item" href="/user/dashboard">داشبورد</a></li>
+					<li><a class="dropdown-item" href="#" onclick="logout()">خروج</a></li>
+				</ul>
+			</li>
+		</ul>
+	</header>
+	<div class="container">
+		<main role="main" class="pb-3">
+			@RenderBody()
+		</main>
+	</div>
+
+	<footer class="border-top footer text-muted">
+		<div class="container">
+			&copy; 2025 - ArayanDev - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+		</div>
+	</footer>
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+	<environment include="Development">
+		<script src="~/lib/jquery/dist/jquery.min.js"></script>
+		<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+		<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	</environment>
+
+	<script>
+		const token = localStorage.getItem("accessToken");
+		if (token) {
+			try {
+				const payload = JSON.parse(atob(token.split('.')[1]));
+				const fullname = payload["fullname"] || payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+				if (fullname) {
+					document.getElementById("auth-links").classList.add("d-none");
+					document.getElementById("user-menu").classList.remove("d-none");
+					document.getElementById("user-fullname").innerText = decodeURIComponent(fullname);
+				}
+			} catch (e) {
+				console.warn("توکن نامعتبر است.");
+			}
+		}
+
+		function logout() {
+			localStorage.removeItem("accessToken");
+			location.href = "/auth/login";
+		}
+	</script>
+	<script>
+		function logout() {
+			localStorage.removeItem("accessToken");
+
+			// نمایش دوباره دکمه‌های ورود و ثبت‌نام
+			document.getElementById("auth-links")?.classList.remove("d-none");
+			document.getElementById("user-menu")?.classList.add("d-none");
+			window.location.href = "/";
+
+
+		}
+	</script>
+</body>
+</html>

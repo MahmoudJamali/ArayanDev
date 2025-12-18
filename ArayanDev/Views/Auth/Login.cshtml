@@ -1,0 +1,39 @@
+﻿@model ArayanDev.Business.Handlers.Users.Commands.UserLoginCommand
+@{
+    ViewData["Title"] = "ورود به حساب کاربری";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form id="login-form">
+    <input type="email" name="email" placeholder="ایمیل" required />
+    <input type="password" name="password" placeholder="رمز عبور" required />
+    <button type="submit">ورود</button>
+</form>
+
+<script>
+    document.getElementById("login-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const command = {
+            email: formData.get("email"),
+            password: formData.get("password")
+        };
+
+        const response = await fetch("/auth/api-login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(command)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            localStorage.setItem("accessToken", result.accessToken);
+            localStorage.setItem("refreshToken", result.refreshToken);
+            window.location.href = "/";
+        } else {
+            alert("ورود ناموفق بود.");
+        }
+    });
+</script>

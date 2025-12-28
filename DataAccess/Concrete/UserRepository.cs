@@ -18,7 +18,7 @@ namespace DataAccess.Concrete
         public async Task<User?> GetByEmailAsync(string email)
         {
             return await _context.Set<User>()
-                .Include(u => u.Role)     // 👈 این خط اضافه شد
+                .Include(u => u.Role)     
                 .Include(u => u.Claims)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }

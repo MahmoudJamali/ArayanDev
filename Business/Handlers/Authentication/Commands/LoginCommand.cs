@@ -7,50 +7,32 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Business.Handlers.Authentication.Commands
 {
-    public class LoginCommand : IRequest
+    public class LoginCommand : IRequest<bool>
     {
         public string PhoneNumber { get; set; } = null!;
+        public string Otp { get; set; } = null!;
     }
 
-    public class LoginCommandHandler : IRequestHandler<LoginCommand>
+    public class LoginCommandHandler : IRequestHandler<LoginCommand, bool>
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _http;
 
-        public LoginCommandHandler(IUserRepository userRepository, IHttpContextAccessor http)
+        public LoginCommandHandler(IAuthService authService, IHttpContextAccessor http)
         {
-            _userRepository = userRepository;
+            _authService = authService;
             _http = http;
         }
 
-        public async Task<Unit> Handle(LoginCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByPhoneAsync(request.PhoneNumber);
-
-            if (user == null)
-                throw new Exception("کاربر یافت نشد.");
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-                new Claim(ClaimTypes.Role, user.Role.Name)
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await _http.HttpContext!.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal,
-                new AuthenticationProperties
-                {
-                    IsPersistent = true,
-                    ExpiresUtc = DateTime.UtcNow.AddHours(12)
-                });
-
-            return Unit.Value;
+            return await _authService.LoginWithOtpAsync(
+                request.PhoneNumber,
+                request.Otp,
+                _http.HttpContext!
+            );
         }
     }
+
 }
 

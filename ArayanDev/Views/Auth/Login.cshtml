@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "ورود";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Tahoma, sans-serif;
+        }
+
+        /* کارت لاگین */
+        .login-card {
+            width: 360px;
+            padding: 45px 35px; /* ارتفاع حدود 25٪ بیشتر */
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(106,17,203,0.15), rgba(37,117,252,0.25), rgba(106,17,203,0.35) );
+            box-shadow: 0 15px 35px rgba(37,117,252,.25), inset 0 0 30px rgba(255,255,255,.35);
+        }
+
+            /* تیتر */
+            .login-card h3 {
+                text-align: center;
+                margin-bottom: 30px;
+                color: #3a0ca3;
+            }
+
+        /* اینپوت شماره */
+        .phone-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background: #ffffff;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+        }
+
+            .phone-input:focus {
+                border-color: #6a11cb;
+                box-shadow: 0 0 0 3px rgba(106,17,203,.15);
+            }
+
+        /* دکمه */
+        .send-btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg,#6a11cb,#2575fc);
+            color: white;
+            font-size: 16px;
+            transition: .3s;
+        }
+
+            .send-btn:hover {
+                opacity: .9;
+                cursor: pointer;
+            }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <h3>ورود به حساب</h3>
+
+        <form asp-action="SendOtp" method="post">
+
+            <input id="phone"
+                   class="phone-input"
+                   type="text"
+                   name="phoneNumber"
+                   placeholder="شماره موبایل (مثلاً 09123456789)"
+                   maxlength="11"
+                   required />
+
+            <button class="send-btn" type="submit">
+                ارسال کد تأیید
+            </button>
+
+        </form>
+
+    </div>
+
+    <script>
+        const phoneInput = document.getElementById("phone");
+
+        phoneInput.addEventListener("input", function () {
+
+            // فقط عدد
+            let v = this.value.replace(/[^0-9]/g, "");
+
+            // حتماً با 0 شروع شود
+            if (v.length > 0 && v[0] !== "0") {
+                v = "0";
+            }
+
+            // حداکثر 11 رقم
+            if (v.length > 11) {
+                v = v.slice(0, 11);
+            }
+
+            this.value = v;
+        });
+
+        // جلوگیری از ارسال فرم اگر دقیقاً 11 رقم نباشد
+        document.querySelector("form").addEventListener("submit", function (e) {
+            if (phoneInput.value.length !== 11) {
+                alert("شماره موبایل باید 11 رقمی و با 0 شروع شود");
+                e.preventDefault();
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -3,9 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using Business.Extentions;
 using FluentValidation.AspNetCore;
 
-using FluentValidation;
 using DataAccess.Concrete.Contexts;
-
+using Business.Services;
+using MediatR;
+using Business.Handlers.Authentication.Commands;
+using DataAccess.Abstract;
+using DataAccess.Concrete.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -13,27 +16,27 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<IOtpService, OtpService>();
-
+// MediatR registration
+builder.Services.AddCustomMediatR();
 builder.Services.AddControllersWithViews();
-//builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddAuthentication("MyCookieAuth")
-    .AddCookie("MyCookieAuth", options =>
-    {
-        options.LoginPath = "/Auth/Login";
-        options.LogoutPath = "/Auth/Logout";
-        options.AccessDeniedPath = "/Auth/AccessDenied";
-        options.ExpireTimeSpan = TimeSpan.FromDays(7); // مدت اعتبار کوکی
-        options.SlidingExpiration = true; // تمدید خودکار
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SameSite = SameSiteMode.Strict;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    });
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "MyCookieAuth";
+    options.DefaultSignInScheme = "MyCookieAuth";
+    options.DefaultChallengeScheme = "MyCookieAuth";
+})
+.AddCookie("MyCookieAuth", options =>
+{
+    options.LoginPath = "/Auth/Login";
+    options.AccessDeniedPath = "/Auth/Login";
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,7 +54,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

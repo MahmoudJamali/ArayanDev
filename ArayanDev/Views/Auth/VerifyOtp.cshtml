@@ -1,0 +1,170 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "تأیید کد";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Tahoma, sans-serif;
+        }
+
+        /* کارت OTP */
+        .verify-card {
+            width: 360px;
+            padding: 45px 35px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, rgba(106,17,203,0.15), rgba(37,117,252,0.25), rgba(106,17,203,0.30) );
+            box-shadow: 0 15px 35px rgba(37,117,252,.25), inset 0 0 30px rgba(255,255,255,.35);
+            text-align: center;
+        }
+
+            /* تیتر */
+            .verify-card h3 {
+                margin-bottom: 10px;
+                color: #3a0ca3;
+            }
+
+        .phone-label {
+            margin-bottom: 25px;
+            font-size: 14px;
+            opacity: .8;
+        }
+
+        /* ورودی OTP */
+        .otp-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            background: #ffffff;
+            font-size: 20px;
+            text-align: center;
+            letter-spacing: 8px;
+            outline: none;
+        }
+
+            .otp-input:focus {
+                border-color: #2575fc;
+                box-shadow: 0 0 0 3px rgba(37,117,252,.2);
+            }
+
+        /* دکمه‌ها */
+        .action-btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(45deg,#6a11cb,#2575fc);
+            color: white;
+            font-size: 16px;
+            transition: .3s;
+        }
+
+            .action-btn:hover {
+                opacity: .9;
+                cursor: pointer;
+            }
+
+        .resend-btn {
+            margin-top: 12px;
+            padding: 10px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #2575fc;
+            background: white;
+            color: #2575fc;
+        }
+
+            .resend-btn:disabled {
+                opacity: .4;
+                border-color: gray;
+                color: gray;
+            }
+
+        .timer {
+            margin-top: 15px;
+            font-size: 14px;
+            opacity: .75;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="verify-card">
+
+        <h3>تأیید کد</h3>
+        <div class="phone-label">کد ارسال شده به شماره <br /> <strong>@Model</strong></div>
+
+        <form asp-action="VerifyOtp" method="post">
+
+            <input type="hidden" name="phoneNumber" value="@Model" />
+
+            <input id="otpBox"
+                   class="otp-input"
+                   type="text"
+                   name="otpCode"
+                   maxlength="6"
+                   placeholder="••••••"
+                   required />
+
+            <button type="submit" class="action-btn">تأیید</button>
+
+        </form>
+
+        <div class="timer">
+            زمان باقی‌مانده: <span id="time">120</span> ثانیه
+        </div>
+
+        <form asp-action="SendOtp" method="post">
+            <input type="hidden" name="phoneNumber" value="@Model" />
+            <button id="resendBtn" class="resend-btn" disabled>ارسال مجدد کد</button>
+        </form>
+
+    </div>
+
+    <script>
+        // --- کنترل ورودی فقط عدد ---
+        document.getElementById("otpBox").addEventListener("input", function(){
+            this.value = this.value.replace(/[^0-9]/g, "").slice(0,6);
+        });
+
+        // --- تایمر 120 ثانیه ---
+        let time = 120;
+        let timeEl = document.getElementById("time");
+        let resendBtn = document.getElementById("resendBtn");
+
+        let countdown = setInterval(function(){
+            time--;
+            timeEl.innerText = time;
+
+            if(time <= 0){
+                clearInterval(countdown);
+                resendBtn.disabled = false;
+                timeEl.innerText = "0";
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>

@@ -6,28 +6,25 @@ using System.Threading.Tasks;
 
 namespace Entities.Concrete
 {
-    public class User : BaseEntity
+    namespace Entities.Concrete
     {
-        public string Fullname { get; set; }
+        public class User : BaseEntity
+        {
+            public string? Fullname { get; set; }     // Optional
+            public string? Email { get; set; }        // Optional
 
-        public string Email { get; set; }
+            public string PhoneNumber { get; set; } = null!; // Required
 
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
-        public string? PhoneNumber { get; set; }
+            public bool IsActive { get; set; } = true;
+            public bool IsPhoneNumberConfirmed { get; set; } = false;
 
-        public bool IsActive { get; set; } = true;
+            public Guid RoleId { get; set; }
+            public Role Role { get; set; } = null!;
 
-        public Guid RoleId { get; set; }
-        public Role Role { get; set; } = null!;
+            public ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
+        }
 
-
-        public ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
-        public string? VerificationCode { get; set; }
-        public DateTime? VerificationCodeExpireAt { get; set; }
-
-        public bool IsPhoneNumberConfirmed { get; set; } = false;
-        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
+
 }
 

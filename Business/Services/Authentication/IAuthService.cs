@@ -1,17 +1,10 @@
-﻿using Entities.Concrete;
+﻿using DataAccess.Concrete.Contexts;
+using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
-namespace Business.Services.Authentication
+public interface IAuthService
 {
-    public interface IAuthService
-    {
-        Task<User?> LoginAsync(string email, string password);
-        Task RegisterAsync(User user, string password);
-        Task LogoutAsync();
-        Task<string> GenerateJwtTokenAsync(User user);
-        Task<(string accessToken, string refreshToken)> LoginWithTokensAsync(string email, string password);
-        Task<(string accessToken, string refreshToken)> RefreshTokenAsync(string refreshToken);
-
-    }
+    Task<bool> LoginWithOtpAsync(string phoneNumber, string otp, HttpContext http);
+    Task LogoutAsync(HttpContext http);
 }
-
-

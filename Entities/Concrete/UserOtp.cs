@@ -13,7 +13,7 @@ namespace Entities.Concrete
             public Guid UserId { get; set; }
             public User User { get; set; } = null!;
 
-            public string OtpHash { get; set; } = null!;   // store hashed OTP
+            public string OtpCode { get; set; } = null!;
             public DateTime ExpireAt { get; set; }         // expiration time
 
             public int AttemptCount { get; set; } = 0;     // wrong attempts

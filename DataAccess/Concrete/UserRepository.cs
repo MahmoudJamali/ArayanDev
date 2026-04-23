@@ -1,39 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using DataAccess.Abstract.Context;
-using DataAccess.Concrete.EntityFramework;
-using DataAccess.Abstract;
+﻿using DataAccess.Abstract;
 using DataAccess.Concrete.Contexts;
 using Entities.Concrete;
-namespace DataAccess.Concrete
+using Microsoft.EntityFrameworkCore;
+
+namespace DataAccess.Concrete.Repositories
 {
-   public class UserRepository : BaseRepository<User>, IUserRepository
-{
-    public UserRepository(AppDbContext context) : base(context) { }
+    public class UserRepository : IUserRepository
+    {
+        private readonly AppDbContext _context;
+
+        public UserRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<User?> GetByIdAsync(Guid id)
+        {
+            return await _context.Users
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<User?> GetByPhoneAsync(string phoneNumber)
+        {
+            return await _context.Users
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+        }
 
         public async Task<User?> GetByEmailAsync(string email)
         {
-            return await _context.Set<User>()
-                .Include(u => u.Role)     
-                .Include(u => u.Claims)
-                .FirstOrDefaultAsync(u => u.Email == email);
+            return await _context.Users
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x => x.Email == email);
         }
-        public async Task<User?> GetByRefreshTokenAsync(string refreshToken)
+
+        public async Task<bool> ExistsByPhoneAsync(string phoneNumber)
         {
-            return await _context.Set<User>()
-                .Include(u => u.RefreshTokens)
-                .FirstOrDefaultAsync(u => u.RefreshTokens.Any(rt => rt.Token == refreshToken));
+            return await _context.Users
+                .AnyAsync(x => x.PhoneNumber == phoneNumber);
         }
+
+        public async Task AddAsync(User user)
+        {
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateAsync(User user)
         {
-            _context.Set<User>().Update(user);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
     }
 }
-
-

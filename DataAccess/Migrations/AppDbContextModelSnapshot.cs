@@ -22,23 +22,26 @@ namespace DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.Concrete.RefreshToken", b =>
+            modelBuilder.Entity("Entities.Concrete.Entities.Concrete.UserOtp", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("AttemptCount")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("ExpiresAt")
+                    b.Property<DateTime>("ExpireAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Token")
+                    b.Property<string>("OtpCode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RequestIp")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
@@ -48,7 +51,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("UserOtps");
                 });
 
             modelBuilder.Entity("Entities.Concrete.Role", b =>
@@ -73,44 +76,7 @@ namespace DataAccess.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Role");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedDate = new DateTime(2025, 12, 17, 21, 57, 50, 243, DateTimeKind.Utc).AddTicks(341),
-                            Description = "مدیر سیستم",
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedDate = new DateTime(2025, 12, 17, 21, 57, 50, 243, DateTimeKind.Utc).AddTicks(341),
-                            Description = "کاربر عادی",
-                            Name = "User"
-                        },
-                        new
-                        {
-                            Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedDate = new DateTime(2025, 12, 17, 21, 57, 50, 243, DateTimeKind.Utc).AddTicks(341),
-                            Description = "مدیر مجموعه",
-                            Name = "Manager"
-                        },
-                        new
-                        {
-                            Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedDate = new DateTime(2025, 12, 17, 21, 57, 50, 243, DateTimeKind.Utc).AddTicks(341),
-                            Description = "منشی",
-                            Name = "Secretary"
-                        },
-                        new
-                        {
-                            Id = new Guid("55555555-5555-5555-5555-555555555555"),
-                            CreatedDate = new DateTime(2025, 12, 17, 21, 57, 50, 243, DateTimeKind.Utc).AddTicks(341),
-                            Description = "کارمند",
-                            Name = "Employee"
-                        });
+                    b.ToTable("Roles", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Concrete.User", b =>
@@ -123,11 +89,9 @@ namespace DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Fullname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -136,32 +100,18 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsPhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordSalt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("VerificationCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("VerificationCodeExpireAt")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Email")
+                    b.HasIndex("PhoneNumber")
                         .IsUnique();
-
-                    b.HasIndex("PhoneNumber");
 
                     b.HasIndex("RoleId");
 
@@ -195,10 +145,10 @@ namespace DataAccess.Migrations
                     b.ToTable("UserClaims");
                 });
 
-            modelBuilder.Entity("Entities.Concrete.RefreshToken", b =>
+            modelBuilder.Entity("Entities.Concrete.Entities.Concrete.UserOtp", b =>
                 {
                     b.HasOne("Entities.Concrete.User", "User")
-                        .WithMany("RefreshTokens")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -236,8 +186,6 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Entities.Concrete.User", b =>
                 {
                     b.Navigation("Claims");
-
-                    b.Navigation("RefreshTokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,9 +11,9 @@ using DataAccess.Concrete.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Business.Services.Authentication;
+
 using MediatR;
-using ArayanDev.Business.Handlers.Users.Commands;
+
 using System.Reflection;
 
 using DataAccess.Abstract;
@@ -31,19 +31,12 @@ namespace Business.Extentions
 
             // Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IAuthService, AuthService>();
-            services.AddScoped<IPasswordHasher, PasswordHasher>();
+
 
 
             return services;
         }
 
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        {
-            services.AddMediatR(typeof(UserRegisterCommand).GetTypeInfo().Assembly);
-            return services;
-        }
     }
 }
 

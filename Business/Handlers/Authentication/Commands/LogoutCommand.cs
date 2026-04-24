@@ -18,12 +18,10 @@ namespace Business.Handlers.Authentication.Commands
 
         public async Task<Unit> Handle(LogoutCommand request, CancellationToken cancellationToken)
         {
-            await _http.HttpContext!.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme
-            );
-
+            await _http.HttpContext!.SignOutAsync("MyCookieAuth");
             return Unit.Value;
         }
+
     }
 }
 

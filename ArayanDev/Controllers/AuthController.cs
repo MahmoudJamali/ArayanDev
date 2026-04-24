@@ -41,15 +41,20 @@ namespace UI.Controllers
                 return View(model: phoneNumber);
             }
 
-            await _mediator.Send(new LoginCommand { PhoneNumber = phoneNumber });
+            await _mediator.Send(new LoginCommand
+            {
+                PhoneNumber = phoneNumber,
+                Otp = otpCode
+            });
 
             return RedirectToAction("Index", "Home");
         }
 
+
         public async Task<IActionResult> Logout()
         {
             await _mediator.Send(new LogoutCommand());
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

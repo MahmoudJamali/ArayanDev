@@ -325,21 +325,55 @@
                             </nav>
                         </div>
                         <!-- دکمه‌های ورود و ثبت‌نام سمت چپ -->
+                        @{
+                            var name = User.Identity?.Name;
+                            var phone = User.FindFirst("phone_number")?.Value
+                            ?? User.FindFirst(System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
+
+                            var displayName = !string.IsNullOrEmpty(name) ? name : phone;
+                        }
+
                         <div class="col-auto order-3 d-flex align-items-center gap-2">
 
-                            <!-- آیکون و لینک ورود/ثبت‌نام -->
-                            <ul class="d-none d-lg-flex list-unstyled mb-0 align-items-center">
-                                <li class="d-inline-flex align-items-center">
-                                    <i class="far fa-user me-1"></i>
-                                    <a href="contact.html" class="text-decoration-none">ورود / ثبت نام</a>
-                                </li>
-                            </ul>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="dropdown">
+                                    <a class="d-flex align-items-center text-decoration-none dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                        <i class="far fa-user me-1"></i>
+                                        <span>@displayName</span>
+                                    </a>
 
-                            <!-- دکمه موبایل -->
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="/Profile">پروفایل</a>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item text-danger" href="/Auth/Logout">خروج</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <ul class="d-none d-lg-flex list-unstyled mb-0 align-items-center">
+                                    <li class="d-inline-flex align-items-center">
+                                        <i class="far fa-user me-1"></i>
+                                        <a href="/Auth/Login" class="text-decoration-none">ورود / ثبت نام</a>
+                                    </li>
+                                </ul>
+                            }
+
                             <button type="button" class="th-menu-toggle d-block d-lg-none ms-2">
                                 <i class="far fa-bars"></i>
                             </button>
+
                         </div>
+
 
                     </div>
                 </div>

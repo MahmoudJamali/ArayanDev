@@ -12,14 +12,16 @@ namespace DataAccess.Concrete.Contexts
         public DbSet<UserClaim> UserClaims { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserOtp> UserOtps { get; set; }
-
+        public DbSet<UserProfile> UserProfile { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<CourseEnrollment> CourseEnrollment { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             var now = DateTime.UtcNow;
 
-    
+
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.ToTable("Roles");
@@ -59,6 +61,30 @@ namespace DataAccess.Concrete.Contexts
 
                 entity.HasIndex(o => o.UserId);
             });
+            modelBuilder.Entity<CourseEnrollment>()
+    .HasOne(e => e.User)
+    .WithMany(u => u.Enrollments)
+    .HasForeignKey(e => e.UserId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CourseEnrollment>()
+                .HasOne(e => e.Course)
+                .WithMany(c => c.Enrollments)
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CourseEnrollment>()
+                .HasIndex(e => new { e.UserId, e.CourseId })
+                .IsUnique();
+
+
+
+            modelBuilder.Entity<UserProfile>()
+    .HasOne(p => p.User)
+    .WithOne(u => u.Profile)
+    .HasForeignKey<UserProfile>(p => p.UserId)
+    .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

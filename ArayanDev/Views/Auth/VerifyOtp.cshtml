@@ -116,9 +116,13 @@
         <h3>تأیید کد</h3>
         <div class="phone-label">کد ارسال شده به شماره <br /> <strong>@Model</strong></div>
 
-        <form asp-action="VerifyOtp" method="post">
+        <form asp-controller="Auth"
+              asp-action="VerifyOtp"
+              asp-route-returnUrl="@ViewBag.ReturnUrl"
+              method="post">
 
             <input type="hidden" name="phoneNumber" value="@Model" />
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
 
             <input id="otpBox"
                    class="otp-input"
@@ -129,8 +133,8 @@
                    required />
 
             <button type="submit" class="action-btn">تأیید</button>
-
         </form>
+
 
         <div class="timer">
             زمان باقی‌مانده: <span id="time">120</span> ثانیه
@@ -138,6 +142,7 @@
 
         <form asp-action="SendOtp" method="post">
             <input type="hidden" name="phoneNumber" value="@Model" />
+
             <button id="resendBtn" class="resend-btn" disabled>ارسال مجدد کد</button>
         </form>
 

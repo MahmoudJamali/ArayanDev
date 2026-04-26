@@ -1,0 +1,31 @@
+﻿@model CourseDetailsViewModel
+@{
+    // آدرس کامل صفحه جاری برای returnUrl
+    var returnUrl = Url.Action("Details", "Course", new { id = Model.Course.Id });
+}
+
+<div class="container mt-4">
+    <h2>@Model.Course.Title</h2>
+
+    <p class="text-muted">@Model.Course.Description</p>
+
+    <hr />
+
+<div class="mt-4">
+    @if (Model.IsEnrolled)
+    {
+        <button class="btn btn-success btn-lg w-100" disabled>شما ثبت‌نام کرده‌اید</button>
+    }
+    else
+    {
+        <!-- فقط همین یک دکمه کافیست! -->
+        <!-- اگر لاگین نباشد، خودِ [Authorize] او را به Login می‌برد -->
+        <!-- اگر پروفایل نداشته باشد، خودِ [Policy] او را به CompleteProfile می‌برد -->
+        <a class="btn btn-primary btn-lg w-100"
+           href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
+            شرکت در دوره
+        </a>
+    }
+</div>
+
+</div>

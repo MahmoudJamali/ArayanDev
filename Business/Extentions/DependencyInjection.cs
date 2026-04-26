@@ -18,6 +18,7 @@ using System.Reflection;
 
 using DataAccess.Abstract;
 using DataAccess.Concrete.Contexts;
+using DataAccess.Concrete.Repositories;
 
 namespace Business.Extentions
 {
@@ -32,8 +33,10 @@ namespace Business.Extentions
             // Repositories
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
+           services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 
-
+            services.AddScoped<ICourseEnrollmentRepository, CourseEnrollmentRepository>();
+            services.AddScoped<ICourseRepository, CourseRepository>();
             return services;
         }
 

@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Business.Handlers.Courses.Queries
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -131,6 +132,43 @@ Hero Area
 <!--==============================
 About Area
  ==============================-->
+ @model List<CourseListItemDto>
+
+<div class="container mt-4">
+    <h2 class="mb-4">دوره‌های آموزشی</h2>
+
+    <div class="row">
+
+        @foreach (var course in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <h5 class="card-title">@course.Title</h5>
+
+                        <p class="card-text">
+                            @if(course.IsFree)
+                            {
+                                <span class="text-success">رایگان</span>
+                            }
+                            else
+                            {
+                                <span>@course.Price.ToString("N0") تومان</span>
+                            }
+                        </p>
+
+                        <a href="/Course/Details/@course.Id" class="btn btn-primary w-100">
+                            مشاهده جزئیات دوره
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
 
 <div class="space overflow-hidden" id="about-sec">
     <div class="container">

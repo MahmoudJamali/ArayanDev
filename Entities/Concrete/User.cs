@@ -19,8 +19,11 @@ using System.Threading.Tasks;
 
             public Guid RoleId { get; set; }
             public Role Role { get; set; } = null!;
+        public UserProfile? Profile { get; set; }
+        public ICollection<CourseEnrollment> Enrollments { get; set; }
+    = new List<CourseEnrollment>();
+        public ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
 
-            public ICollection<UserClaim> Claims { get; set; } = new List<UserClaim>();
         }
 
     }

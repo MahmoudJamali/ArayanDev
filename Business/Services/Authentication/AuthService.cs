@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using DataAccess.Concrete.Contexts;
 using Microsoft.AspNetCore.Http;
 using Business.Services;
+using Entities.Concrete;
 
 public class AuthService : IAuthService
 {
@@ -31,14 +32,19 @@ public class AuthService : IAuthService
         if (user == null)
             return false;
 
+        // چک واقعی وجود پروفایل در دیتابیس
+        var profileCompleted = await _context.UserProfile
+            .AnyAsync(x => x.UserId == user.Id);
+
         // Claim ها
         var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
-            new Claim(ClaimTypes.Role, user.Role.Name),
-            new Claim("IsPhoneConfirmed", user.IsPhoneNumberConfirmed.ToString())
-        };
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+        new Claim(ClaimTypes.Role, user.Role.Name),
+        new Claim("IsPhoneConfirmed", user.IsPhoneNumberConfirmed.ToString()),
+        new Claim("ProfileCompleted", profileCompleted ? "true" : "false")
+    };
 
         var identity = new ClaimsIdentity(claims, "MyCookieAuth");
         var principal = new ClaimsPrincipal(identity);
@@ -53,6 +59,31 @@ public class AuthService : IAuthService
         await http.SignInAsync("MyCookieAuth", principal, authProps);
 
         return true;
+    }
+
+    public async Task SignInUserAsync(User user, HttpContext http)
+    {
+        var profileCompleted = user.Profile != null;
+
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
+        new Claim(ClaimTypes.Role, user.Role.Name),
+        new Claim("IsPhoneConfirmed", user.IsPhoneNumberConfirmed.ToString()),
+        new Claim("ProfileCompleted", profileCompleted ? "true" : "false")
+    };
+
+        var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+        var principal = new ClaimsPrincipal(identity);
+
+        var authProps = new AuthenticationProperties
+        {
+            IsPersistent = true,
+            ExpiresUtc = DateTime.UtcNow.AddDays(7)
+        };
+
+        await http.SignInAsync("MyCookieAuth", principal, authProps);
     }
 
     public async Task LogoutAsync(HttpContext http)

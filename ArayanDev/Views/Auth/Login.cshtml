@@ -80,8 +80,7 @@
 
         <h3>ورود به حساب</h3>
 
-        <form asp-action="SendOtp" method="post">
-
+        <form asp-action="SendOtp" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
             <input id="phone"
                    class="phone-input"
                    type="text"

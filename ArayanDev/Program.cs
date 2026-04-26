@@ -14,12 +14,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddScoped<IOtpService, OtpService>();
 // MediatR registration
 builder.Services.AddCustomMediatR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddFluentValidationAutoValidation();
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "MyCookieAuth";
@@ -28,10 +30,18 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie("MyCookieAuth", options =>
 {
-    options.LoginPath = "/Auth/Login";
-    options.AccessDeniedPath = "/Auth/Login";
+    options.LoginPath = "/Auth/Login";             // وقتی لاگین نیست
+    options.AccessDeniedPath = "/Auth/CompleteProfile"; // وقتی لاگین هست ولی پروفایل ناقص است
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
 });
+
+builder.Services.AddAuthorization(options =>
+{
+    // پالیسی: فقط زمانی اجرا شود که Claim پروفایل کامل باشد
+    options.AddPolicy("CompleteProfile", policy =>
+        policy.RequireClaim("ProfileCompleted", "true"));
+});
+
 
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();

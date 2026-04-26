@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using ArayanDev.Models;
+using Business.Handlers.Courses.Queries;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArayanDev.Controllers
@@ -7,26 +9,17 @@ namespace ArayanDev.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMediator _mediator;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMediator mediator)
         {
             _logger = logger;
+            _mediator = mediator;
         }
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var courses = await _mediator.Send(new GetCoursesQuery());
+            return View(courses);
         }
     }
 }

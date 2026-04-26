@@ -1,0 +1,62 @@
+﻿@model Entities.Concrete.UserProfile
+
+@{
+    ViewData["Title"] = "تکمیل پروفایل";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+
+    <h2 class="mb-4 text-center">تکمیل پروفایل کاربری</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <form asp-controller="Auth"
+                  asp-action="CompleteProfile"
+                  asp-route-returnUrl="@ViewBag.ReturnUrl"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <!-- City -->
+                <div class="mb-3">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+
+                <!-- Age -->
+                <div class="mb-3">
+                    <label asp-for="Age" class="form-label"></label>
+                    <input asp-for="Age" type="number" class="form-control" />
+                    <span asp-validation-for="Age" class="text-danger"></span>
+                </div>
+
+                <!-- EducationDegree -->
+                <div class="mb-3">
+                    <label asp-for="EducationDegree" class="form-label"></label>
+                    <input asp-for="EducationDegree" class="form-control" />
+                    <span asp-validation-for="EducationDegree" class="text-danger"></span>
+                </div>
+
+                <!-- Major -->
+                <div class="mb-3">
+                    <label asp-for="Major" class="form-label"></label>
+                    <input asp-for="Major" class="form-control" />
+                    <span asp-validation-for="Major" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mt-3">
+                    ذخیره پروفایل
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

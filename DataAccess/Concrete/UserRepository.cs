@@ -52,5 +52,14 @@ namespace DataAccess.Concrete.Repositories
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<User> GetByIdWithRoleAndProfileAsync(Guid userId)
+        {
+            return await _context.Users
+                .Include(x => x.Role)
+                .Include(x => x.Profile)
+                .FirstAsync(x => x.Id == userId);
+        }
+
     }
 }

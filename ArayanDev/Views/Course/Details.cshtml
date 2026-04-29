@@ -1,31 +1,140 @@
-﻿@model CourseDetailsViewModel
-@{
-    // آدرس کامل صفحه جاری برای returnUrl
-    var returnUrl = Url.Action("Details", "Course", new { id = Model.Course.Id });
-}
-
-<div class="container mt-4">
-    <h2>@Model.Course.Title</h2>
-
-    <p class="text-muted">@Model.Course.Description</p>
-
-    <hr />
-
-<div class="mt-4">
-    @if (Model.IsEnrolled)
-    {
-        <button class="btn btn-success btn-lg w-100" disabled>شما ثبت‌نام کرده‌اید</button>
+﻿<style>
+    .course-content {
+        direction: rtl;
+        text-align: right;
+        line-height: 2;
+        font-size: 15px;
+        color: #444;
     }
-    else
-    {
-        <!-- فقط همین یک دکمه کافیست! -->
-        <!-- اگر لاگین نباشد، خودِ [Authorize] او را به Login می‌برد -->
-        <!-- اگر پروفایل نداشته باشد، خودِ [Policy] او را به CompleteProfile می‌برد -->
-        <a class="btn btn-primary btn-lg w-100"
-           href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
-            شرکت در دوره
-        </a>
+
+    .course-content p {
+        margin-bottom: 18px;
     }
+
+    .course-content ul {
+        padding-right: 20px;
+        margin-bottom: 20px;
+    }
+
+    .course-content li {
+        margin-bottom: 8px;
+    }
+
+    .section-title {
+        font-weight: 800;
+        color: #6f42c1; /* بنفش حرفه‌ای */
+        margin-bottom: 10px;
+        display: block;
+        font-size: 17px;
+    }
+
+    .highlight-box {
+        background: #f8f6ff;
+        border-right: 4px solid #6f42c1;
+        padding: 15px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+</style>
+
+
+
+
+@model CourseDetailsViewModel
+
+<div class="container my-5 text-end" dir="rtl">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-md-10">
+
+            <div class="card shadow-lg">
+
+                <!-- تصویر -->
+                <img src="/assets/img/course/course2.jpg" 
+                     class="card-img-top" 
+                     alt="@Model.Course.Title">
+
+                <div class="card-body">
+
+                    <!-- عنوان -->
+                    <h3 class="fw-bold text-center mb-4">
+                        @Model.Course.Title
+                    </h3>
+
+                    <!-- توضیحات -->
+                    <div class="course-content">
+
+    <p>
+        در این دوره با فراگیری آموزش‌های لازم، قادر به طراحی وب‌سایت و اپلیکیشن در پلتفرم Asp.Net خواهید شد.
+        برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
+    </p>
+
+    <ul>
+        <li>زبان برنامه‌نویسی پیشرفته #C</li>
+        <li>مفاهیم داده و SQL</li>
+        <li>مبانی UI شامل HTML و CSS</li>
+    </ul>
+
+    <p>
+        همچنین در پروژه‌های عملی با مفاهیم مختلفی مانند ASP.NET Core MVC، Razor،
+        EntityFramework، Dependency Injection و CRUD آشنا خواهید شد.
+    </p>
+
+    <div class="highlight-box">
+        <span class="section-title">نحوه برگزاری دوره</span>
+
+        <p>
+            یک جلسه برای سطح‌سنجی برگزار می‌شود.<br>
+            دوره‌ها در سه سطح مقدماتی، میانی و پیشرفته (هر سطح ۱۵ جلسه).<br>
+            کلاس‌ها به صورت آنلاین یا حضوری برگزار می‌شود.<br>
+            هر هفته ۳ جلسه کلاس برگزار می‌شود.
+        </p>
+    </div>
+
+    <div class="highlight-box">
+        <span class="section-title">هزینه جلسات</span>
+
+        <p>
+            مقدماتی: ۶۵۰ هزار تومان<br>
+            میانی: ۸۰۰ هزار تومان<br>
+            پیشرفته: ۹۵۰ هزار تومان
+        </p>
+    </div>
+
+    <p>
+        در صورت هرگونه ابهام می‌توانید از طریق بخش ارتباط با ما پیام ارسال کنید.
+    </p>
+
 </div>
+
+
+                    <!-- مدرس + دکمه -->
+                 <div class="d-flex justify-content-center mt-4">
+
+                        @if (Model.IsEnrolled)
+                        {
+            <button class="btn btn-secondary px-4" disabled>
+                ثبت‌نام شده
+            </button>
+                        }
+                        else
+                        {
+            <a class="btn btn-primary px-4"
+               href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
+                ثبت‌نام در دوره
+            </a>
+                        }
+
+</div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>

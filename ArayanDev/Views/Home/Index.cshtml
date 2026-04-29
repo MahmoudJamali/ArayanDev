@@ -132,45 +132,9 @@ Hero Area
 <!--==============================
 About Area
  ==============================-->
- @model List<CourseListItemDto>
+ 
 
-<div class="container mt-4">
-    <h2 class="mb-4">دوره‌های آموزشی</h2>
-
-    <div class="row">
-
-        @foreach (var course in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-
-                        <h5 class="card-title">@course.Title</h5>
-
-                        <p class="card-text">
-                            @if(course.IsFree)
-                            {
-                                <span class="text-success">رایگان</span>
-                            }
-                            else
-                            {
-                                <span>@course.Price.ToString("N0") تومان</span>
-                            }
-                        </p>
-
-                        <a href="/Course/Details/@course.Id" class="btn btn-primary w-100">
-                            مشاهده جزئیات دوره
-                        </a>
-
-                    </div>
-                </div>
-            </div>
-        }
-
-    </div>
-</div>
-
-<div class="space overflow-hidden" id="about-sec">
+<div class="space overflow-hidden" id="blog-sec">
     <div class="container">
         <div class="row align-items-center justify-content-between" style="direction: rtl;">
 
@@ -363,13 +327,17 @@ Contact Area
 <!--==============================
 Servce Area
 ==============================-->
-<section class="space" data-bg-src="/assets/img/bg/course_bg_1.png" id="course-sec">
+<section  id="Course-sec" class="space" data-bg-src="/assets/img/bg/course_bg_1.png" >
     <div class="container">
         <div class="mb-35 text-center text-md-start">
             <div class="row align-items-center justify-content-between">
                 <div class="col-md-8">
                     <div class="title-area mb-md-0">
-                        <span class="sub-title"><i class="fal fa-book me-4"></i> مهمترین دوره های آکادمی</span>
+                        <span class="sub-title"><i class="fal fa-book me-4"></i> مهمترین آموزش های آکادمی در طول دوره </span>
+                             <p>
+        در این دوره با فراگیری آموزش‌های لازم، قادر به طراحی وب‌سایت و اپلیکیشن در پلتفرم Asp.Net خواهید شد.
+        برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
+    </p>
                     </div>
                 </div>
 @*                 <div class="col-md-auto">
@@ -382,7 +350,7 @@ Servce Area
                 <div class="course-box">
                     <div class="course-img">
                         <img src="/assets/img/course/C-Sharp.png" alt="img">
-						<span class="tag"><i class="fas fa-clock"></i>  16 جلسه</span>
+					
                     </div>
                     <div class="course-content">
                         <div class="course-rating">
@@ -391,7 +359,7 @@ Servce Area
                             </div>(4.7)
                         </div>
                         <h4 class="course-title">
-                            <a href="course-details.html">
+                            <a ="course-details.html">
 								آموزش #C								
 							</a>
                         </h4>
@@ -403,7 +371,7 @@ Servce Area
                         <div class="course-author">
                             <div class="author-info">
                                 <img src="/assets/img/course/author.png" alt="author">
-                                <a href="course.html" class="author-name">Max Alexix</a>
+                              
                             </div>
                             <div class="offer-tag">Free</div>
                         </div>
@@ -414,7 +382,7 @@ Servce Area
                 <div class="course-box">
                     <div class="course-img">
                         <img src="/assets/img/course/asp.net-mvc.jpg" alt="img">
-                        <span class="tag"><i class="fas fa-clock"></i> 16 جلسه</span>
+         
                     </div>
                     <div class="course-content">
                         <div class="course-rating">
@@ -423,7 +391,7 @@ Servce Area
                             </div>(4.7)
                         </div>
                         <h3 class="course-title">
-                            <a href="course-details.html">
+                            <a "course-details.html">
 								آموزش ساختارMVC
                             </a>
                         </h3>
@@ -435,18 +403,18 @@ Servce Area
                         <div class="course-author">
                             <div class="author-info">
                                 <img src="/assets/img/course/author.png" alt="author">
-                                <a href="course.html" class="author-name">Kevin Perry</a>
+                           
                             </div>
                             <div class="offer-tag">Free</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+@*             <div class="col-md-6 col-lg-4">
                 <div class="course-box">
                     <div class="course-img">
                         <img src="/assets/img/course/asp.net-WebApi.png" alt="img">
-                        <span class="tag"><i class="fas fa-clock"></i> 16 هفته</span>
+                
                     </div>
                     <div class="course-content">
                         <div class="course-rating">
@@ -467,18 +435,18 @@ Servce Area
                         <div class="course-author">
                             <div class="author-info">
                                 <img src="/assets/img/course/author.png" alt="author">
-                                <a href="course.html" class="author-name">Kevin Perry</a>
+                           
                             </div>
                             <div class="offer-tag">Free</div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> *@
             <div class="col-md-6 col-lg-4">
                 <div class="course-box">
                     <div class="course-img">
                         <img src="/assets/img/course/sqlserver.png" alt="img">
-                        <span class="tag"><i class="fas fa-clock"></i> 8 جلسه</span>
+                 
                     </div>
                     <div class="course-content">
                         <div class="course-rating">
@@ -487,7 +455,7 @@ Servce Area
                             </div>(4.7)
                         </div>
                         <h3 class="course-title">
-                            <a href="course-details.html">
+                            <a "course-details.html">
 								آموزشSQL SERVER
 							</a> 
                         </h3>
@@ -499,18 +467,18 @@ Servce Area
                         <div class="course-author">
                             <div class="author-info">
                                 <img src="/assets/img/course/author.png" alt="author">
-                                <a href="course.html" class="author-name">Max Alexix</a>
+                               
                             </div>
                             <div class="offer-tag">Free</div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-4">
+            <div id="courses-sec" class="col-md-6 col-lg-4">
                 <div class="course-box">
                     <div class="course-img">
                         <img src="/assets/img/course/front.jpg" alt="img">
-                        <span class="tag"><i class="fas fa-clock"></i> 16 هفته</span>
+                      
                     </div>
                     <div class="course-content">
                         <div class="course-rating">
@@ -519,7 +487,7 @@ Servce Area
                             </div>(4.7)
                         </div>
                         <h6 class="course-title">
-                            <a href="course-details.html">
+                            <a "course-details.html">
                                 آموزش FrontEnd (رابط کاربری)
                             </a>
                         </h6>
@@ -531,7 +499,7 @@ Servce Area
                         <div class="course-author">
                             <div class="author-info">
                                 <img src="/assets/img/course/author.png" alt="author">
-                                <a href="course.html" class="author-name">Kevin Perry</a>
+                 
                             </div>
                             <div class="offer-tag">Free</div>
                         </div>
@@ -541,6 +509,51 @@ Servce Area
            
            
         </div>
+
+        @model List<CourseListItemDto>
+
+        <div class="container mt-5">
+
+    <!-- عنوان مدرن و آبی -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">
+            ثبت نام در دوره 
+        </h2>
+     
+    </div>
+
+    <div class="row justify-content-center">
+
+                @foreach (var course in Model)
+                {
+                <!-- پهن‌تر از قبل (قبلاً col-md-4 بود) -->
+                <div class="col-md-8 col-lg-6 mb-4 d-flex justify-content-center">
+
+                    <!-- ارتفاع بیشتر با py بیشتر -->
+                    <div class="card shadow-lg w-100 py-4">
+
+                        <div class="card-body text-center">
+
+                            <h4 class="card-title mb-3">
+                                    @course.Title
+                            </h4>
+
+                            <!-- دکمه همان اندازه، فقط وسط -->
+                            <a href="/Course/Details/@course.Id"
+                               class="btn btn-primary px-4">
+                                مشاهده جزئیات و ثبت نام در دوره
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+                }
+
+    </div>
+</div>
+
+
     </div>
 </section>
 
@@ -549,9 +562,9 @@ Servce Area
     <div class="container">
         <div class="row">
             <div class="col-xl-12">
-                <div class="contact-form-wrap" style="background-image: url('/assets/img/bg/contact_bg_1.jpg'); background-size: cover; background-position: center;">
-                    <h2 class="border-title">تماس با من</h2>
-                    <p class="mt-n1 mb-30 sec-text">هر سوال و ابهامی داری اینجا ازم بپرس دوست من!</p>
+                <div class="contact-form-wrap" style="background-image: url('/assets/img/bg/contact_bg_1.png'); background-size: cover; background-position: center;">
+                    <h2 class="border-title">تماس با ما</h2>
+                    <p class="mt-n1 mb-30 sec-text">هر سوال و ابهامی داری اینجا بپرس دوست من!</p>
                     <form action="mail.php" method="POST" class="contact-form ajax-contact">
                         <div class="row">
                             <div class="col-md-6">

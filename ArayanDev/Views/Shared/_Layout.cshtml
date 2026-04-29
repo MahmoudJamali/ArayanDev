@@ -171,10 +171,6 @@
             </div>
             <div class="th-mobile-menu">
                 <ul>
-                    <li class="menu">
-                        <a asp-controller="Home" asp-action="Index">صفحه اصلی</a>
-                    </li>
-
                     <li class="menu-item-has-children">
                         <a asp-controller="Courses" asp-action="Index">دوره ها</a>
                         <ul class="sub-menu">
@@ -265,65 +261,26 @@
                         </div>
 
                         <!-- منو وسط -->
-                        <div class="col text-center order-2">
-                            <nav class="main-menu d-none d-lg-inline-block">
-                                <ul>
-                                    <li class="menu">
-                                        <a asp-controller="Home" asp-action="Index">صفحه اصلی</a>
-                                    </li>
-@*                                     <li class="menu-item-has-children">
-                                        <a asp-controller="Teachers" asp-action="Index">پروژه ها</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Teachers</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li> *@
-                                    <li class="menu-item-has-children">
-                                        <a asp-controller="Teachers" asp-action="Index">برنامه نویسان</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Teachers</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li>
-@*                                     <li class="menu-item-has-children">
-                                        <a asp-controller="Teachers" asp-action="Index">کارآموزان</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Teachers</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li> *@
-@*                                     <li class="menu-item-has-children">
-                                        <a asp-controller="Teachers" asp-action="Index">مدرسین</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Teachers</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li> *@
+                       <div class="col text-center order-2">
+    <nav class="main-menu d-none d-lg-inline-block">
+        <ul>
 
-                                    <li class="menu-item-has-children">
-                                        <a asp-controller="Courses" asp-action="Index">دوره ها</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li>
-@*                                     <li class="menu-item-has-children">
-                                        <a asp-controller="Courses" asp-action="Index">منابع آموزشی</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li> *@
-                                    <li class="menu">
-                                        <a asp-controller="Courses" asp-action="Index">تماس با ما</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="blog.html">Blog</a></li>
-                                            <li><a href="blog-details.html">Blog Details</a></li>
-                                        </ul>
-                                    </li>                                   
-                                </ul>
-                            </nav>
-                        </div>
+            <li class="menu">
+                <a href="/#blog-sec">بلاگ</a>
+            </li>
+
+            <li class="menu">
+                <a href="/#courses-sec">دوره ها</a>
+            </li>
+
+            <li class="menu">
+                <a href="/#contact-sec">تماس با ما</a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+
                         <!-- دکمه‌های ورود و ثبت‌نام سمت چپ -->
                         @{
                             var name = User.Identity?.Name;

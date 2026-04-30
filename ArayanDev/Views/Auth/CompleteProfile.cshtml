@@ -4,12 +4,14 @@
     ViewData["Title"] = "تکمیل پروفایل";
 }
 
-<div class="container mt-5" style="max-width: 600px;">
+<div class="container py-5" style="max-width:700px">
 
-    <h2 class="mb-4 text-center">تکمیل پروفایل کاربری</h2>
+    <div class="card shadow border-0">
+        <div class="card-body p-4">
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+            <h3 class="text-center mb-4 fw-bold">
+                تکمیل پروفایل کاربری
+            </h3>
 
             <form asp-controller="Auth"
                   asp-action="CompleteProfile"
@@ -18,36 +20,75 @@
 
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                <!-- City -->
-                <div class="mb-3">
-                    <label asp-for="City" class="form-label"></label>
-                    <input asp-for="City" class="form-control" />
-                    <span asp-validation-for="City" class="text-danger"></span>
+                <div class="row">
+
+                    <!-- Name -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Name" class="form-label">نام</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <!-- Family -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="Family" class="form-label">نام خانوادگی</label>
+                        <input asp-for="Family" class="form-control" />
+                        <span asp-validation-for="Family" class="text-danger"></span>
+                    </div>
+
+                    <!-- NationalCode -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="NationalCode" class="form-label">کد ملی</label>
+                        <input asp-for="NationalCode" class="form-control" maxlength="10" />
+                        <span asp-validation-for="NationalCode" class="text-danger"></span>
+                    </div>
+                    <!-- Address -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Address" class="form-label">آدرس</label>
+                        <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <!-- BirthDay -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="BirthDay" class="form-label">تاریخ تولد</label>
+                        <input asp-for="BirthDay" type="date" class="form-control" />
+                        <span asp-validation-for="BirthDay" class="text-danger"></span>
+                    </div>
+
+                    <!-- City -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="City" class="form-label">شهر</label>
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="EducationDegree" class="form-label">مدرک تحصیلی</label>
+                        <input asp-for="EducationDegree" class="form-control" />
+                        <span asp-validation-for="EducationDegree" class="text-danger"></span>
+                    </div>
+
+                    <!-- Major -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Major" class="form-label">رشته تحصیلی</label>
+                        <input asp-for="Major" class="form-control" />
+                        <span asp-validation-for="Major" class="text-danger"></span>
+                    </div>
+
+             
+                    <!-- Email -->
+                    <div class="col-md-12 mb-3">
+                        <label asp-for="Email" class="form-label">ایمیل (اختیاری)</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
                 </div>
 
-                <!-- Age -->
-                <div class="mb-3">
-                    <label asp-for="Age" class="form-label"></label>
-                    <input asp-for="Age" type="number" class="form-control" />
-                    <span asp-validation-for="Age" class="text-danger"></span>
-                </div>
-
-                <!-- EducationDegree -->
-                <div class="mb-3">
-                    <label asp-for="EducationDegree" class="form-label"></label>
-                    <input asp-for="EducationDegree" class="form-control" />
-                    <span asp-validation-for="EducationDegree" class="text-danger"></span>
-                </div>
-
-                <!-- Major -->
-                <div class="mb-3">
-                    <label asp-for="Major" class="form-label"></label>
-                    <input asp-for="Major" class="form-control" />
-                    <span asp-validation-for="Major" class="text-danger"></span>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100 mt-3">
-                    ذخیره پروفایل
+                <button type="submit" class="btn btn-primary w-100 mt-3 py-2 fw-bold">
+                    ذخیره اطلاعات
                 </button>
 
             </form>

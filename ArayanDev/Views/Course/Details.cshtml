@@ -1,4 +1,12 @@
 ﻿<style>
+    /* عکس یک‌سوم ارتفاع */
+    .course-img-top {
+        height: 220px !important;
+        object-fit: cover;
+        border-radius: .75rem .75rem 0 0;
+    }
+
+    /* متن دوره */
     .course-content {
         direction: rtl;
         text-align: right;
@@ -7,22 +15,22 @@
         color: #444;
     }
 
-    .course-content p {
-        margin-bottom: 18px;
-    }
+        .course-content p {
+            margin-bottom: 18px;
+        }
 
-    .course-content ul {
-        padding-right: 20px;
-        margin-bottom: 20px;
-    }
+        .course-content ul {
+            padding-right: 20px;
+            margin-bottom: 20px;
+        }
 
-    .course-content li {
-        margin-bottom: 8px;
-    }
+        .course-content li {
+            margin-bottom: 8px;
+        }
 
     .section-title {
         font-weight: 800;
-        color: #6f42c1; /* بنفش حرفه‌ای */
+        color: #6f42c1;
         margin-bottom: 10px;
         display: block;
         font-size: 17px;
@@ -35,10 +43,19 @@
         border-radius: 8px;
         margin-bottom: 20px;
     }
+
+    /* باکس قوانین */
+    #rules-box {
+        background: #f3f3ff;
+        border: 1px solid #d8d6ff;
+    }
+
+        #rules-box label {
+            font-size: 15px;
+            cursor: pointer;
+        }
+
 </style>
-
-
-
 
 @model CourseDetailsViewModel
 
@@ -46,88 +63,116 @@
 
     <div class="row justify-content-center">
 
-        <div class="col-lg-8 col-md-10">
+        <div class="col-lg-7 col-md-9">
 
-            <div class="card shadow-lg">
+            <div class="card shadow-lg border-0" style="border-radius: 15px;">
 
                 <!-- تصویر -->
-                <img src="/assets/img/course/course2.jpg" 
-                     class="card-img-top" 
+                <img src="/assets/img/course/course2.jpg"
+                     class="course-img-top"
                      alt="@Model.Course.Title">
 
-                <div class="card-body">
+                <div class="card-body px-4 py-5">
 
                     <!-- عنوان -->
-                    <h3 class="fw-bold text-center mb-4">
+                    <h3 class="fw-bold text-center mb-4" style="color:#333;">
                         @Model.Course.Title
                     </h3>
 
                     <!-- توضیحات -->
                     <div class="course-content">
 
-    <p>
-        در این دوره با فراگیری آموزش‌های لازم، قادر به طراحی وب‌سایت و اپلیکیشن در پلتفرم Asp.Net خواهید شد.
-        برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
-    </p>
-
-    <ul>
-        <li>زبان برنامه‌نویسی پیشرفته #C</li>
-        <li>مفاهیم داده و SQL</li>
-        <li>مبانی UI شامل HTML و CSS</li>
-    </ul>
-
-    <p>
-        همچنین در پروژه‌های عملی با مفاهیم مختلفی مانند ASP.NET Core MVC، Razor،
-        EntityFramework، Dependency Injection و CRUD آشنا خواهید شد.
-    </p>
-
-    <div class="highlight-box">
-        <span class="section-title">نحوه برگزاری دوره</span>
-
-        <p>
-            یک جلسه برای سطح‌سنجی برگزار می‌شود.<br>
-            دوره‌ها در سه سطح مقدماتی، میانی و پیشرفته (هر سطح ۱۵ جلسه).<br>
-            کلاس‌ها به صورت آنلاین یا حضوری برگزار می‌شود.<br>
-            هر هفته ۳ جلسه کلاس برگزار می‌شود.
-        </p>
-    </div>
-
-    <div class="highlight-box">
-        <span class="section-title">هزینه جلسات</span>
-
-        <p>
-            مقدماتی: ۶۵۰ هزار تومان<br>
-            میانی: ۸۰۰ هزار تومان<br>
-            پیشرفته: ۹۵۰ هزار تومان
-        </p>
-    </div>
-
-    <p>
-        در صورت هرگونه ابهام می‌توانید از طریق بخش ارتباط با ما پیام ارسال کنید.
-    </p>
-
-</div>
+                        <p style="text-align: justify; direction: rtl;">
+                            در این دوره با فراگیری آموزش‌ها لازم، قادر به طراحی وب‌سایت و اپلیکیشن در پلتفرم Asp.Net خواهید شد.
+                            برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
+                        </p>
 
 
-                    <!-- مدرس + دکمه -->
-                 <div class="d-flex justify-content-center mt-4">
+                        <ul>
+                            <li>زبان برنامه‌نویسی پیشرفته #C</li>
+                            <li>مفاهیم داده و SQL</li>
+                            <li>MVC – Razor – Entity Framework</li>
+                            <li>سایر مفاهیم تخصصی و پیشرفته</li>
+                        </ul>
+
+                        <div class="highlight-box">
+                            <span class="section-title">نحوه برگزاری دوره</span>
+
+                            <p>
+                                <i class="fas fa-check-circle me-1"></i>یک جلسه برای سطح‌سنجی برگزار می‌شود.<br>
+                                <i class="fas fa-check-circle me-1"></i>دوره در سه سطح مقدماتی، میانی و پیشرفته برگزار می‌گردد.<br>
+                                <i class="fas fa-check-circle me-1"></i>هر سطح طی 15 جلسه برگزار می‌گردد.<br>
+                                <i class="fas fa-check-circle me-1"></i>کلاس‌ها به صورت آنلاین یا حضوری بنا به انتخاب شما برگزار می‌شود.<br>
+                                <i class="fas fa-check-circle me-1"></i>مدت هر جلسه 70 دقیقه است.<br>
+                                <i class="fas fa-check-circle me-1"></i>هر هفته سه جلسه برگزار می‌شود.
+                            </p>
+                        </div>
+
+                        <div class="highlight-box">
+                            <span class="section-title">هزینه جلسات</span>
+
+                            <p>
+                                هزینه هر جلسه حضوری 850 و هر جلسه آنلاین 750 هزار تومان می‌باشد.<br>
+                                پرداخت پس از پایان هر جلسه انجام می‌شود.<br>
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <!-- 🔻🔻 بخش تیک قوانین - فقط اگر ثبت نام نکرده باشد 🔻🔻 -->
+                    @if (!Model.IsEnrolled)
+                    {
+                        <div class="mt-4 p-3 border rounded text-end" id="rules-box"
+                             style="background-color: #f3e8ff;">
+
+                            <!-- هشدار -->
+                            <div class="d-flex flex-row-reverse align-items-center gap-2 justify-content-end w-100">
+
+                                <span style="color: blueviolet;">لطفاً قوانین دوره را مطالعه و تأیید نمایید.</span>
+                                <span style="color: darkmagenta;">⚠</span>
+                            </div>
+
+                            <!-- چک‌باکس عادی -->
+                            <div class="d-flex flex-row-reverse align-items-center gap-2 justify-content-end w-100">
+
+                                <input class="form-check-input" type="checkbox" id="acceptRules" />
+
+                                <label class="form-check-label fw-bold" for="acceptRules">
+                                    تایید می‌نمایم
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    }
+
+
+
+
+
+                    <!-- 🔺🔺 پایان بخش قوانین 🔺🔺 -->
+                    <!-- دکمه ثبت‌نام -->
+                    <div class="d-flex justify-content-center mt-4">
 
                         @if (Model.IsEnrolled)
                         {
-            <button class="btn btn-secondary px-4" disabled>
-                ثبت‌نام شده
-            </button>
+                            <button class="btn btn-success enrolled-btn px-4" disabled>
+                                شما قبلاً با موفقیت در این دوره شرکت کرده‌اید
+                                <i class="fas fa-check-circle me-1"></i>
+                            </button>
                         }
                         else
                         {
-            <a class="btn btn-primary px-4"
-               href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
-                ثبت‌نام در دوره
-            </a>
+                            <a id="enrollBtn"
+                               class="btn btn-primary px-5 py-2 disabled"
+                               style="pointer-events:none; opacity:0.55; font-size:16px; font-weight:600;"
+                               href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
+                                ثبت‌نام در دوره
+                            </a>
                         }
 
-</div>
-
+                    </div>
 
                 </div>
 
@@ -138,3 +183,37 @@
     </div>
 
 </div>
+
+
+
+
+<!-- اسکریپت فعال‌سازی دکمه بعد از تیک زدن -->
+<script>
+    const checkbox = document.getElementById("acceptRules");
+    const enrollBtn = document.getElementById("enrollBtn");
+    const rulesWarning = document.getElementById("rulesWarning");
+
+    if (checkbox) {
+
+        checkbox.addEventListener("change", function () {
+            if (this.checked) {
+                enrollBtn.classList.remove("disabled");
+                enrollBtn.style.pointerEvents = "auto";
+                enrollBtn.style.opacity = "1";
+                rulesWarning.classList.add("d-none");
+            } else {
+                enrollBtn.classList.add("disabled");
+                enrollBtn.style.pointerEvents = "none";
+                enrollBtn.style.opacity = "0.55";
+            }
+        });
+
+        enrollBtn.addEventListener("click", function (e) {
+            if (!checkbox.checked) {
+                e.preventDefault();
+                rulesWarning.classList.remove("d-none");
+            }
+        });
+
+    }
+</script>

@@ -9,8 +9,6 @@ using System.Threading.Tasks;
     {
         public class User : BaseEntity
         {
-            public string? Fullname { get; set; }     // Optional
-            public string? Email { get; set; }        // Optional
 
             public string PhoneNumber { get; set; } = null!; // Required
 

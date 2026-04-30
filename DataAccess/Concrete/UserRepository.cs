@@ -28,12 +28,7 @@ namespace DataAccess.Concrete.Repositories
                 .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
         }
 
-        public async Task<User?> GetByEmailAsync(string email)
-        {
-            return await _context.Users
-                .Include(x => x.Role)
-                .FirstOrDefaultAsync(x => x.Email == email);
-        }
+
 
         public async Task<bool> ExistsByPhoneAsync(string phoneNumber)
         {

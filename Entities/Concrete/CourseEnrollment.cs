@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Enums;
 
 namespace Entities.Concrete
 {
@@ -13,7 +14,7 @@ namespace Entities.Concrete
 
         public Guid CourseId { get; set; }
         public Course Course { get; set; } = null!;
-
+        public CourseType CourseType { get; set; } = CourseType.InPerson;
         public DateTime EnrollDate { get; set; } = DateTime.UtcNow;
     }
 }

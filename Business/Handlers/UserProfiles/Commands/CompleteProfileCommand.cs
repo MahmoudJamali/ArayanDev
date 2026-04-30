@@ -1,15 +1,12 @@
 ﻿using MediatR;
-
 using Entities.Concrete;
 using FluentValidation;
 using DataAccess.Abstract;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 
 namespace Business.Handlers.UserProfiles.Commands
 {
-    public class CompleteProfileCommand
-        : IRequest<bool>
+    public class CompleteProfileCommand : IRequest<bool>
     {
         public Guid UserId { get; set; }
         public CompleteProfileModel Model { get; set; } = null!;
@@ -18,10 +15,15 @@ namespace Business.Handlers.UserProfiles.Commands
     // ---------- ViewModel ----------
     public class CompleteProfileModel
     {
-        public string? City { get; set; }
-        public int? Age { get; set; }
-        public string? EducationDegree { get; set; }
-        public string? Major { get; set; }
+        public string Name { get; set; } = null!;
+        public string Family { get; set; } = null!;
+        public string NationalCode { get; set; } = null!;
+        public string City { get; set; } = null!;
+        public DateOnly BirthDay { get; set; }
+        public string EducationDegree { get; set; } = null!;
+        public string Major { get; set; } = null!;
+        public string Address { get; set; } = null!;
+        public string? Email { get; set; }
     }
 
     // ---------- Validator ----------
@@ -29,25 +31,41 @@ namespace Business.Handlers.UserProfiles.Commands
     {
         public CompleteProfileValidator()
         {
-            RuleFor(x => x.Model.City)
-                .NotEmpty().WithMessage("لطفا شهر را وارد کنید");
+            RuleFor(x => x.Model.Name)
+                .NotEmpty().WithMessage("نام را وارد کنید");
 
-            RuleFor(x => x.Model.Age)
-                .NotNull().WithMessage("سن را وارد کنید")
-                .InclusiveBetween(10, 90)
-                .WithMessage("سن معتبر نیست");
+            RuleFor(x => x.Model.Family)
+                .NotEmpty().WithMessage("نام خانوادگی را وارد کنید");
+
+            RuleFor(x => x.Model.NationalCode)
+                .NotEmpty().WithMessage("کد ملی را وارد کنید")
+                .Length(10).WithMessage("کد ملی باید 10 رقم باشد")
+                .Matches(@"^\d{10}$").WithMessage("کد ملی معتبر نیست");
+
+            RuleFor(x => x.Model.City)
+                .NotEmpty().WithMessage("شهر محل سکونت را وارد کنید");
+
+            RuleFor(x => x.Model.BirthDay)
+                .NotEmpty().WithMessage("تاریخ تولد را وارد کنید");
+
+            RuleFor(x => x.Model.Address)
+                .NotEmpty().WithMessage("آدرس را وارد کنید");
 
             RuleFor(x => x.Model.EducationDegree)
                 .NotEmpty().WithMessage("مدرک تحصیلی را وارد کنید");
 
             RuleFor(x => x.Model.Major)
                 .NotEmpty().WithMessage("رشته تحصیلی را وارد کنید");
+
+            RuleFor(x => x.Model.Email)
+                .EmailAddress()
+                .When(x => !string.IsNullOrWhiteSpace(x.Model.Email))
+                .WithMessage("ایمیل معتبر نیست");
         }
     }
 
     // ---------- Handler ----------
-    public class CompleteProfileHandler
-    : IRequestHandler<CompleteProfileCommand, bool>
+    public class CompleteProfileHandler : IRequestHandler<CompleteProfileCommand, bool>
     {
         private readonly IUserProfileRepository _profileRepository;
         private readonly IUserRepository _userRepository;
@@ -75,33 +93,41 @@ namespace Business.Handlers.UserProfiles.Commands
                 profile = new UserProfile
                 {
                     UserId = request.UserId,
+                    Name = request.Model.Name,
+                    Family = request.Model.Family,
+                    NationalCode = request.Model.NationalCode,
                     City = request.Model.City,
-                    Age = request.Model.Age,
+                    BirthDay = request.Model.BirthDay,
                     EducationDegree = request.Model.EducationDegree,
-                    Major = request.Model.Major
+                    Major = request.Model.Major,
+                    Address = request.Model.Address,
+                    Email = request.Model.Email
                 };
 
                 await _profileRepository.AddAsync(profile);
             }
             else
             {
+                profile.Name = request.Model.Name;
+                profile.Family = request.Model.Family;
+                profile.NationalCode = request.Model.NationalCode;
                 profile.City = request.Model.City;
-                profile.Age = request.Model.Age;
+                profile.BirthDay = request.Model.BirthDay;
                 profile.EducationDegree = request.Model.EducationDegree;
                 profile.Major = request.Model.Major;
+                profile.Address = request.Model.Address;
+                profile.Email = request.Model.Email;
 
                 await _profileRepository.UpdateAsync(profile);
             }
 
-            // گرفتن کاربر برای ساخت claims جدید
+            // گرفتن کاربر برای ساخت Claims جدید
             var user = await _userRepository.GetByIdWithRoleAndProfileAsync(request.UserId);
 
-            // ساخت مجدد Cookie و Claims
+            // ساخت مجدد Cookie
             await _authService.SignInUserAsync(user, _httpContextAccessor.HttpContext!);
 
             return true;
         }
     }
-
-
 }

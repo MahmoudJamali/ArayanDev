@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.Enums;
 
 namespace Entities.Concrete
 {
@@ -18,7 +19,7 @@ namespace Entities.Concrete
         public DateTime? EndDate { get; set; }
 
         public bool IsActive { get; set; } = true;
-
+       
         public ICollection<CourseEnrollment> Enrollments { get; set; }
             = new List<CourseEnrollment>();
     }

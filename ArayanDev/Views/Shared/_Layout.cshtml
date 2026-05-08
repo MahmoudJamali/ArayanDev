@@ -274,7 +274,7 @@
             </li>
 
             <li class="menu">
-                <a href="/#contact-sec">تماس با ما</a>
+                                        <a href="/#Footer-sec">تماس با ما</a>
             </li>
 
         </ul>
@@ -348,7 +348,7 @@
     <!--==============================
         Footer Area
     ==============================-->
-    <footer class="footer-wrapper footer-layout1" data-bg-src="/assets/img/bg/footer-bg.png">
+    <footer id="Footer-sec" class="footer-wrapper footer-layout1" data-bg-src="/assets/img/bg/footer-bg.png">
         <div class="shape-mockup footer-shape1 jump" data-left="60px" data-top="70px">
             <img src="/assets/img/normal/footer-bg-shape1.png" alt="img">
         </div>
@@ -363,8 +363,9 @@
                             <i class="fal fa-phone"></i>
                         </div>
                         <div class="media-body">
-                            <p class="footer-contact_text">Call us any time:</p>
+                            <p class="footer-contact_text"> تماس با مدرس</p>
                             <a href="tel+11234567890" class="footer-contact_link">09100045628</a>
+                            
                         </div>
                     </div>
                     <div class="divider"></div>
@@ -373,8 +374,8 @@
                             <i class="fal fa-envelope"></i>
                         </div>
                         <div class="media-body">
-                            <p class="footer-contact_text">Email us 24/7 hours:</p>
-                            <a href="mailto:info@edura.com" class="footer-contact_link">arayandev2025@gmail.com</a>
+                            <p class="footer-contact_text">کانال روبیکا:</p>
+                            <a href="Rubika.ir/ArayanDev" class="footer-contact_link">Rubika.ir/ArayanDev</a>
                         </div>
                     </div>
                     <div class="divider"></div>
@@ -383,8 +384,11 @@
                             <i class="fal fa-location-dot"></i>
                         </div>
                         <div class="media-body">
-                            <p class="footer-contact_text">Our university location:</p>
-                            <a href="https://www.google.com/maps" class="footer-contact_link">Iran/Ilam</a>
+                            <p class="footer-contact_text">آدرس آموزشگاه:</p>
+                            <a class="footer-contact_link" style="font-size: 0.85em;">
+                                ایلام - خیابان فردوسی - روبروی بانک مهر ایران - بن بست زاگرس
+                            </a>
+                            <a class="footer-contact_link" style="font-size: 0.85em;"> ساختمان خلیج فارس -ط 3 - آموزشگاه فناوری اطلاعات برتر - 09187454688 </a>
                         </div>
                     </div>
                 </div>
@@ -515,6 +519,34 @@
     <script src="/assets/js/tweenmax.min.js"></script>
     <!-- Nice Select JS -->
     <script src="/assets/js/nice-select.min.js"></script>
+ @*    <script>
+
+        const images = [
+            "/assets/img/hero/banner2002.jpg",
+            "/assets/img/hero/banner2000.jpg",
+            "/assets/img/hero/banner2003.jpg"
+        ];
+
+        const img = document.getElementById("heroRandomImg");
+
+        // فقط یکبار: اضافه کردن افکت فید
+        img.style.transition = "opacity 0.7s ease";
+
+        function changeHeroImage() {
+
+            img.style.opacity = "0"; // محو شدن
+
+            setTimeout(() => {
+                const randomIndex = Math.floor(Math.random() * images.length);
+                img.src = images[randomIndex];
+                img.style.opacity = "1"; // ظاهر شدن
+            }, 700); // دقیقا برابر با مقدار transition
+
+        }
+
+        setInterval(changeHeroImage, 5000);
+
+    </script> *@
 
     <!-- Main Js File -->
     <script src="/assets/js/main.js"></script>

@@ -301,18 +301,42 @@
                                     </a>
 
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li>
-                                            <a class="dropdown-item" href="/Profile">پروفایل</a>
-                                        </li>
+
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li>
+                                                <a class="dropdown-item"
+                                                   asp-area="Admin"
+                                                   asp-controller="Dashboard"
+                                                   asp-action="Index">
+                                                    پنل مدیریت
+                                                </a>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li>
+                                                <a class="dropdown-item"
+                                                   asp-area="User"
+                                                   asp-controller="Dashboard"
+                                                   asp-action="Index">
+                                                    پروفایل
+                                                </a>
+                                            </li>
+                                        }
 
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
 
                                         <li>
-                                            <a class="dropdown-item text-danger" href="/Auth/Logout">خروج</a>
+                                            <a class="dropdown-item text-danger" href="/Auth/Logout">
+                                                خروج
+                                            </a>
                                         </li>
+
                                     </ul>
+
                                 </div>
                             }
                             else

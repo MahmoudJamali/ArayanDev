@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie("MyCookieAuth", options =>
 {
     options.LoginPath = "/Auth/Login";             // وقتی لاگین نیست
-    options.AccessDeniedPath = "/Auth/CompleteProfile"; // وقتی لاگین هست ولی پروفایل ناقص است
+    options.AccessDeniedPath = "/Auth/Login"; // وقتی لاگین هست ولی پروفایل ناقص است
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
 });
 
@@ -66,6 +66,10 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

@@ -70,7 +70,7 @@ namespace ArayanDev.Controllers
             }
 
             TempData["Success"] = "ثبت‌نام با موفقیت انجام شد.";
-            return RedirectToAction("MyCourses");
+            return RedirectToAction("Details", new { id = courseId });
         }
     }
 }

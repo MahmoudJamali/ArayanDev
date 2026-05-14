@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <title>پنل مدیریت</title>
+
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/assets/css/style.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .sidebar {
+            width: 220px;
+            height: 100vh;
+            background: #212529;
+            position: fixed;
+            right: 0;
+            top: 0;
+        }
+
+            .sidebar a {
+                display: block;
+                color: white;
+                padding: 14px 20px;
+                text-decoration: none;
+            }
+
+                .sidebar a:hover {
+                    background: #343a40;
+                }
+
+        .content {
+            margin-right: 220px;
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+
+        <h4 class="text-white text-center py-3">
+            مدیریت
+        </h4>
+
+        <a asp-area="Admin"
+           asp-controller="Dashboard"
+           asp-action="Index">
+            داشبورد
+        </a>
+
+        <a href="#">
+            دوره‌ها
+        </a>
+
+        <a href="#">
+            کاربران
+        </a>
+
+    </div>
+
+    <div class="content">
+        @RenderBody()
+    </div>
+
+    <!-- Scripts -->
+
+    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+
+</body>
+</html>

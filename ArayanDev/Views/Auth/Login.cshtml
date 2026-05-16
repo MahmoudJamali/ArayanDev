@@ -9,68 +9,102 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+
     <style>
+
         body {
             margin: 0;
-            padding: 0;
-            background: #ffffff;
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: Tahoma, sans-serif;
+            font-family: tahoma;
+            background: linear-gradient(140deg,#eef2ff,#ffffff);
         }
 
-        /* کارت لاگین */
+        /* کارت */
         .login-card {
-            width: 360px;
-            padding: 45px 35px; /* ارتفاع حدود 25٪ بیشتر */
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            padding: 40px 28px;
             border-radius: 22px;
-            background: linear-gradient(135deg, rgba(106,17,203,0.15), rgba(37,117,252,0.25), rgba(106,17,203,0.35) );
-            box-shadow: 0 15px 35px rgba(37,117,252,.25), inset 0 0 30px rgba(255,255,255,.35);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+            border: 1px solid #f1f1f1;
         }
 
             /* تیتر */
             .login-card h3 {
                 text-align: center;
                 margin-bottom: 30px;
+                font-weight: 700;
                 color: #3a0ca3;
             }
 
-        /* اینپوت شماره */
+        /* ورودی */
         .phone-input {
             width: 100%;
-            padding: 12px;
+            height: 46px;
             border-radius: 12px;
             border: 1px solid #ddd;
-            background: #ffffff;
-            font-size: 16px;
+            padding: 0 15px;
+            font-size: 15px;
             text-align: center;
-            outline: none;
+            transition: all .25s;
         }
 
             .phone-input:focus {
                 border-color: #6a11cb;
-                box-shadow: 0 0 0 3px rgba(106,17,203,.15);
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(106,17,203,.12);
             }
 
         /* دکمه */
         .send-btn {
-            margin-top: 25px;
             width: 100%;
-            padding: 12px;
+            height: 46px;
+            margin-top: 20px;
             border: none;
             border-radius: 12px;
             background: linear-gradient(45deg,#6a11cb,#2575fc);
-            color: white;
-            font-size: 16px;
-            transition: .3s;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            transition: .25s;
         }
 
             .send-btn:hover {
                 opacity: .9;
-                cursor: pointer;
             }
+
+        /* متن راهنما */
+        .login-help {
+            text-align: center;
+            font-size: 13px;
+            margin-top: 18px;
+            color: #777;
+        }
+
+        /* ریسپانسیو موبایل */
+        @@media (max-width:480px) {
+            body
+
+        {
+            padding: 15px;
+        }
+
+        .login-card {
+            padding: 30px 20px;
+            border-radius: 18px;
+        }
+
+            .login-card h3 {
+                font-size: 20px;
+            }
+
+        }
     </style>
 </head>
 
@@ -81,13 +115,16 @@
         <h3>ورود به حساب</h3>
 
         <form asp-action="SendOtp" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
-            <input id="phone"
-                   class="phone-input"
-                   type="text"
-                   name="phoneNumber"
-                   placeholder="شماره موبایل (مثلاً 09123456789)"
-                   maxlength="11"
-                   required />
+
+            <div class="mb-3">
+                <input id="phone"
+                       class="phone-input"
+                       type="text"
+                       name="phoneNumber"
+                       placeholder="شماره موبایل (مثلاً 09123456789)"
+                       maxlength="11"
+                       required />
+            </div>
 
             <button class="send-btn" type="submit">
                 ارسال کد تأیید
@@ -95,36 +132,48 @@
 
         </form>
 
+        <div class="login-help">
+            کد تأیید برای شما پیامک خواهد شد
+        </div>
+
     </div>
 
+
+    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+
     <script>
-        const phoneInput = document.getElementById("phone");
 
-        phoneInput.addEventListener("input", function () {
+        const phoneInput=document.getElementById("phone");
 
-            // فقط عدد
-            let v = this.value.replace(/[^0-9]/g, "");
+        phoneInput.addEventListener("input",function(){
 
-            // حتماً با 0 شروع شود
-            if (v.length > 0 && v[0] !== "0") {
-                v = "0";
-            }
+        let v=this.value.replace(/[^0-9]/g,"");
 
-            // حداکثر 11 رقم
-            if (v.length > 11) {
-                v = v.slice(0, 11);
-            }
+        if(v.length>0 && v[0]!=="0"){
+        v="0";
+        }
 
-            this.value = v;
+        if(v.length>11){
+        v=v.slice(0,11);
+        }
+
+        this.value=v;
+
         });
 
-        // جلوگیری از ارسال فرم اگر دقیقاً 11 رقم نباشد
-        document.querySelector("form").addEventListener("submit", function (e) {
-            if (phoneInput.value.length !== 11) {
-                alert("شماره موبایل باید 11 رقمی و با 0 شروع شود");
-                e.preventDefault();
-            }
+        document.querySelector("form").addEventListener("submit",function(e){
+
+        if(phoneInput.value.length!==11){
+
+        alert("شماره موبایل باید 11 رقمی باشد");
+
+        e.preventDefault();
+
+        }
+
         });
+
     </script>
 
 </body>

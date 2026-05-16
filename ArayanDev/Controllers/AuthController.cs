@@ -3,15 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using Business.Handlers.Authentication.Commands;
 using Business.Handlers.UserProfiles.Commands;
 using System.Security.Claims;
+using Entities.Enums;
+using Microsoft.EntityFrameworkCore;
+using DataAccess.Abstract;
 
 namespace UI.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IMediator _mediator;
+        private readonly IOtpRepository _otpRepository;
 
-        public AuthController(IMediator mediator) => _mediator = mediator;
-
+        public AuthController(IMediator mediator, IOtpRepository otpRepository)
+        {
+            _mediator = mediator;
+            _otpRepository = otpRepository;
+        }
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
@@ -28,35 +35,66 @@ namespace UI.Controllers
         }
 
         [HttpGet]
-        public IActionResult VerifyOtp(string phoneNumber, string? returnUrl = null)
+        public async Task<IActionResult> VerifyOtp(string phoneNumber, string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
+
+            var otp = await _otpRepository.GetLastOtpByPhoneAsync(phoneNumber);
+
+            if (otp != null)
+                ViewBag.ExpireAt = otp.ExpireAt;
+
             return View(model: phoneNumber);
         }
 
         [HttpPost]
         public async Task<IActionResult> VerifyOtp(string phoneNumber, string otpCode, string? returnUrl = null)
         {
-            var ok = await _mediator.Send(new VerifyOtpCommand { PhoneNumber = phoneNumber, OtpCode = otpCode });
-
-            if (!ok)
+            var result = await _mediator.Send(new VerifyOtpCommand
             {
-                ModelState.AddModelError("", "کد وارد شده نادرست یا منقضی شده است.");
+                PhoneNumber = phoneNumber,
+                OtpCode = otpCode
+            });
+
+            if (result == OtpVerifyResult.InvalidCode)
+            {
+                ModelState.AddModelError("", "کد وارد شده اشتباه است.");
                 ViewBag.ReturnUrl = returnUrl;
+
+                var otp = await _otpRepository.GetLastOtpByPhoneAsync(phoneNumber);
+
+                if (otp != null)
+                    ViewBag.ExpireAt = otp.ExpireAt;
+
                 return View(model: phoneNumber);
             }
 
-            // انجام لاگین و ایجاد کوکی
-            await _mediator.Send(new LoginCommand { PhoneNumber = phoneNumber, Otp = otpCode });
+            if (result == OtpVerifyResult.Expired)
+            {
+                ModelState.AddModelError("", "کد منقضی شده است.");
 
-            // تصمیم‌گیری هوشمند:
-            // اگر returnUrl خالی بود، برو به صفحه اصلی
-            // اگر returnUrl داشت، برو به همان آدرس (مثلاً صفحه Enroll دوره)
+                var otp = await _otpRepository.GetLastOtpByPhoneAsync(phoneNumber);
+
+                if (otp != null)
+                    ViewBag.ExpireAt = otp.ExpireAt;
+
+                return View(model: phoneNumber);
+            }
+
+            await _mediator.Send(new LoginCommand
+            {
+                PhoneNumber = phoneNumber,
+                Otp = otpCode
+            });
+
             if (string.IsNullOrEmpty(returnUrl))
                 return RedirectToAction("Index", "Home");
 
             return LocalRedirect(returnUrl);
         }
+
+
+
 
         [HttpGet]
         public IActionResult CompleteProfile(string? returnUrl = null)

@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using FluentValidation;
 using Business.Services;
+using Entities.Enums;
 
 namespace Business.Handlers.Authentication.Commands
 {
-    public class VerifyOtpCommand : IRequest<bool>
+    // ✅ تغییر نوع خروجی از bool به OtpVerifyResult
+    public class VerifyOtpCommand : IRequest<OtpVerifyResult>
     {
         public string PhoneNumber { get; set; } = null!;
         public string OtpCode { get; set; } = null!;
@@ -23,7 +25,9 @@ namespace Business.Handlers.Authentication.Commands
         }
     }
 
-    public class VerifyOtpCommandHandler : IRequestHandler<VerifyOtpCommand, bool>
+    // ✅ تغییر نوع Handler
+    public class VerifyOtpCommandHandler
+        : IRequestHandler<VerifyOtpCommand, OtpVerifyResult>
     {
         private readonly IOtpService _otpService;
 
@@ -32,9 +36,13 @@ namespace Business.Handlers.Authentication.Commands
             _otpService = otpService;
         }
 
-        public async Task<bool> Handle(VerifyOtpCommand request, CancellationToken cancellationToken)
+        public async Task<OtpVerifyResult> Handle(
+            VerifyOtpCommand request,
+            CancellationToken cancellationToken)
         {
-            return await _otpService.VerifyOtpAsync(request.PhoneNumber, request.OtpCode);
+            return await _otpService.VerifyOtpAsync(
+                request.PhoneNumber,
+                request.OtpCode);
         }
     }
 }

@@ -46,6 +46,8 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOtpRepository, OtpRepository>();
+
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
 

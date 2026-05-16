@@ -6,6 +6,7 @@ using DataAccess.Concrete.Contexts;
 using Microsoft.AspNetCore.Http;
 using Business.Services;
 using Entities.Concrete;
+using Entities.Enums;
 
 public class AuthService : IAuthService
 {
@@ -20,9 +21,10 @@ public class AuthService : IAuthService
 
     public async Task<bool> LoginWithOtpAsync(string phoneNumber, string otp, HttpContext http)
     {
-        // ابتدا OTP را چک کنیم
-        var isValid = await _otpService.VerifyOtpAsync(phoneNumber, otp);
-        if (!isValid)
+        // بررسی OTP
+        var result = await _otpService.VerifyOtpAsync(phoneNumber, otp);
+
+        if (result != OtpVerifyResult.Success)
             return false;
 
         var user = await _context.Users
@@ -32,11 +34,11 @@ public class AuthService : IAuthService
         if (user == null)
             return false;
 
-        // چک واقعی وجود پروفایل در دیتابیس
+        // بررسی وجود پروفایل
         var profileCompleted = await _context.UserProfile
             .AnyAsync(x => x.UserId == user.Id);
 
-        // Claim ها
+        // Claims
         var claims = new List<Claim>
     {
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -55,11 +57,11 @@ public class AuthService : IAuthService
             ExpiresUtc = DateTime.UtcNow.AddDays(7)
         };
 
-        // ساخت کوکی ورود
         await http.SignInAsync("MyCookieAuth", principal, authProps);
 
         return true;
     }
+
 
     public async Task SignInUserAsync(User user, HttpContext http)
     {

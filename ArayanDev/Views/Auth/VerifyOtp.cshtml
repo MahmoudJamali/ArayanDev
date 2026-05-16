@@ -12,101 +12,131 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+
     <style>
 
         body {
             margin: 0;
-            padding: 0;
-            background: #ffffff;
+            padding: 20px;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: Tahoma, sans-serif;
+            font-family: tahoma;
+            background: linear-gradient(140deg,#eef2ff,#ffffff);
         }
 
-        /* کارت OTP */
+        /* کارت */
         .verify-card {
-            width: 360px;
-            padding: 45px 35px;
+            width: 100%;
+            max-width: 420px;
+            background: #fff;
+            padding: 40px 28px;
             border-radius: 22px;
-            background: linear-gradient(135deg, rgba(106,17,203,0.15), rgba(37,117,252,0.25), rgba(106,17,203,0.30) );
-            box-shadow: 0 15px 35px rgba(37,117,252,.25), inset 0 0 30px rgba(255,255,255,.35);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.08);
+            border: 1px solid #f1f1f1;
             text-align: center;
         }
 
             /* تیتر */
             .verify-card h3 {
                 margin-bottom: 10px;
+                font-weight: 700;
                 color: #3a0ca3;
             }
 
+        /* شماره موبایل */
         .phone-label {
-            margin-bottom: 25px;
             font-size: 14px;
-            opacity: .8;
+            margin-bottom: 25px;
+            color: #666;
         }
+
+            .phone-label strong {
+                display: block;
+                margin-top: 5px;
+                color: #222;
+                font-size: 15px;
+            }
 
         /* ورودی OTP */
         .otp-input {
             width: 100%;
-            padding: 12px;
+            height: 48px;
             border-radius: 12px;
             border: 1px solid #ddd;
-            background: #ffffff;
-            font-size: 20px;
+            background: #fff;
+            font-size: 22px;
             text-align: center;
-            letter-spacing: 8px;
-            outline: none;
+            letter-spacing: 10px;
+            transition: .25s;
         }
 
             .otp-input:focus {
                 border-color: #2575fc;
-                box-shadow: 0 0 0 3px rgba(37,117,252,.2);
+                outline: none;
+                box-shadow: 0 0 0 3px rgba(37,117,252,.15);
             }
 
-        /* دکمه‌ها */
+        /* دکمه تایید */
         .action-btn {
-            margin-top: 25px;
             width: 100%;
-            padding: 12px;
+            height: 46px;
+            margin-top: 20px;
             border: none;
             border-radius: 12px;
             background: linear-gradient(45deg,#6a11cb,#2575fc);
-            color: white;
-            font-size: 16px;
-            transition: .3s;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 600;
         }
 
-            .action-btn:hover {
-                opacity: .9;
-                cursor: pointer;
-            }
+        /* تایمر */
+        .timer {
+            margin-top: 18px;
+            font-size: 14px;
+            color: #777;
+        }
 
+        /* دکمه ارسال مجدد */
         .resend-btn {
-            margin-top: 12px;
-            padding: 10px;
+            margin-top: 10px;
             width: 100%;
+            height: 42px;
             border-radius: 12px;
             border: 1px solid #2575fc;
-            background: white;
+            background: #fff;
             color: #2575fc;
+            font-size: 14px;
         }
 
             .resend-btn:disabled {
-                opacity: .4;
-                border-color: gray;
-                color: gray;
+                opacity: .5;
+                border-color: #bbb;
+                color: #888;
             }
 
-        .timer {
-            margin-top: 15px;
-            font-size: 14px;
-            opacity: .75;
+        /* موبایل */
+        @@media (max-width:480px) {
+            body
+
+        {
+            padding: 15px;
         }
 
-    </style>
+        .verify-card {
+            padding: 30px 20px;
+            border-radius: 18px;
+        }
 
+        .otp-input {
+            font-size: 20px;
+            letter-spacing: 8px;
+        }
+
+        }
+    </style>
 </head>
 
 <body>
@@ -114,7 +144,13 @@
     <div class="verify-card">
 
         <h3>تأیید کد</h3>
-        <div class="phone-label">کد ارسال شده به شماره <br /> <strong>@Model</strong></div>
+
+        <div class="phone-label">
+            کد ارسال شده به شماره
+            <strong>@Model</strong>
+        </div>
+
+        <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
         <form asp-controller="Auth"
               asp-action="VerifyOtp"
@@ -123,6 +159,7 @@
 
             <input type="hidden" name="phoneNumber" value="@Model" />
             <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <input type="hidden" id="expireAt" value="@ViewBag.ExpireAt" />
 
             <input id="otpBox"
                    class="otp-input"
@@ -130,45 +167,63 @@
                    name="otpCode"
                    maxlength="6"
                    placeholder="••••••"
+                   autocomplete="one-time-code"
                    required />
 
-            <button type="submit" class="action-btn">تأیید</button>
-        </form>
+            <button type="submit" class="action-btn">
+                تأیید
+            </button>
 
+        </form>
 
         <div class="timer">
             زمان باقی‌مانده: <span id="time">120</span> ثانیه
         </div>
 
-        <form asp-action="SendOtp" method="post">
+        <form asp-controller="Auth"
+              asp-action="SendOtp"
+              method="post">
+
             <input type="hidden" name="phoneNumber" value="@Model" />
 
-            <button id="resendBtn" class="resend-btn" disabled>ارسال مجدد کد</button>
+            <button id="resendBtn"
+                    type="submit"
+                    class="resend-btn"
+                    disabled>
+                ارسال مجدد کد
+            </button>
+
         </form>
 
     </div>
 
+    <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+
     <script>
-        // --- کنترل ورودی فقط عدد ---
-        document.getElementById("otpBox").addEventListener("input", function(){
-            this.value = this.value.replace(/[^0-9]/g, "").slice(0,6);
-        });
 
-        // --- تایمر 120 ثانیه ---
-        let time = 120;
-        let timeEl = document.getElementById("time");
-        let resendBtn = document.getElementById("resendBtn");
+        const expireAt = new Date(document.getElementById("expireAt").value).getTime();
+        const timeEl = document.getElementById("time");
+        const resendBtn = document.getElementById("resendBtn");
 
-        let countdown = setInterval(function(){
-            time--;
-            timeEl.innerText = time;
+        function updateTimer(){
 
-            if(time <= 0){
-                clearInterval(countdown);
-                resendBtn.disabled = false;
-                timeEl.innerText = "0";
-            }
-        }, 1000);
+        const now = new Date().getTime();
+        const remaining = Math.floor((expireAt - now) / 1000);
+
+        if(remaining <= 0){
+        timeEl.innerText = "0";
+        resendBtn.disabled = false;
+        }
+        else{
+        timeEl.innerText = remaining;
+        }
+
+        }
+
+        updateTimer();
+        setInterval(updateTimer,1000);
+
     </script>
 
 </body>

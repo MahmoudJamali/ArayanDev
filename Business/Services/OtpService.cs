@@ -1,6 +1,7 @@
 ﻿using DataAccess.Concrete.Contexts;
 using Entities.Concrete;
 using Entities.Concrete.Entities.Concrete;
+using Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 
@@ -35,32 +36,28 @@ namespace Business.Services
                 await _context.SaveChangesAsync();
             }
 
-            // OTP 6 digits
             string otp = GenerateOtp();
 
             var otpEntity = new UserOtp
             {
                 UserId = user.Id,
                 OtpCode = otp,
-                ExpireAt = DateTime.UtcNow.AddMinutes(2),
- 
+                ExpireAt = DateTime.Now.AddMinutes(2)
             };
 
             _context.UserOtps.Add(otpEntity);
             await _context.SaveChangesAsync();
 
-            // به جای SMS واقعی
             Console.WriteLine($"OTP for {phoneNumber}: {otp}");
         }
 
-
-        public async Task<bool> VerifyOtpAsync(string phoneNumber, string otp)
+        public async Task<OtpVerifyResult> VerifyOtpAsync(string phoneNumber, string otp)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
 
             if (user == null)
-                return false;
+                return OtpVerifyResult.InvalidCode;
 
             var otpEntity = await _context.UserOtps
                 .Where(o => o.UserId == user.Id)
@@ -68,33 +65,32 @@ namespace Business.Services
                 .FirstOrDefaultAsync();
 
             if (otpEntity == null)
-                return false;
+                return OtpVerifyResult.InvalidCode;
 
-            if (otpEntity.ExpireAt < DateTime.UtcNow)
-                return false;
+            if (otpEntity.ExpireAt < DateTime.Now)
+                return OtpVerifyResult.Expired;
 
             if (otpEntity.AttemptCount >= 5)
-                return false;
+                return OtpVerifyResult.TooManyAttempts;
 
             if (otpEntity.OtpCode != otp)
             {
                 otpEntity.AttemptCount++;
                 await _context.SaveChangesAsync();
-                return false;
+                return OtpVerifyResult.InvalidCode;
             }
 
             user.IsPhoneNumberConfirmed = true;
             await _context.SaveChangesAsync();
 
-            return true;
+            return OtpVerifyResult.Success;
         }
-
 
         private string GenerateOtp()
         {
-            // استفاده از RNG امن
             int code = RandomNumberGenerator.GetInt32(100000, 999999);
             return code.ToString();
         }
     }
+
 }

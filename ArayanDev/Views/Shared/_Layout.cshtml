@@ -169,42 +169,82 @@
                     </a>
                 </div>
             </div>
+            @{
+                var name = User.Identity?.Name;
+                var phone = User.FindFirst("phone_number")?.Value
+                ?? User.FindFirst(System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
+
+                var displayName = !string.IsNullOrEmpty(name) ? name : phone;
+            }
+
             <div class="th-mobile-menu">
                 <ul>
-                    <li class="menu-item-has-children">
-                        <a asp-controller="Courses" asp-action="Index">دوره ها</a>
-                        <ul class="sub-menu">
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="blog-details.html">Blog Details</a></li>
-                        </ul>
+
+                    <li>
+                        <a href="/#blog-sec">بلاگ</a>
                     </li>
-                    <li class="menu-item-has-children">
-                        <a asp-controller="Teachers" asp-action="Index">مدرسین</a>
-                        <ul class="sub-menu">
-                            <li><a href="blog.html">Teachers</a></li>
-                            <li><a href="blog-details.html">Blog Details</a></li>
-                        </ul>
+
+                    <li>
+                        <a href="/#courses-sec">دوره ها</a>
                     </li>
-                    <li class="menu-item-has-children">
-                        <a asp-controller="Courses" asp-action="Index">منابع آموزشی</a>
-                        <ul class="sub-menu">
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="blog-details.html">Blog Details</a></li>
-                        </ul>
+
+                    <li>
+                        <a href="/#Footer-sec">تماس با ما</a>
                     </li>
-                    <li class="menu">
-                        <a asp-controller="Courses" asp-action="Index">تماس با ما</a>
-                        <ul class="sub-menu">
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="blog-details.html">Blog Details</a></li>
-                        </ul>
-					</li>
-					<li class="d-inline-flex align-items-center">
-						<i class="far fa-user me-1"></i>
-						<a href="contact.html" class="text-decoration-none">ورود / ثبت نام</a>
-					</li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="menu-user mt-3">
+                            <span class="d-flex align-items-center">
+                                <i class="far fa-user me-2"></i>
+                                @displayName
+                            </span>
+                        </li>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li>
+                                <a asp-area="Admin"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index">
+                                    پنل مدیریت
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a asp-area="User"
+                                   asp-controller="Dashboard"
+                                   asp-action="Index">
+                                    پروفایل
+                                </a>
+                            </li>
+                        }
+
+                        <li>
+                            <a class="text-danger" href="/Auth/Logout">
+                                خروج
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="mt-3">
+                            <a href="/Auth/Login" class="d-flex align-items-center">
+                                <i class="far fa-user me-2"></i>
+                                ورود / ثبت نام
+                            </a>
+                        </li>
+                    }
+
                 </ul>
             </div>
+
+
+            <!-- دکمه‌های ورود و ثبت‌نام سمت چپ -->
+            
+
         </div>
     </div>
     <!--==============================
@@ -274,7 +314,7 @@
             </li>
 
             <li class="menu">
-                                        <a href="/#Footer-sec">تماس با ما</a>
+                <a href="/#Footer-sec">تماس با ما</a>
             </li>
 
         </ul>
@@ -283,11 +323,11 @@
 
                         <!-- دکمه‌های ورود و ثبت‌نام سمت چپ -->
                         @{
-                            var name = User.Identity?.Name;
-                            var phone = User.FindFirst("phone_number")?.Value
+                            var Name = User.Identity?.Name;
+                            var Phone = User.FindFirst("phone_number")?.Value
                             ?? User.FindFirst(System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
 
-                            var displayName = !string.IsNullOrEmpty(name) ? name : phone;
+                            var DisplayName = !string.IsNullOrEmpty(name) ? name : phone;
                         }
 
                         <div class="col-auto order-3 d-flex align-items-center gap-2">

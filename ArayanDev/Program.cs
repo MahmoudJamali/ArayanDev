@@ -30,10 +30,12 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie("MyCookieAuth", options =>
 {
-    options.LoginPath = "/Auth/Login";             // وقتی لاگین نیست
-    options.AccessDeniedPath = "/Auth/Login"; // وقتی لاگین هست ولی پروفایل ناقص است
+    options.LoginPath = "/Auth/Login";
+    // این مسیر جدید برای کاربرانی که لاگین هستند ولی پروفایل ناقص دارند
+    options.AccessDeniedPath = "/Auth/ProfileIncomplete";
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
 });
+
 
 builder.Services.AddAuthorization(options =>
 {

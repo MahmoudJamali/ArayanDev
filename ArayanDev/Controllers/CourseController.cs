@@ -49,9 +49,8 @@ namespace ArayanDev.Controllers
             return View(vm);
         }
 
-        // ثبت‌نام فقط هنگام لاگین + تکمیل پروفایل
-        [Authorize] // اول باید لاگین باشد
-        [Authorize(Policy = "CompleteProfile")] // بعد پروفایل کامل باشد
+        [Authorize] // ۱. چک می‌کند لاگین است
+        [Authorize(Policy = "CompleteProfile")] // ۲. چک می‌کند پروفایل کامل است (اگر نبود به AccessDeniedPath می‌رود)
         [HttpGet]
         public async Task<IActionResult> Enroll(Guid courseId)
         {
@@ -72,5 +71,6 @@ namespace ArayanDev.Controllers
             TempData["Success"] = "ثبت‌نام با موفقیت انجام شد.";
             return RedirectToAction("Details", new { id = courseId });
         }
+
     }
 }

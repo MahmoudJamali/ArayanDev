@@ -6,6 +6,9 @@ using System.Security.Claims;
 using Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using DataAccess.Abstract;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Entities.Concrete;
 
 namespace UI.Controllers
 {
@@ -13,9 +16,10 @@ namespace UI.Controllers
     {
         private readonly IMediator _mediator;
         private readonly IOtpRepository _otpRepository;
-
-        public AuthController(IMediator mediator, IOtpRepository otpRepository)
+        private readonly IAuthService _authService;
+        public AuthController(IMediator mediator, IOtpRepository otpRepository , IAuthService authService)
         {
+            _authService = authService;
             _mediator = mediator;
             _otpRepository = otpRepository;
         }
@@ -124,6 +128,45 @@ namespace UI.Controllers
                 return RedirectToAction("Index", "Home");
 
             return LocalRedirect(returnUrl);
+        }
+        [Authorize] 
+        public IActionResult ProfileIncomplete()
+        {
+            // اینجا هدایتش می‌کنیم به صفحه تکمیل پروفایل
+            return RedirectToAction("CompleteProfile", "Auth");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubmitCompleteProfile(UserProfile model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            // ۱. گرفتن اطلاعات فعلی کاربر از کوکی قبل از SignOut
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var phoneNumber = User.FindFirstValue(ClaimTypes.MobilePhone);
+            var role = User.FindFirstValue(ClaimTypes.Role);
+
+            // ۲. ذخیره اطلاعات در دیتابیس (مثلاً با Mediator یا Service)
+            await _authService.UpdateProfileAsync(Guid.Parse(userId), model);
+
+            // ۳. خروج کاربر (پاک کردن کوکی قدیمی)
+            await HttpContext.SignOutAsync("MyCookieAuth");
+
+            // ۴. صدور کوکی جدید با مقدار جدید "true"
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, userId),
+        new Claim(ClaimTypes.MobilePhone, phoneNumber),
+        new Claim(ClaimTypes.Role, role),
+        new Claim("IsPhoneConfirmed", "True"),
+        new Claim("ProfileCompleted", "true")
+    };
+
+            var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+            await HttpContext.SignInAsync("MyCookieAuth", new ClaimsPrincipal(identity));
+
+            TempData["Success"] = "پروفایل شما با موفقیت تکمیل شد.";
+            return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> Logout()

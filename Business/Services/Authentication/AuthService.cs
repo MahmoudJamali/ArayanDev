@@ -88,6 +88,55 @@ public class AuthService : IAuthService
         await http.SignInAsync("MyCookieAuth", principal, authProps);
     }
 
+
+    public async Task<bool> UpdateProfileAsync(Guid userId, UserProfile model)
+    {
+        // بررسی اینکه آیا پروفایل قبلاً وجود دارد یا نه
+        var profile = await _context.UserProfile.FirstOrDefaultAsync(p => p.UserId == userId);
+
+        if (profile == null)
+        {
+            // ایجاد پروفایل جدید
+            profile = new UserProfile
+            {
+                UserId = userId,
+                Name = model.Name,
+                Family = model.Family,
+                NationalCode = model.NationalCode,
+                City = model.City,
+                BirthDay = model.BirthDay,
+                EducationDegree = model.EducationDegree,
+                Major = model.Major,
+                Address = model.Address,
+                Email = model.Email
+            };
+            _context.UserProfile.Add(profile);
+        }
+        else
+        {
+            profile.Name = model.Name;
+            profile.Family = model.Family;
+            profile.NationalCode = model.NationalCode;
+            profile.City = model.City;
+            profile.BirthDay = model.BirthDay;
+            profile.EducationDegree = model.EducationDegree;
+            profile.Major = model.Major;
+            profile.Address = model.Address;
+            profile.Email = model.Email;
+        }
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+
     public async Task LogoutAsync(HttpContext http)
     {
         await http.SignOutAsync("MyCookieAuth");

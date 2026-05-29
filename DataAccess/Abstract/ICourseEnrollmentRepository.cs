@@ -12,6 +12,8 @@ namespace DataAccess.Abstract
         Task<bool> ExistsAsync(Guid userId, Guid courseId);
         Task AddAsync(CourseEnrollment entity);
         Task<List<CourseEnrollment>> GetUserEnrollmentsAsync(Guid userId);
+
+        Task<List<CourseEnrollment>> GetAllEnrollmentsWithDetailsAsync(Guid? courseId = null);
     }
 }
 

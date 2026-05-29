@@ -34,6 +34,27 @@ namespace DataAccess.Concrete
                 .Where(x => x.UserId == userId)
                 .ToListAsync();
         }
+
+
+        public async Task<List<CourseEnrollment>> GetAllEnrollmentsWithDetailsAsync(Guid? courseId = null)
+        {
+            var query = _context.CourseEnrollment
+                .AsNoTracking() // چون فقط میخوان بخونن، NoTracking بهتره
+                .Include(e => e.User)
+                    .ThenInclude(u => u.Profile) // اینجا پروفایل یوزر رو هم میاریم
+                .Include(e => e.Course)
+                .AsQueryable();
+
+            if (courseId.HasValue)
+            {
+                query = query.Where(e => e.CourseId == courseId.Value);
+            }
+
+            // برای نمایش در داشبورد ادمین، معمولا مرتب سازی بر اساس تاریخ ثبت نام مهمه
+            return await query
+                .OrderByDescending(e => e.EnrollDate)
+                .ToListAsync();
+        }
     }
 }
 

@@ -166,7 +166,7 @@ namespace UI.Controllers
             await HttpContext.SignInAsync("MyCookieAuth", new ClaimsPrincipal(identity));
 
             TempData["Success"] = "پروفایل شما با موفقیت تکمیل شد.";
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Details", "Course");
         }
 
         public async Task<IActionResult> Logout()

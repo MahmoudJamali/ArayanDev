@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Business.Handlers.EnrollCourses.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UI.Areas.Admin.Controllers
@@ -8,9 +10,21 @@ namespace UI.Areas.Admin.Controllers
 
     public class DashboardController : Controller
     {
-        public IActionResult Index()
+
+        private readonly IMediator _mediator;
+
+        public DashboardController(IMediator mediator)
         {
-            return View();
+            _mediator = mediator;
+        }
+        public async Task<IActionResult> Index(Guid? courseId)
+        {
+            var enrollments = await _mediator.Send(new GetEnrollmentsQuery
+            {
+                CourseId = courseId
+            });
+
+            return View(enrollments);
         }
     }
 }

@@ -2,76 +2,128 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>پنل مدیریت</title>
 
+    <!-- استفاده از فایل‌های محلی خودتان -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/css/style.css" rel="stylesheet" />
 
     <style>
         body {
-            background: #f4f6f9;
+            background-color: #f8f9fa;
         }
 
+        /* استایل اختصاصی سایدبار بدون نیاز به آیکون خارجی */
         .sidebar {
-            width: 220px;
+            width: 260px;
             height: 100vh;
-            background: #212529;
+            background-color: #343a40; /* رنگ تیره استاندارد بوترسپ */
             position: fixed;
             right: 0;
             top: 0;
+            z-index: 1000;
+            padding-top: 20px;
+            box-shadow: -3px 0 10px rgba(0,0,0,0.1);
         }
 
-            .sidebar a {
-                display: block;
-                color: white;
-                padding: 14px 20px;
-                text-decoration: none;
+        .sidebar-brand {
+            padding: 15px 25px;
+            font-size: 1.25rem;
+            color: #fff;
+            border-bottom: 1px solid #4b545c;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .nav-link-custom {
+            display: block;
+            padding: 12px 25px;
+            color: #c2c7d0;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-right: 4px solid transparent;
+        }
+
+            .nav-link-custom:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: #fff;
+                border-right-color: #0d6efd; /* رنگ آبی بوترسپ */
             }
 
-                .sidebar a:hover {
-                    background: #343a40;
-                }
+            .nav-link-custom.active {
+                background-color: #0d6efd;
+                color: #fff;
+                border-right-color: #fff;
+            }
 
-        .content {
-            margin-right: 220px;
+        /* تنظیم محتوا برای کنار رفتن از سایدبار */
+        .main-content {
+            margin-right: 260px;
             padding: 25px;
         }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 15px;
+            background-color: #2c3136;
+        }
+
+        /* برای صفحاتی که سایدبار ندارند، این کلاس را بردارید */
+        .admin-wrapper {
+            display: flex;
+        }
     </style>
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
 
-    <div class="sidebar">
+    <div class="admin-wrapper">
+        <!-- سایدبار -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                پنل مدیریت آموزش
+            </div>
 
-        <h4 class="text-white text-center py-3">
-            مدیریت
-        </h4>
+            <nav class="mt-2">
+                <a href="/admin/dashboard" class="nav-link-custom active">
+                    داشبورد
+                </a>
+                <a href="/admin/enrollments" class="nav-link-custom">
+                    لیست ثبت‌نام‌ها
+                </a>
+                <a href="/admin/courses" class="nav-link-custom">
+                    مدیریت دوره‌ها
+                </a>
+                <a href="/admin/users" class="nav-link-custom">
+                    مدیریت کاربران
+                </a>
+                <a href="/" class="nav-link-custom">
+                    مشاهده سایت
+                </a>
+            </nav>
 
-        <a asp-area="Admin"
-           asp-controller="Dashboard"
-           asp-action="Index">
-            داشبورد
-        </a>
+            <div class="sidebar-footer">
+                <a href="/Auth/Logout" class="text-danger text-decoration-none d-block text-center">
+                    خروج از سیستم
+                </a>
+            </div>
+        </aside>
 
-        <a href="#">
-            دوره‌ها
-        </a>
-
-        <a href="#">
-            کاربران
-        </a>
-        <a class="dropdown-item text-danger" href="/Auth/Logout">
-            خروج
-        </a>
+        <!-- محتوای اصلی -->
+        <main class="main-content w-100">
+            @RenderBody()
+        </main>
     </div>
 
-    <div class="content">
-        @RenderBody()
-    </div>
-
-    <!-- Scripts -->
-
+    <!-- فایل‌های محلی خودتان -->
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
 
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

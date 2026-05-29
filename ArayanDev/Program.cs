@@ -33,6 +33,7 @@ builder.Services.AddAuthentication(options =>
     options.LoginPath = "/Auth/Login";
     // این مسیر جدید برای کاربرانی که لاگین هستند ولی پروفایل ناقص دارند
     options.AccessDeniedPath = "/Auth/ProfileIncomplete";
+    options.ReturnUrlParameter = "returnUrl";
     options.ExpireTimeSpan = TimeSpan.FromDays(7);
 });
 

@@ -129,15 +129,15 @@ namespace UI.Controllers
 
             return LocalRedirect(returnUrl);
         }
-        [Authorize] 
-        public IActionResult ProfileIncomplete()
+        [Authorize]
+        [HttpGet]
+        public IActionResult ProfileIncomplete(string? returnUrl = null)
         {
-            // اینجا هدایتش می‌کنیم به صفحه تکمیل پروفایل
-            return RedirectToAction("CompleteProfile", "Auth");
+            return RedirectToAction("CompleteProfile", "Auth", new { returnUrl });
         }
 
         [HttpPost]
-        public async Task<IActionResult> SubmitCompleteProfile(UserProfile model)
+        public async Task<IActionResult> SubmitCompleteProfile(UserProfile model , string? returnUrl = null)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -166,7 +166,10 @@ namespace UI.Controllers
             await HttpContext.SignInAsync("MyCookieAuth", new ClaimsPrincipal(identity));
 
             TempData["Success"] = "پروفایل شما با موفقیت تکمیل شد.";
-            return RedirectToAction("Details", "Course");
+            if (string.IsNullOrWhiteSpace(returnUrl))
+                return RedirectToAction("Index", "Home");
+
+            return LocalRedirect(returnUrl);
         }
 
         public async Task<IActionResult> Logout()

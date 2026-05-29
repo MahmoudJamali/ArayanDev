@@ -1,0 +1,86 @@
+﻿@using Entities.Concrete
+@model Course  
+
+<style>
+    .course-img-top {
+        height: 220px !important;
+        object-fit: cover;
+        border-radius: .75rem .75rem 0 0;
+    }
+
+    .section-title {
+        font-weight: 800;
+        color: #6f42c1;
+        margin-bottom: 10px;
+        display: block;
+        font-size: 17px;
+    }
+
+    .highlight-box {
+        background: #f8f6ff;
+        border-right: 4px solid #6f42c1;
+        padding: 15px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container my-5 text-end" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card shadow-lg border-0" style="border-radius: 15px;">
+
+                <!-- تصویر پیش‌فرض یا اختصاصی دوره -->
+                <img src="/assets/img/course/course2.jpg"
+                     class="course-img-top"
+                     alt="@Model.Title">
+
+                <div class="card-body px-4 py-5">
+                    <!-- عنوان -->
+                    <h3 class="fw-bold text-center mb-4" style="color:#333;">
+                        تایید نهایی ثبت‌نام
+                    </h3>
+
+                    <div class="alert alert-warning text-center mb-4" role="alert">
+                        شما در حال نهایی کردن فرآیند ثبت‌نام در دوره زیر هستید. لطفا اطلاعات را بررسی نمایید.
+                    </div>
+
+                    <div class="highlight-box">
+                        <span class="section-title">مشخصات دوره انتخابی</span>
+                        <p class="mb-2"><strong>عنوان دوره:</strong> @Model.Title</p>
+                        
+                        <p class="mb-0">
+                            <strong>هزینه دوره:</strong> 
+                            @if (Model.IsFree || Model.Price == 0)
+                            {
+                                <span class="text-success fw-bold">رایگان</span>
+                            }
+                            else
+                            {
+                                <span class="fw-bold text-dark">@Model.Price.ToString("N0") تومان</span>
+                            }
+                        </p>
+                    </div>
+
+                    <!-- دکمه‌های تایید و انصراف -->
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <form asp-controller="Course" asp-action="ConfirmEnroll" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="courseId" value="@Model.Id" />
+                            
+                            <button type="submit" class="btn btn-success px-5 py-2 fw-bold" style="font-size:16px;">
+                                تایید و ثبت‌نام نهایی <i class="fas fa-check-circle ms-1"></i>
+                            </button>
+                        </form>
+
+                        <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.Id" 
+                           class="btn btn-outline-secondary px-4 py-2">
+                            انصراف و بازگشت
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

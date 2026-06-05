@@ -14,5 +14,7 @@ namespace DataAccess.Abstract
 
         Task<bool> ExistsByPhoneAsync(string phoneNumber);
         Task<User> GetByIdWithRoleAndProfileAsync(Guid userId);
+
+        Task<User?> GetUserWithProfile(Guid userId);
     }
 }

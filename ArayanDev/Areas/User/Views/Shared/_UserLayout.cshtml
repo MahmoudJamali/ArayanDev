@@ -38,6 +38,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="sidebar">
@@ -46,32 +47,32 @@
             پروفایل من
         </h4>
 
-        <a asp-area="Admin"
+        <a asp-area="User"
            asp-controller="Dashboard"
            asp-action="Index">
             داشبورد
         </a>
 
-        <a href="#">
-            دوره‌ها
-        </a>
+        <a href="#">دوره‌ها</a>
+        <a href="#">کاربران</a>
 
-        <a href="#">
-            کاربران
-        </a>
         <a class="dropdown-item text-danger" href="/Auth/Logout">
             خروج
         </a>
+
     </div>
 
     <div class="content">
         @RenderBody()
     </div>
 
-    <!-- Scripts -->
-
+    <!-- jQuery اول -->
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
+   
+    <!-- اسکریپت ویوها -->
+    @RenderSection("Scripts", required: false)
 
 </body>
 </html>

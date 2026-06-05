@@ -1,0 +1,120 @@
+﻿@using System.Globalization
+@using Business.Handlers.Users.Commands
+@model EditProfileViewModel
+<div class="card shadow-sm">
+    <div class="card-header">
+        ویرایش اطلاعات
+    </div>
+
+    <div class="card-body">
+
+        <form asp-action="EditProfile" method="post">
+
+            <input type="hidden" asp-for="UserId" />
+
+            <div class="row">
+
+                <div class="col-md-4 mb-3">
+                    <label>نام</label>
+                    <input asp-for="Name" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>نام خانوادگی</label>
+                    <input asp-for="Family" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>کد ملی</label>
+                    <input asp-for="NationalCode" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>شهر</label>
+                    <input asp-for="City" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>تاریخ تولد (شمسی)</label>
+
+                    <div class="row">
+
+                        <div class="col-4">
+                            <select asp-for="BirthYear" class="form-control">
+                                <option value="">سال</option>
+
+                                @for (int y = 1330; y <= 1410; y++)
+                                {
+                                    <option value="@y">@y</option>
+                                }
+
+                            </select>
+                        </div>
+
+                        <div class="col-4">
+                            <select asp-for="BirthMonth" class="form-control">
+                                <option value="">ماه</option>
+
+                                <option value="1">فروردین</option>
+                                <option value="2">اردیبهشت</option>
+                                <option value="3">خرداد</option>
+                                <option value="4">تیر</option>
+                                <option value="5">مرداد</option>
+                                <option value="6">شهریور</option>
+                                <option value="7">مهر</option>
+                                <option value="8">آبان</option>
+                                <option value="9">آذر</option>
+                                <option value="10">دی</option>
+                                <option value="11">بهمن</option>
+                                <option value="12">اسفند</option>
+
+                            </select>
+                        </div>
+
+                        <div class="col-4">
+                            <select asp-for="BirthDayNumber" class="form-control">
+                                <option value="">روز</option>
+
+                                @for (int d = 1; d <= 31; d++)
+                                {
+                                    <option value="@d">@d</option>
+                                }
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>مدرک تحصیلی</label>
+                    <input asp-for="EducationDegree" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>رشته</label>
+                    <input asp-for="Major" class="form-control" />
+                </div>
+
+                <div class="col-md-4 mb-3">
+                    <label>ایمیل</label>
+                    <input asp-for="Email" class="form-control" />
+                </div>
+
+                <div class="col-md-8 mb-3">
+                    <label>آدرس</label>
+                    <input asp-for="Address" class="form-control" />
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                ذخیره تغییرات
+            </button>
+
+        </form>
+
+    </div>
+</div>
+

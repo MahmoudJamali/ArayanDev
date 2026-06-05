@@ -55,6 +55,11 @@ namespace DataAccess.Concrete.Repositories
                 .Include(x => x.Profile)
                 .FirstAsync(x => x.Id == userId);
         }
-
+        public async Task<User?> GetUserWithProfile(Guid userId)
+        {
+            return await _context.Users
+                .Include(x => x.Profile)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+        }
     }
 }

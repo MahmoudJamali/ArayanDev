@@ -1,5 +1,90 @@
-﻿
+﻿@using Business.Handlers.Users.Queries
+@model UserDashboardViewModel
+@using System.Globalization
+
+@{
+    string birthDateShamsi = "";
+
+    if (Model.BirthDay != default)
+    {
+        var pc = new PersianCalendar();
+        var date = Model.BirthDay.ToDateTime(TimeOnly.MinValue);
+
+        birthDateShamsi = $"{pc.GetYear(date)}/{pc.GetMonth(date):00}/{pc.GetDayOfMonth(date):00}";
+    }
+}
 
 
+<<div class="card mb-4 shadow-sm">
 
-HI UUUUSSSSEEERRRR
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>اطلاعات کاربری</span>
+
+        <form asp-area="User"
+              asp-controller="Dashboard"
+              asp-action="EditProfile"
+              method="get">
+
+            <button type="submit" class="btn btn-sm btn-primary">
+                ویرایش اطلاعات
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row">
+
+            <div class="col-md-4 mb-3">
+                <strong>نام:</strong>
+                <div>@Model.Name</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>نام خانوادگی:</strong>
+                <div>@Model.Family</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>شماره موبایل:</strong>
+                <div>@Model.PhoneNumber</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>کد ملی:</strong>
+                <div>@Model.NationalCode</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>شهر:</strong>
+                <div>@Model.City</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>تاریخ تولد:</strong>
+                <div>@birthDateShamsi</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>مدرک تحصیلی:</strong>
+                <div>@Model.EducationDegree</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>رشته:</strong>
+                <div>@Model.Major</div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <strong>ایمیل:</strong>
+                <div>@Model.Email</div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

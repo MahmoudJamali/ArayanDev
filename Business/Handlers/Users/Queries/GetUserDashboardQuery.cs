@@ -103,17 +103,18 @@ public class GetUserDashboardQueryHandler
             UserId = user.Id,
             PhoneNumber = user.PhoneNumber,
 
-            Name = user.Profile.Name,
-            Family = user.Profile.Family,
-            NationalCode = user.Profile.NationalCode,
-            City = user.Profile.City,
-            BirthDay = user.Profile.BirthDay,
-            EducationDegree = user.Profile.EducationDegree,
-            Major = user.Profile.Major,
-            Email = user.Profile.Email,
-            Address = user.Profile.Address,
+            Name = user.Profile?.Name,
+            Family = user.Profile?.Family,
+            NationalCode = user.Profile?.NationalCode,
+            City = user.Profile?.City,
+            BirthDay = user.Profile?.BirthDay ?? default,
+            EducationDegree = user.Profile?.EducationDegree,
+            Major = user.Profile?.Major,
+            Email = user.Profile?.Email,
+
             Courses = courses
         };
+
     }
 }
 

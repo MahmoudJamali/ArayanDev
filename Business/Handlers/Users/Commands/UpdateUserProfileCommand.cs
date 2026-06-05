@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Business.Handlers.Users.Commands;
 using DataAccess.Concrete.Contexts;
+using Entities.Concrete;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 namespace Business.Handlers.Users.Commands
@@ -53,7 +54,14 @@ public class UpdateUserProfileCommandHandler
             .FirstOrDefaultAsync(x => x.UserId == request.Model.UserId);
 
         if (profile == null)
-            return false;
+        {
+            profile = new UserProfile
+            {
+                UserId = request.Model.UserId
+            };
+
+            _context.UserProfile.Add(profile);
+        }
 
         profile.Name = request.Model.Name;
         profile.Family = request.Model.Family;
@@ -71,6 +79,7 @@ public class UpdateUserProfileCommandHandler
 
         return true;
     }
+
 }
 
 

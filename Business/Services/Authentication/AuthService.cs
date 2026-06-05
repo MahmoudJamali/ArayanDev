@@ -28,8 +28,10 @@ public class AuthService : IAuthService
             return false;
 
         var user = await _context.Users
-            .Include(u => u.Role)
-            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+    .Include(u => u.Role)
+    .Include(u => u.Profile)
+    .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+
 
         if (user == null)
             return false;
@@ -38,6 +40,15 @@ public class AuthService : IAuthService
         var profileCompleted = await _context.UserProfile
             .AnyAsync(x => x.UserId == user.Id);
 
+
+        string fullName = "";
+
+        if (user.Profile != null && !string.IsNullOrWhiteSpace(user.Profile.Name))
+        {
+            fullName = $"{user.Profile.Name} {user.Profile.Family}";
+        }
+
+
         // Claims
         var claims = new List<Claim>
     {
@@ -45,7 +56,8 @@ public class AuthService : IAuthService
         new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
         new Claim(ClaimTypes.Role, user.Role.Name),
         new Claim("IsPhoneConfirmed", user.IsPhoneNumberConfirmed.ToString()),
-        new Claim("ProfileCompleted", profileCompleted ? "true" : "false")
+        new Claim("ProfileCompleted", profileCompleted ? "true" : "false"),
+        new Claim("FullName", fullName)
     };
 
         var identity = new ClaimsIdentity(claims, "MyCookieAuth");
@@ -67,13 +79,21 @@ public class AuthService : IAuthService
     {
         var profileCompleted = user.Profile != null;
 
+        string fullName = "";
+
+        if (user.Profile != null && !string.IsNullOrWhiteSpace(user.Profile.Name))
+        {
+            fullName = $"{user.Profile.Name} {user.Profile.Family}";
+        }
+
         var claims = new List<Claim>
     {
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
         new Claim(ClaimTypes.MobilePhone, user.PhoneNumber),
         new Claim(ClaimTypes.Role, user.Role.Name),
         new Claim("IsPhoneConfirmed", user.IsPhoneNumberConfirmed.ToString()),
-        new Claim("ProfileCompleted", profileCompleted ? "true" : "false")
+        new Claim("ProfileCompleted", profileCompleted ? "true" : "false"),
+        new Claim("FullName", fullName)
     };
 
         var identity = new ClaimsIdentity(claims, "MyCookieAuth");
@@ -87,6 +107,7 @@ public class AuthService : IAuthService
 
         await http.SignInAsync("MyCookieAuth", principal, authProps);
     }
+
 
 
     public async Task<bool> UpdateProfileAsync(Guid userId, UserProfile model)

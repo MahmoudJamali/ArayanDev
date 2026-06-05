@@ -8,6 +8,7 @@ using Business.Handlers.Users.Commands;
 using DataAccess.Concrete.Contexts;
 using Entities.Concrete;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 namespace Business.Handlers.Users.Commands
 {
@@ -42,10 +43,17 @@ public class UpdateUserProfileCommandHandler
     : IRequestHandler<UpdateUserProfileCommand, bool>
 {
     private readonly AppDbContext _context;
+    private readonly IAuthService _authService;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UpdateUserProfileCommandHandler(AppDbContext context)
+    public UpdateUserProfileCommandHandler(
+        AppDbContext context,
+        IAuthService authService,
+        IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
+        _authService = authService;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<bool> Handle(UpdateUserProfileCommand request, CancellationToken cancellationToken)
@@ -77,10 +85,21 @@ public class UpdateUserProfileCommandHandler
 
         await _context.SaveChangesAsync();
 
+        // گرفتن کاربر برای ساخت Claims جدید
+        var user = await _context.Users
+            .Include(x => x.Role)
+            .Include(x => x.Profile)
+            .FirstOrDefaultAsync(x => x.Id == request.Model.UserId);
+
+        if (user != null)
+        {
+            await _authService.SignInUserAsync(user, _httpContextAccessor.HttpContext!);
+        }
+
         return true;
     }
-
 }
+
 
 
 

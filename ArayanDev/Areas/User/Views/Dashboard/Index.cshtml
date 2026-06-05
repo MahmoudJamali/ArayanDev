@@ -1,6 +1,7 @@
 ﻿@using Business.Handlers.Users.Queries
 @model UserDashboardViewModel
 @using System.Globalization
+@using Entities.Enums
 
 @{
     string birthDateShamsi = "";
@@ -88,3 +89,83 @@
 
 </div>
 
+<div class="card shadow-sm">
+
+    <div class="card-header">
+        دوره‌های ثبت نام شده
+    </div>
+
+    <div class="card-body">
+
+        @if (!Model.Courses.Any())
+        {
+            <div class="alert alert-info">
+                شما هنوز در دوره‌ای ثبت نام نکرده‌اید
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th>عنوان دوره</th>
+                        <th>نوع دوره</th>
+                        <th>قیمت</th>
+                        <th>تاریخ شروع</th>
+                        <th>تاریخ ثبت نام</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @{
+                        var pc = new PersianCalendar();
+                    }
+
+                    @foreach (var item in Model.Courses)
+                    {
+                        string startDateShamsi = "-";
+                        string enrollDateShamsi = "-";
+
+                        if (item.StartDate.HasValue)
+                        {
+                            var sd = item.StartDate.Value;
+                            startDateShamsi =
+                            $"{pc.GetYear(sd)}/{pc.GetMonth(sd):00}/{pc.GetDayOfMonth(sd):00}";
+                        }
+
+                        var ed = item.EnrollDate;
+                        enrollDateShamsi =
+                        $"{pc.GetYear(ed)}/{pc.GetMonth(ed):00}/{pc.GetDayOfMonth(ed):00}";
+
+                        <tr>
+
+                            <td>@item.Title</td>
+
+                            <td>
+                                @(item.CourseType == CourseType.InPerson
+                                    ? "حضوری"
+                                    : "آنلاین")
+                            </td>
+
+                            <td>
+                                @(item.IsFree ? "رایگان" : item.Price.ToString("N0"))
+                            </td>
+
+                            <td>@startDateShamsi</td>
+
+                            <td>@enrollDateShamsi</td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+
+            </table>
+        }
+
+    </div>
+
+</div>

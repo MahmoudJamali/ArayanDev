@@ -320,7 +320,7 @@
         </ul>
     </nav>
 </div>
-
+                        @User.Identity.IsAuthenticated
                         <!-- دکمه‌های ورود و ثبت‌نام سمت چپ -->
                         @{
                             var fullName1 = User.FindFirst("FullName")?.Value;

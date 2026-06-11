@@ -1,96 +1,126 @@
-﻿using DataAccess.Concrete.Contexts;
-using Entities.Concrete;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+using Business.Services;
+using DataAccess.Concrete.Contexts;
 using Entities.Concrete.Entities.Concrete;
 using Entities.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
+using Microsoft.Extensions.Configuration;
 
-namespace Business.Services
+
+
+public class MelipayamakOtpResponse
 {
-    public class OtpService : IOtpService
+    public string code { get; set; } = null!;
+    public string status { get; set; } = null!;
+}
+
+public class OtpService : IOtpService
+{
+    private readonly HttpClient _client;
+    private readonly IConfiguration _config;
+
+    private readonly AppDbContext _context;
+
+    public OtpService(
+        HttpClient client,
+        IConfiguration config,
+        AppDbContext context)
     {
-        private readonly AppDbContext _context;
+        _client = client;
+        _config = config;
+        _context = context;
 
-        public OtpService(AppDbContext context)
+        _client.BaseAddress = new Uri("https://console.melipayamak.com/");
+         }
+
+
+    public async Task SendOtpAsync(string phoneNumber)
+    {
+        var apiKey = _config["Melipayamak:ApiKey"];
+
+        var response = await _client.PostAsJsonAsync(
+            $"api/send/otp/{apiKey}",
+            new { to = phoneNumber });
+
+        if (!response.IsSuccessStatusCode)
+            throw new Exception("Melipayamak error");
+
+        var result = await response.Content.ReadFromJsonAsync<MelipayamakOtpResponse>();
+
+        if (result == null || string.IsNullOrEmpty(result.code))
+            throw new Exception("OTP not returned");
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
+        if (user == null)
+            throw new Exception("User not found");
+
+        // غیرفعال کردن OTPهای قبلی
+        var oldOtps = await _context.UserOtps
+            .Where(x => x.UserId == user.Id && x.ExpireAt > DateTime.UtcNow)
+            .ToListAsync();
+
+        foreach (var item in oldOtps)
+            item.ExpireAt = DateTime.UtcNow;
+
+        // ذخیره OTP جدید
+        var userOtp = new UserOtp
         {
-            _context = context;
-        }
+            UserId = user.Id,
+            OtpCode = result.code, // بهتره هش بشه
+            ExpireAt = DateTime.UtcNow.AddMinutes(5),
+            CreatedDate = DateTime.UtcNow,
+            AttemptCount = 0
+        };
 
-        public async Task SendOtpAsync(string phoneNumber)
-        {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
+        _context.UserOtps.Add(userOtp);
 
-            if (user == null)
-            {
-                user = new User
-                {
-                    PhoneNumber = phoneNumber,
-                    RoleId = await _context.Roles
-                        .Where(r => r.Name == "User")
-                        .Select(r => r.Id)
-                        .FirstAsync()
-                };
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-            }
-
-            string otp = GenerateOtp();
-
-            var otpEntity = new UserOtp
-            {
-                UserId = user.Id,
-                OtpCode = otp,
-                ExpireAt = DateTime.Now.AddMinutes(2)
-            };
-
-            _context.UserOtps.Add(otpEntity);
-            await _context.SaveChangesAsync();
-
-            Console.WriteLine($"OTP for {phoneNumber}: {otp}");
-        }
-
-        public async Task<OtpVerifyResult> VerifyOtpAsync(string phoneNumber, string otp)
-        {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-
-            if (user == null)
-                return OtpVerifyResult.InvalidCode;
-
-            var otpEntity = await _context.UserOtps
-                .Where(o => o.UserId == user.Id)
-                .OrderByDescending(o => o.CreatedDate)
-                .FirstOrDefaultAsync();
-
-            if (otpEntity == null)
-                return OtpVerifyResult.InvalidCode;
-
-            if (otpEntity.ExpireAt < DateTime.Now)
-                return OtpVerifyResult.Expired;
-
-            if (otpEntity.AttemptCount >= 5)
-                return OtpVerifyResult.TooManyAttempts;
-
-            if (otpEntity.OtpCode != otp)
-            {
-                otpEntity.AttemptCount++;
-                await _context.SaveChangesAsync();
-                return OtpVerifyResult.InvalidCode;
-            }
-
-            user.IsPhoneNumberConfirmed = true;
-            await _context.SaveChangesAsync();
-
-            return OtpVerifyResult.Success;
-        }
-
-        private string GenerateOtp()
-        {
-            int code = RandomNumberGenerator.GetInt32(100000, 999999);
-            return code.ToString();
-        }
+        await _context.SaveChangesAsync();
     }
+
+    public async Task<OtpVerifyResult> VerifyOtpAsync(string phoneNumber, string otp)
+    {
+        var now = DateTime.UtcNow;
+
+        var user = await _context.Users
+            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+
+        if (user == null)
+            return OtpVerifyResult.InvalidCode;
+
+        // فقط OTP معتبر (منقضی نشده) رو بگیر
+        var userOtp = await _context.UserOtps
+            .Where(x => x.UserId == user.Id && x.ExpireAt > now)
+            .OrderByDescending(x => x.CreatedDate)
+            .FirstOrDefaultAsync();
+
+        if (userOtp == null)
+            return OtpVerifyResult.Expired;
+
+        // محدودیت تعداد تلاش
+        if (userOtp.AttemptCount >= 5)
+            return OtpVerifyResult.TooManyAttempts;
+
+        // بررسی کد
+        if (userOtp.OtpCode != otp)
+        {
+            userOtp.AttemptCount++;
+            await _context.SaveChangesAsync();
+            return OtpVerifyResult.InvalidCode;
+        }
+
+        // ✅ موفق - invalidate کردن OTP
+        userOtp.ExpireAt = now;
+
+        user.IsPhoneNumberConfirmed = true;
+
+        await _context.SaveChangesAsync();
+
+        return OtpVerifyResult.Success;
+    }
+
+
 
 }

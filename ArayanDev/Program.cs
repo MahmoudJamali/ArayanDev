@@ -16,6 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddDataAccessServices(builder.Configuration);
 builder.Services.AddScoped<IOtpService, OtpService>();
+builder.Services.AddHttpClient<IOtpService, OtpService>();
 // MediatR registration
 builder.Services.AddCustomMediatR();
 builder.Services.AddControllersWithViews();

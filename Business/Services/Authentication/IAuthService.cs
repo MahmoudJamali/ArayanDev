@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 public interface IAuthService
 {
-    Task<bool> LoginWithOtpAsync(string phoneNumber, string otp, HttpContext http);
+    Task<bool> LoginWithOtpAsync(string phoneNumber,  HttpContext http);
     Task LogoutAsync(HttpContext http);
     Task SignInUserAsync(User user, HttpContext http);
     Task<bool> UpdateProfileAsync(Guid userId, UserProfile model);

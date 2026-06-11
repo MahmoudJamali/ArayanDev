@@ -15,13 +15,11 @@ namespace UI.Controllers
     public class AuthController : Controller
     {
         private readonly IMediator _mediator;
-        private readonly IOtpRepository _otpRepository;
         private readonly IAuthService _authService;
-        public AuthController(IMediator mediator, IOtpRepository otpRepository , IAuthService authService)
+        public AuthController(IMediator mediator, IAuthService authService)
         {
             _authService = authService;
             _mediator = mediator;
-            _otpRepository = otpRepository;
         }
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
@@ -39,17 +37,12 @@ namespace UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerifyOtp(string phoneNumber, string? returnUrl = null)
+        public IActionResult VerifyOtp(string phoneNumber, string? returnUrl = null)
         {
             ViewBag.ReturnUrl = returnUrl;
-
-            var otp = await _otpRepository.GetLastOtpByPhoneAsync(phoneNumber);
-
-            if (otp != null)
-                ViewBag.ExpireAt = otp.ExpireAt;
-
             return View(model: phoneNumber);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> VerifyOtp(string phoneNumber, string otpCode, string? returnUrl = null)
@@ -64,41 +57,29 @@ namespace UI.Controllers
             {
                 ModelState.AddModelError("", "کد وارد شده اشتباه است.");
                 ViewBag.ReturnUrl = returnUrl;
-
-                var otp = await _otpRepository.GetLastOtpByPhoneAsync(phoneNumber);
-
-                if (otp != null)
-                    ViewBag.ExpireAt = otp.ExpireAt;
-
                 return View(model: phoneNumber);
             }
 
             if (result == OtpVerifyResult.Expired)
             {
                 ModelState.AddModelError("", "کد منقضی شده است.");
-
-                var otp = await _otpRepository.GetLastOtpByPhoneAsync(phoneNumber);
-
-                if (otp != null)
-                    ViewBag.ExpireAt = otp.ExpireAt;
-
                 return View(model: phoneNumber);
             }
 
-            await _mediator.Send(new LoginCommand
+            // ✅ اینجا کوکی ساخته می‌شود
+            var loginSuccess = await _authService.LoginWithOtpAsync(phoneNumber,  HttpContext);
+
+            if (!loginSuccess)
             {
-                PhoneNumber = phoneNumber,
-                Otp = otpCode
-            });
+                ModelState.AddModelError("", "خطا در ورود.");
+                return View(model: phoneNumber);
+            }
 
             if (string.IsNullOrEmpty(returnUrl))
                 return RedirectToAction("Index", "Home");
 
             return LocalRedirect(returnUrl);
         }
-
-
-
 
         [HttpGet]
         public IActionResult CompleteProfile(string? returnUrl = null)

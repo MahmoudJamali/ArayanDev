@@ -28,7 +28,7 @@ namespace Business.Handlers.Authentication.Commands
         {
             return await _authService.LoginWithOtpAsync(
                 request.PhoneNumber,
-                request.Otp,
+
                 _http.HttpContext!
             );
         }

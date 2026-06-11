@@ -19,27 +19,18 @@ public class AuthService : IAuthService
         _otpService = otpService;
     }
 
-    public async Task<bool> LoginWithOtpAsync(string phoneNumber, string otp, HttpContext http)
+    public async Task<bool> LoginWithOtpAsync(string phoneNumber, HttpContext http)
     {
-        // بررسی OTP
-        var result = await _otpService.VerifyOtpAsync(phoneNumber, otp);
-
-        if (result != OtpVerifyResult.Success)
-            return false;
-
         var user = await _context.Users
-    .Include(u => u.Role)
-    .Include(u => u.Profile)
-    .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
-
+            .Include(u => u.Role)
+            .Include(u => u.Profile)
+            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber);
 
         if (user == null)
             return false;
 
-        // بررسی وجود پروفایل
         var profileCompleted = await _context.UserProfile
             .AnyAsync(x => x.UserId == user.Id);
-
 
         string fullName = "";
 
@@ -48,8 +39,6 @@ public class AuthService : IAuthService
             fullName = $"{user.Profile.Name} {user.Profile.Family}";
         }
 
-
-        // Claims
         var claims = new List<Claim>
     {
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),

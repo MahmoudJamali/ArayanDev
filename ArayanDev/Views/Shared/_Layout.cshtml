@@ -320,7 +320,6 @@
         </ul>
     </nav>
 </div>
-                        @User.Identity.IsAuthenticated
                         <!-- دکمه‌های ورود و ثبت‌نام سمت چپ -->
                         @{
                             var fullName1 = User.FindFirst("FullName")?.Value;
@@ -427,9 +426,11 @@
                             <i class="fal fa-phone"></i>
                         </div>
                         <div class="media-body">
-                            <p class="footer-contact_text"> تماس با مدرس</p>
-                            <a href="tel+11234567890" class="footer-contact_link">09100045628</a>
-                            
+                            <p class="footer-contact_text">مدرس دوره مهندس جمالی:</p>
+
+                            <a href="tel:09100045628" class="footer-contact_link">
+                                09100045628
+                            </a>
                         </div>
                     </div>
                     <div class="divider"></div>
@@ -439,7 +440,12 @@
                         </div>
                         <div class="media-body">
                             <p class="footer-contact_text">کانال روبیکا:</p>
-                            <a href="Rubika.ir/ArayanDev" class="footer-contact_link">Rubika.ir/ArayanDev</a>
+
+                            <a href="https://rubika.ir/ArayanDev"
+                               class="footer-contact_link"
+                               target="_blank">
+                                rubika.ir/ArayanDev
+                            </a>
                         </div>
                     </div>
                     <div class="divider"></div>
@@ -449,10 +455,28 @@
                         </div>
                         <div class="media-body">
                             <p class="footer-contact_text">آدرس آموزشگاه:</p>
-                            <a class="footer-contact_link" style="font-size: 0.85em;">
+
+                            <a href="https://www.google.com/maps?q=33.63615432013166,46.426656147650114"
+                               class="footer-contact_link"
+                               style="font-size:0.85em;"
+                               target="_blank">
+
                                 ایلام - خیابان فردوسی - روبروی بانک مهر ایران - بن بست زاگرس
                             </a>
-                            <a class="footer-contact_link" style="font-size: 0.85em;"> ساختمان خلیج فارس -ط 3 - آموزشگاه فناوری اطلاعات برتر - 09187454688 </a>
+
+                            <a href="https://www.google.com/maps?q=33.63615432013166,46.426656147650114"
+                               class="footer-contact_link"
+                               style="font-size:0.85em;"
+                               target="_blank">
+
+                                ساختمان خلیج فارس - طبقه ۳ - آموزشگاه فناوری اطلاعات برتر
+                            </a>
+
+                            <a href="tel:09187454688"
+                               class="footer-contact_link"
+                               style="font-size:0.85em;">
+                                09187454688
+                            </a>
                         </div>
                     </div>
                 </div>

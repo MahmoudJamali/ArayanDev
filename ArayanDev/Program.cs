@@ -9,6 +9,7 @@ using MediatR;
 using Business.Handlers.Authentication.Commands;
 using DataAccess.Abstract;
 using DataAccess.Concrete.Repositories;
+using Entities.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -51,6 +52,8 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOtpRepository, OtpRepository>();
+builder.Services.AddScoped<IImageService, ImageService>();
+
 
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();

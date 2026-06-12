@@ -24,6 +24,8 @@ namespace Business.Handlers.UserProfiles.Commands
         public string Major { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string? Email { get; set; }
+
+        public IFormFile? ProfileImage { get; set; }
     }
 
     // ---------- Validator ----------
@@ -61,6 +63,27 @@ namespace Business.Handlers.UserProfiles.Commands
                 .EmailAddress()
                 .When(x => !string.IsNullOrWhiteSpace(x.Model.Email))
                 .WithMessage("ایمیل معتبر نیست");
+
+            RuleFor(x => x.Model.ProfileImage)
+            .Must(file =>
+            {
+               if (file == null) return true;
+
+                 var allowed = new[] { ".jpg", ".jpeg", ".png" };
+               var ext = Path.GetExtension(file.FileName).ToLower();
+
+               return allowed.Contains(ext);
+            })
+              .WithMessage("فرمت عکس باید jpg یا png باشد");
+
+            RuleFor(x => x.Model.ProfileImage)
+            .Must(file =>
+            {
+                if (file == null) return true;
+                return file.Length <= 5 * 1024 * 1024;
+            })
+            .WithMessage("حجم عکس نباید بیشتر از 5 مگابایت باشد");
+
         }
     }
 
@@ -71,22 +94,36 @@ namespace Business.Handlers.UserProfiles.Commands
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IImageService _imageService;
 
         public CompleteProfileHandler(
             IUserProfileRepository profileRepository,
             IUserRepository userRepository,
-            IAuthService authService,
+            IAuthService authService, 
+            IImageService imageService,
             IHttpContextAccessor httpContextAccessor)
+           
+
         {
             _profileRepository = profileRepository;
             _userRepository = userRepository;
             _authService = authService;
             _httpContextAccessor = httpContextAccessor;
+            _imageService = imageService;
+
         }
 
         public async Task<bool> Handle(CompleteProfileCommand request, CancellationToken cancellationToken)
         {
             var profile = await _profileRepository.GetByUserIdAsync(request.UserId);
+
+            string? imagePath = null;
+
+            if (request.Model.ProfileImage != null)
+            {
+                imagePath = await _imageService.SaveProfileImageAsync(request.Model.ProfileImage);
+            }
+
 
             if (profile == null)
             {
@@ -101,7 +138,8 @@ namespace Business.Handlers.UserProfiles.Commands
                     EducationDegree = request.Model.EducationDegree,
                     Major = request.Model.Major,
                     Address = request.Model.Address,
-                    Email = request.Model.Email
+                    Email = request.Model.Email,
+                    ProfileImage = imagePath
                 };
 
                 await _profileRepository.AddAsync(profile);
@@ -117,6 +155,9 @@ namespace Business.Handlers.UserProfiles.Commands
                 profile.Major = request.Model.Major;
                 profile.Address = request.Model.Address;
                 profile.Email = request.Model.Email;
+                if (imagePath != null)
+                    profile.ProfileImage = imagePath;
+
 
                 await _profileRepository.UpdateAsync(profile);
             }

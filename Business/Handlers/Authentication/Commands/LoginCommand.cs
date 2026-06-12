@@ -1,9 +1,7 @@
 ﻿using MediatR;
-using DataAccess.Abstract;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Business.Services;
+using Entities.Enums;
 
 namespace Business.Handlers.Authentication.Commands
 {
@@ -16,23 +14,32 @@ namespace Business.Handlers.Authentication.Commands
     public class LoginCommandHandler : IRequestHandler<LoginCommand, bool>
     {
         private readonly IAuthService _authService;
-        private readonly IHttpContextAccessor _http;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-        public LoginCommandHandler(IAuthService authService, IHttpContextAccessor http)
+        public LoginCommandHandler(
+            IAuthService authService,
+            IHttpContextAccessor contextAccessor)
         {
             _authService = authService;
-            _http = http;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<bool> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
+            // مرحله 1: بررسی OTP
+            var verifyResult = await _authService.VerifyOtpAsync(
+                request.PhoneNumber,
+                request.Otp
+            );
+
+            if (verifyResult != OtpVerifyResult.Success)
+                return false;
+
+            // مرحله 2: ورود کاربر
             return await _authService.LoginWithOtpAsync(
                 request.PhoneNumber,
-
-                _http.HttpContext!
+                _contextAccessor.HttpContext!
             );
         }
     }
-
 }
-

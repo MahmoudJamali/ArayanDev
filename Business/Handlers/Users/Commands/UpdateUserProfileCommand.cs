@@ -32,7 +32,12 @@ namespace Business.Handlers.Users.Commands
         public string Address { get; set; }
         public string? Email { get; set; }
 
+        // فایل آپلود جدید
         public IFormFile? ProfileImage { get; set; }
+
+        // عکس فعلی کاربر
+        public string? CurrentProfileImage { get; set; }
+
     }
 }
 
@@ -130,12 +135,29 @@ public class UpdateUserProfileCommandHandler
 
             _context.UserProfile.Add(profile);
         }
+
+
         string? imagePath = null;
 
         if (request.Model.ProfileImage != null)
         {
+            // حذف عکس قبلی
+            if (!string.IsNullOrEmpty(profile.ProfileImage))
+            {
+                var oldPath = Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "wwwroot",
+                    profile.ProfileImage.TrimStart('/').Replace("/", Path.DirectorySeparatorChar.ToString())
+                );
+
+                if (File.Exists(oldPath))
+                    File.Delete(oldPath);
+            }
+
+            // ذخیره عکس جدید
             imagePath = await _imageService.SaveProfileImageAsync(request.Model.ProfileImage);
         }
+
 
         profile.Name = request.Model.Name;
         profile.Family = request.Model.Family;

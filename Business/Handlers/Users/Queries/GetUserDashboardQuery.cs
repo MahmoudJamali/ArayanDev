@@ -10,6 +10,7 @@ using MediatR;
 using DataAccess.Concrete.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Entities.Enums;
+using Microsoft.AspNetCore.Http;
 
 
 namespace Business.Handlers.Users.Queries
@@ -29,6 +30,8 @@ namespace Business.Handlers.Users.Queries
         public string EducationDegree { get; set; }
         public string Major { get; set; }
         public string Email { get; set; }
+        public string? ProfileImage { get; set; }
+
 
         public List<UserCourseItemViewModel> Courses { get; set; }
             = new();
@@ -111,7 +114,8 @@ public class GetUserDashboardQueryHandler
             EducationDegree = user.Profile?.EducationDegree,
             Major = user.Profile?.Major,
             Email = user.Profile?.Email,
-
+            Address = user.Profile?.Address,
+            ProfileImage = user.Profile?.ProfileImage,
             Courses = courses
         };
 

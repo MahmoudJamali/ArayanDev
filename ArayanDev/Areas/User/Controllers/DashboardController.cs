@@ -59,7 +59,8 @@ namespace UI.Areas.User.Controllers
                 EducationDegree = profile.EducationDegree,
                 Major = profile.Major,
                 Address = profile.Address,
-                Email = profile.Email
+                Email = profile.Email,
+                CurrentProfileImage = profile.ProfileImage
             };
 
             if (profile.BirthDay != default)

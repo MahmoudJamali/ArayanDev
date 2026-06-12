@@ -24,7 +24,7 @@ namespace Business.Handlers.UserProfiles.Commands
         public string Major { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string? Email { get; set; }
-
+        public string? CurrentProfileImage { get; set; }
         public IFormFile? ProfileImage { get; set; }
     }
 

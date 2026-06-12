@@ -23,7 +23,12 @@ namespace UI.Areas.User.ViewModels;
         public string Major { get; set; }
         public string Email { get; set; }
 
-        public List<UserCourseItemViewModel> Courses { get; set; }
+    // فایل آپلود جدید
+    public IFormFile? ProfileImage { get; set; }
+
+    // عکس فعلی کاربر
+    public string? CurrentProfileImage { get; set; }
+    public List<UserCourseItemViewModel> Courses { get; set; }
             = new();
     }
 

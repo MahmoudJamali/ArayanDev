@@ -24,6 +24,13 @@ namespace UI.Areas.User.ViewModels
         public string Major { get; set; }
         public string Address { get; set; }
         public string? Email { get; set; }
+
+        // فایل آپلود جدید
+        public IFormFile? ProfileImage { get; set; }
+
+        // عکس فعلی کاربر
+        public string? CurrentProfileImage { get; set; }
+
     }
 }
 

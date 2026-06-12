@@ -146,6 +146,10 @@ public class AuthService : IAuthService
         }
     }
 
+    public async Task<OtpVerifyResult> VerifyOtpAsync(string phoneNumber, string otp)
+    {
+        return await _otpService.VerifyOtpAsync(phoneNumber, otp);
+    }
 
     public async Task LogoutAsync(HttpContext http)
     {

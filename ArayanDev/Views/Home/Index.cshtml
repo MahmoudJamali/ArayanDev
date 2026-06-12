@@ -240,6 +240,50 @@ Servce Area
 
             </div>
         </div>
+
+        @model List<CourseListItemDto>
+
+        <div class="container mt-5">
+
+            <!-- عنوان مدرن و آبی -->
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary">
+                    ثبت نام در دوره
+                </h2>
+
+            </div>
+
+            <div class="row justify-content-center">
+
+                @foreach (var course in Model)
+                {
+                    <!-- پهن‌تر از قبل (قبلاً col-md-4 بود) -->
+                    <div class="col-md-8 col-lg-6 mb-4 d-flex justify-content-center">
+
+                        <!-- ارتفاع بیشتر با py بیشتر -->
+                        <div class="card shadow-lg w-100 py-4">
+
+                            <div class="card-body text-center">
+
+                                <h4 class="card-title mb-3">
+                                    @course.Title
+                                </h4>
+
+                                <!-- دکمه همان اندازه، فقط وسط -->
+                                <a href="/Course/Details/@course.Id"
+                                   class="btn btn-primary px-4">
+                                    مشاهده جزئیات و ثبت نام در دوره
+                                </a>
+
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+
     </div>
 </section>
 

@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using Business.Services;
 using DataAccess.Concrete.Contexts;
+using Entities.Concrete;
 using Entities.Concrete.Entities.Concrete;
 using Entities.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -52,10 +53,31 @@ public class OtpService : IOtpService
             throw new Exception("OTP not returned");
 
         var user = await _context.Users
-            .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
+    .Include(x => x.Role)
+    .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
 
         if (user == null)
-            throw new Exception("User not found");
+        {
+            // گرفتن نقش پیش‌فرض (مثلاً User)
+            var defaultRole = await _context.Roles
+                .FirstOrDefaultAsync(r => r.Name == "User");
+
+            if (defaultRole == null)
+                throw new Exception("Default role not found");
+
+            user = new User
+            {
+                Id = Guid.NewGuid(),
+                PhoneNumber = phoneNumber,
+                RoleId = defaultRole.Id,
+                IsPhoneNumberConfirmed = false,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+        }
+
 
         // غیرفعال کردن OTPهای قبلی
         var oldOtps = await _context.UserOtps

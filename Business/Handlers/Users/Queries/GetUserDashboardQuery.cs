@@ -33,8 +33,8 @@ namespace Business.Handlers.Users.Queries
         public string? ProfileImage { get; set; }
 
 
-        public List<UserCourseItemViewModel> Courses { get; set; }
-            = new();
+        public List<UserCourseItemViewModel> Courses { get; set; } = new();
+           
     }
 
     public class UserCourseItemViewModel

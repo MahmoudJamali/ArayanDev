@@ -1,0 +1,170 @@
+﻿@using Business.Handlers.Users.Queries
+@model HomeStudentsViewModel
+
+<style>
+    .student-card {
+        background: #fff;
+        border-radius: 20px;
+        padding: 16px 12px;
+        text-align: center;
+        min-height: 185px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin: 10px 0;
+    }
+
+        .student-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+        }
+
+        .student-card::before {
+            content: "";
+            position: absolute;
+            top: -30px;
+            left: -30px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(255, 127, 235, 0.18), rgba(106, 184, 255, 0.18));
+            border-radius: 50%;
+        }
+
+        .student-card::after {
+            content: "";
+            position: absolute;
+            bottom: -25px;
+            right: -25px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(255, 209, 102, 0.18), rgba(255, 102, 196, 0.18));
+            border-radius: 50%;
+        }
+
+    .student-img-wrap {
+        width: 90px;
+        height: 90px;
+        margin: 0 auto 10px auto;
+        border-radius: 50%;
+        padding: 4px;
+        background: linear-gradient(135deg, #ff7feb, #6ab8ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        z-index: 2;
+    }
+
+    .student-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+    }
+
+    .student-name {
+        font-size: 15px;
+        font-weight: 800;
+        color: #2f2f2f;
+        margin-bottom: 4px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .student-title {
+        font-size: 13px;
+        color: #6c757d;
+        line-height: 1.6;
+        position: relative;
+        z-index: 2;
+    }
+
+    .student-dot {
+        width: 12px;
+        height: 12px;
+        background: #ff66c4;
+        border-radius: 50%;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        box-shadow: 0 0 0 rgba(255, 102, 196, 0.5);
+        animation: studentGlow 1.8s infinite;
+    }
+
+    @@keyframes studentGlow {
+        0%
+
+    {
+        box-shadow: 0 0 0 0 rgba(255, 102, 196, 0.45);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(255, 102, 196, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 102, 196, 0);
+    }
+
+    }</style>
+
+<section class="space pt-2" data-bg-src="/assets/img/bg/event-bg_1.png">
+    <div class="shape-mockup event-shape1 jump" data-top="0" data-left="-60px">
+        <img src="/assets/img/team/team-shape_1_1.png" alt="img">
+    </div>
+
+    <div class="container">
+        <div class="title-area text-center">
+            <span class="sub-title">
+                <i class="fal fa-screen-users me-3"></i>
+                دوستانی که برای برنامه‌نویس شدن ما را انتخاب کردند :
+            </span>
+        </div>
+
+        @if (Model?.Students != null && Model.Students.Any())
+        {
+            <div class="slider-shadow event-slider-1 th-carousel"
+                 data-slide-show="5"
+                 data-lg-slide-show="5"
+                 data-md-slide-show="2"
+                 data-sm-slide-show="1"
+                 data-xs-slide-show="1"
+                 data-arrows="true">
+
+                @foreach (var item in Model.Students)
+                {
+                    <div class="px-2">
+                        <div class="student-card">
+                            <div class="student-dot"></div>
+
+                            <div class="student-img-wrap">
+                                <img class="student-img"
+                                     src="@(string.IsNullOrEmpty(item.ProfileImage)
+                                            ? "/assets/img/event/event_img-1.png"
+                                            : item.ProfileImage)"
+                                     alt="@item.Name" />
+                            </div>
+
+                            <div class="student-name">
+                                @item.Name @item.Family
+                            </div>
+
+                            <div class="student-title">
+                                برنامه‌نویسی و طراحی سایت
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center">
+                دانشجویی برای نمایش یافت نشد.
+            </div>
+        }
+    </div>
+</section>

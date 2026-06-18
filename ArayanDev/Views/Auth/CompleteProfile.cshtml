@@ -45,19 +45,64 @@
                         <input asp-for="NationalCode" class="form-control" maxlength="10" />
                         <span asp-validation-for="NationalCode" class="text-danger"></span>
                     </div>
-                    <!-- Address -->
-                    <div class="col-md-12 mb-3">
-                        <label asp-for="Address" class="form-label">آدرس</label>
-                        <textarea asp-for="Address" class="form-control" rows="3"></textarea>
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
+
 
                     <!-- BirthDay -->
                     <div class="col-md-6 mb-3">
-                        <label asp-for="BirthDay" class="form-label">تاریخ تولد</label>
-                        <input asp-for="BirthDay" type="date" class="form-control" />
-                        <span asp-validation-for="BirthDay" class="text-danger"></span>
+                        <label class="form-label">تاریخ تولد</label>
+
+                        <div class="row g-2">
+                            <div class="col-4">
+                                <select asp-for="BirthDayDay" class="form-select">
+                                    <option value="">روز</option>
+                                    @for (int day = 1; day <= 31; day++)
+                                    {
+                                        <option value="@day">@day</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-4">
+                                <select asp-for="BirthDayMonth" class="form-select">
+                                    <option value="">ماه</option>
+                                    <option value="1">فروردین</option>
+                                    <option value="2">اردیبهشت</option>
+                                    <option value="3">خرداد</option>
+                                    <option value="4">تیر</option>
+                                    <option value="5">مرداد</option>
+                                    <option value="6">شهریور</option>
+                                    <option value="7">مهر</option>
+                                    <option value="8">آبان</option>
+                                    <option value="9">آذر</option>
+                                    <option value="10">دی</option>
+                                    <option value="11">بهمن</option>
+                                    <option value="12">اسفند</option>
+                                </select>
+                            </div>
+
+                            <div class="col-4">
+                                <select asp-for="BirthDayYear" class="form-select">
+                                    <option value="">سال</option>
+                                    @for (int year = 1405; year >= 1320; year--)
+                                    {
+                                        <option value="@year">@year</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <span asp-validation-for="BirthDayDay" class="text-danger d-block"></span>
+                        <span asp-validation-for="BirthDayMonth" class="text-danger d-block"></span>
+                        <span asp-validation-for="BirthDayYear" class="text-danger d-block"></span>
+
+                        @if (ViewData.ModelState["BirthDay"]?.Errors.Count > 0)
+                        {
+                            <span class="text-danger d-block">
+                                @ViewData.ModelState["BirthDay"]?.Errors.First().ErrorMessage
+                            </span>
+                        }
                     </div>
+
 
                     <!-- City -->
                     <div class="col-md-6 mb-3">

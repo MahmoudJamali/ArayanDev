@@ -3,6 +3,7 @@ using Entities.Concrete;
 using FluentValidation;
 using DataAccess.Abstract;
 using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace Business.Handlers.UserProfiles.Commands
 {
@@ -20,6 +21,9 @@ namespace Business.Handlers.UserProfiles.Commands
         public string NationalCode { get; set; } = null!;
         public string City { get; set; } = null!;
         public DateOnly BirthDay { get; set; }
+        public int? BirthDayDay { get; set; }
+        public int? BirthDayMonth { get; set; }
+        public int? BirthDayYear { get; set; }
         public string EducationDegree { get; set; } = null!;
         public string Major { get; set; } = null!;
         public string Address { get; set; } = null!;
@@ -29,7 +33,7 @@ namespace Business.Handlers.UserProfiles.Commands
     }
 
     // ---------- Validator ----------
-    public class CompleteProfileValidator : AbstractValidator<CompleteProfileCommand>
+public class CompleteProfileValidator : AbstractValidator<CompleteProfileCommand>
     {
         public CompleteProfileValidator()
         {
@@ -47,8 +51,18 @@ namespace Business.Handlers.UserProfiles.Commands
             RuleFor(x => x.Model.City)
                 .NotEmpty().WithMessage("شهر محل سکونت را وارد کنید");
 
-            RuleFor(x => x.Model.BirthDay)
-                .NotEmpty().WithMessage("تاریخ تولد را وارد کنید");
+            RuleFor(x => x.Model.BirthDayYear)
+                .NotNull().WithMessage("سال تولد را انتخاب کنید");
+
+            RuleFor(x => x.Model.BirthDayMonth)
+                .NotNull().WithMessage("ماه تولد را انتخاب کنید");
+
+            RuleFor(x => x.Model.BirthDayDay)
+                .NotNull().WithMessage("روز تولد را انتخاب کنید");
+
+            RuleFor(x => x.Model)
+                .Must(BeValidPersianDate)
+                .WithMessage("تاریخ تولد معتبر نیست");
 
             RuleFor(x => x.Model.Address)
                 .NotEmpty().WithMessage("آدرس را وارد کنید");
@@ -65,27 +79,49 @@ namespace Business.Handlers.UserProfiles.Commands
                 .WithMessage("ایمیل معتبر نیست");
 
             RuleFor(x => x.Model.ProfileImage)
-            .Must(file =>
-            {
-               if (file == null) return true;
+                .Must(file =>
+                {
+                    if (file == null) return true;
 
-                 var allowed = new[] { ".jpg", ".jpeg", ".png" };
-               var ext = Path.GetExtension(file.FileName).ToLower();
+                    var allowed = new[] { ".jpg", ".jpeg", ".png" };
+                    var ext = Path.GetExtension(file.FileName).ToLower();
 
-               return allowed.Contains(ext);
-            })
-              .WithMessage("فرمت عکس باید jpg یا png باشد");
+                    return allowed.Contains(ext);
+                })
+                .WithMessage("فرمت عکس باید jpg یا png باشد");
 
             RuleFor(x => x.Model.ProfileImage)
-            .Must(file =>
-            {
-                if (file == null) return true;
-                return file.Length <= 5 * 1024 * 1024;
-            })
-            .WithMessage("حجم عکس نباید بیشتر از 5 مگابایت باشد");
+                .Must(file =>
+                {
+                    if (file == null) return true;
+                    return file.Length <= 5 * 1024 * 1024;
+                })
+                .WithMessage("حجم عکس نباید بیشتر از 5 مگابایت باشد");
+        }
 
+        private bool BeValidPersianDate(CompleteProfileModel model)
+        {
+            if (!model.BirthDayYear.HasValue || !model.BirthDayMonth.HasValue || !model.BirthDayDay.HasValue)
+                return false;
+
+            try
+            {
+                var pc = new PersianCalendar();
+                _ = pc.ToDateTime(
+                    model.BirthDayYear.Value,
+                    model.BirthDayMonth.Value,
+                    model.BirthDayDay.Value,
+                    0, 0, 0, 0);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
+
 
     // ---------- Handler ----------
     public class CompleteProfileHandler : IRequestHandler<CompleteProfileCommand, bool>

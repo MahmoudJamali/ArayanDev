@@ -9,6 +9,7 @@ using DataAccess.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Entities.Concrete;
+using System.Globalization;
 
 namespace UI.Controllers
 {
@@ -91,11 +92,43 @@ namespace UI.Controllers
         [HttpPost]
         public async Task<IActionResult> CompleteProfile(CompleteProfileModel model, string? returnUrl = null)
         {
-            // نکته: مطمئن شو در LoginCommandHandler نام کلیم را "UserId" گذاشته‌ای
-            // پیشنهاد استاندارد: ClaimTypes.NameIdentifier
+            if (model.BirthDayYear.HasValue && model.BirthDayMonth.HasValue && model.BirthDayDay.HasValue)
+            {
+                try
+                {
+                    var pc = new PersianCalendar();
+
+                    var gregorianDate = pc.ToDateTime(
+                        model.BirthDayYear.Value,
+                        model.BirthDayMonth.Value,
+                        model.BirthDayDay.Value,
+                        0, 0, 0, 0);
+
+                    model.BirthDay = DateOnly.FromDateTime(gregorianDate);
+                }
+                catch
+                {
+                    ModelState.AddModelError("BirthDay", "تاریخ تولد معتبر نیست.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("BirthDay", "تاریخ تولد را کامل انتخاب کنید.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.ReturnUrl = returnUrl;
+                return View(model);
+            }
+
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            var result = await _mediator.Send(new CompleteProfileCommand { UserId = userId, Model = model });
+            var result = await _mediator.Send(new CompleteProfileCommand
+            {
+                UserId = userId,
+                Model = model
+            });
 
             if (!result)
             {
@@ -104,12 +137,12 @@ namespace UI.Controllers
                 return View(model);
             }
 
-            // بعد از تکمیل پروفایل، برگرد به جایی که بودی (مثلاً همان دکمه ثبت نام)
             if (string.IsNullOrEmpty(returnUrl))
                 return RedirectToAction("Index", "Home");
 
             return LocalRedirect(returnUrl);
         }
+
         [Authorize]
         [HttpGet]
         public IActionResult ProfileIncomplete(string? returnUrl = null)

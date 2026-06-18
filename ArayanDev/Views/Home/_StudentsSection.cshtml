@@ -42,27 +42,23 @@
             border-radius: 50%;
         }
 
-    .student-img-wrap {
-        width: 90px;
-        height: 90px;
-        margin: 0 auto 10px auto;
-        border-radius: 50%;
-        padding: 4px;
-        background: linear-gradient(135deg, #ff7feb, #6ab8ff);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        z-index: 2;
-    }
+
 
     .student-img {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
+        width: 110px;
+        height: 110px;
         object-fit: cover;
-        border: 3px solid #fff;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto 12px auto;
+        box-shadow: 0 0 0 4px #a855f7; /* حلقه بنفش */
     }
+
+
+
+
+
+
 
     .student-name {
         font-size: 15px;
@@ -95,21 +91,20 @@
     }
 
     @@keyframes studentGlow {
-        0%
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 102, 196, 0.45);
+        }
 
-    {
-        box-shadow: 0 0 0 0 rgba(255, 102, 196, 0.45);
+        70% {
+            box-shadow: 0 0 0 10px rgba(255, 102, 196, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 102, 196, 0);
+        }
     }
+</style>
 
-    70% {
-        box-shadow: 0 0 0 10px rgba(255, 102, 196, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 102, 196, 0);
-    }
-
-    }</style>
 
 <section class="space pt-2" data-bg-src="/assets/img/bg/event-bg_1.png">
     <div class="shape-mockup event-shape1 jump" data-top="0" data-left="-60px">
@@ -120,7 +115,7 @@
         <div class="title-area text-center">
             <span class="sub-title">
                 <i class="fal fa-screen-users me-3"></i>
-                دوستانی که برای برنامه‌نویس شدن ما را انتخاب کردند :
+                دوستانی که برای شروع برنامه نویسی با ما همراه شدن
             </span>
         </div>
 
@@ -141,12 +136,17 @@
                             <div class="student-dot"></div>
 
                             <div class="student-img-wrap">
-                                <img class="student-img"
-                                     src="@(string.IsNullOrEmpty(item.ProfileImage)
-                                            ? "/assets/img/event/event_img-1.png"
-                                            : item.ProfileImage)"
-                                     alt="@item.Name" />
-                            </div>
+    <div class="student-img-inner">
+        <img class="student-img"
+             src="@(string.IsNullOrWhiteSpace(item.ProfileImage) 
+                    ? "/uploads/profile/DefaultStudentProfile.png" 
+                    : item.ProfileImage)"
+             alt="@($"{item.Name} {item.Family}")"
+             onerror="this.onerror=null;this.src='/uploads/profile/DefaultStudentProfile.png';" />
+    </div>
+</div>
+
+
 
                             <div class="student-name">
                                 @item.Name @item.Family

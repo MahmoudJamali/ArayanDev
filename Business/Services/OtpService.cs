@@ -92,7 +92,7 @@ public class OtpService : IOtpService
         {
             UserId = user.Id,
             OtpCode = result.code, // بهتره هش بشه
-            ExpireAt = DateTime.UtcNow.AddMinutes(5),
+            ExpireAt = DateTime.UtcNow.AddMinutes(3),
             CreatedDate = DateTime.UtcNow,
             AttemptCount = 0
         };

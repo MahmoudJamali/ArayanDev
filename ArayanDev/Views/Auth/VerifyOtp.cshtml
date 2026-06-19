@@ -159,14 +159,13 @@
 
             <input type="hidden" name="phoneNumber" value="@Model" />
             <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-            <input type="hidden" id="expireAt" value="@ViewBag.ExpireAt" />
 
             <input id="otpBox"
                    class="otp-input"
                    type="text"
                    name="otpCode"
                    maxlength="6"
-                   placeholder="••••••"
+                   placeholder="•••••"
                    autocomplete="one-time-code"
                    required />
 
@@ -177,7 +176,7 @@
         </form>
 
         <div class="timer">
-            زمان باقی‌مانده: <span id="time">120</span> ثانیه
+            زمان باقی‌مانده: <span id="time">180</span> ثانیه
         </div>
 
         <form asp-controller="Auth"
@@ -201,30 +200,32 @@
     <script src="/assets/js/bootstrap.min.js"></script>
 
     <script>
+        let remaining = 180;
 
-        const expireAt = new Date(document.getElementById("expireAt").value).getTime();
         const timeEl = document.getElementById("time");
         const resendBtn = document.getElementById("resendBtn");
 
-        function updateTimer(){
+        function updateTimer() {
+            if (remaining <= 0) {
+                timeEl.innerText = "0";
+                resendBtn.disabled = false;
+                return;
+            }
 
-        const now = new Date().getTime();
-        const remaining = Math.floor((expireAt - now) / 1000);
-
-        if(remaining <= 0){
-        timeEl.innerText = "0";
-        resendBtn.disabled = false;
-        }
-        else{
-        timeEl.innerText = remaining;
-        }
-
+            timeEl.innerText = remaining;
+            remaining--;
         }
 
         updateTimer();
-        setInterval(updateTimer,1000);
+        const timerInterval = setInterval(() => {
+            updateTimer();
 
+            if (remaining < 0) {
+                clearInterval(timerInterval);
+            }
+        }, 1000);
     </script>
+
 
 </body>
 </html>

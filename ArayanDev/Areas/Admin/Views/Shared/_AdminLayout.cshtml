@@ -5,26 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>پنل مدیریت</title>
 
-    <!-- استفاده از فایل‌های محلی خودتان -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/css/style.css" rel="stylesheet" />
 
     <style>
         body {
             background-color: #f8f9fa;
+            overflow-x: hidden;
         }
 
-        /* استایل اختصاصی سایدبار بدون نیاز به آیکون خارجی */
+        .admin-wrapper {
+            min-height: 100vh;
+        }
+
         .sidebar {
             width: 260px;
             height: 100vh;
-            background-color: #343a40; /* رنگ تیره استاندارد بوترسپ */
+            background-color: #343a40;
             position: fixed;
             right: 0;
             top: 0;
-            z-index: 1000;
+            z-index: 1040;
             padding-top: 20px;
             box-shadow: -3px 0 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar-brand {
@@ -35,6 +41,11 @@
             margin-bottom: 15px;
             text-align: center;
             font-weight: bold;
+        }
+
+        .sidebar nav {
+            flex: 1;
+            overflow-y: auto;
         }
 
         .nav-link-custom {
@@ -49,7 +60,7 @@
             .nav-link-custom:hover {
                 background-color: rgba(255,255,255,0.1);
                 color: #fff;
-                border-right-color: #0d6efd; /* رنگ آبی بوترسپ */
+                border-right-color: #0d6efd;
             }
 
             .nav-link-custom.active {
@@ -58,53 +69,133 @@
                 border-right-color: #fff;
             }
 
-        /* تنظیم محتوا برای کنار رفتن از سایدبار */
-        .main-content {
-            margin-right: 260px;
-            padding: 25px;
-        }
-
         .sidebar-footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
             padding: 15px;
             background-color: #2c3136;
         }
 
-        /* برای صفحاتی که سایدبار ندارند، این کلاس را بردارید */
-        .admin-wrapper {
+        .main-content {
+            margin-right: 260px;
+            padding: 25px;
+            min-height: 100vh;
+            width: calc(100% - 260px);
+        }
+
+        .mobile-header {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            padding: 12px 16px;
+            border-bottom: 1px solid #dee2e6;
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        .mobile-header-title {
+            font-weight: 700;
+            color: #343a40;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .menu-toggle {
+            border: none;
+            background: #0d6efd;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+            .menu-toggle:focus {
+                outline: none;
+                box-shadow: none;
+            }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1035;
+        }
+
+        @@media (max-width: 991.98px) {
+            .sidebar
+
+        {
+            transform: translateX(100%);
+        }
+
+        .sidebar.show {
+            transform: translateX(0);
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        .mobile-header {
             display: flex;
+        }
+
+        .main-content {
+            margin-right: 0;
+            width: 100%;
+            padding: 0;
+        }
+
+        .main-content-body {
+            padding: 16px;
+        }
+
+        }
+
+        @@media (max-width: 575.98px) {
+            .sidebar
+
+        {
+            width: 82%;
+            max-width: 300px;
+        }
+
+        .sidebar-brand {
+            font-size: 1.1rem;
+            padding: 14px 18px;
+        }
+
+        .nav-link-custom {
+            padding: 11px 18px;
+            font-size: 14px;
+        }
+
+        .main-content-body {
+            padding: 12px;
+        }
+
         }
     </style>
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-
     <div class="admin-wrapper">
-        <!-- سایدبار -->
-        <aside class="sidebar">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-brand">
                 پنل مدیریت آموزش
             </div>
 
             <nav class="mt-2">
-                <a href="/admin/dashboard" class="nav-link-custom active">
-                    داشبورد
-                </a>
-                <a href="/admin/enrollments" class="nav-link-custom">
-                    لیست ثبت‌نام‌ها
-                </a>
-                <a href="/admin/courses" class="nav-link-custom">
-                    مدیریت دوره‌ها
-                </a>
-                <a href="/admin/users" class="nav-link-custom">
-                    مدیریت کاربران
-                </a>
-                <a href="/" class="nav-link-custom">
-                    مشاهده سایت
-                </a>
+                <a href="/admin/dashboard" class="nav-link-custom active">داشبورد</a>
+                <a href="/admin/enrollments" class="nav-link-custom">لیست ثبت‌نام‌ها</a>
+                <a href="/admin/courses" class="nav-link-custom">مدیریت دوره‌ها</a>
+                <a href="/admin/users" class="nav-link-custom">مدیریت کاربران</a>
+                <a href="/" class="nav-link-custom">مشاهده سایت</a>
             </nav>
 
             <div class="sidebar-footer">
@@ -114,15 +205,64 @@
             </div>
         </aside>
 
-        <!-- محتوای اصلی -->
-        <main class="main-content w-100">
-            @RenderBody()
+        <main class="main-content">
+            <div class="mobile-header">
+                <button type="button" class="menu-toggle" id="menuToggle">منو</button>
+                <h1 class="mobile-header-title">پنل مدیریت</h1>
+            </div>
+
+            <div class="main-content-body">
+                @RenderBody()
+            </div>
         </main>
     </div>
 
-    <!-- فایل‌های محلی خودتان -->
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
+
+    <script>
+        $(function () {
+            var $sidebar = $('#sidebar');
+            var $overlay = $('#sidebarOverlay');
+            var mobileWidth = 991.98;
+
+            function openSidebar() {
+                $sidebar.addClass('show');
+                $overlay.addClass('show');
+                $('body').css('overflow', 'hidden');
+            }
+
+            function closeSidebar() {
+                $sidebar.removeClass('show');
+                $overlay.removeClass('show');
+                $('body').css('overflow', '');
+            }
+
+            $('#menuToggle').on('click', function () {
+                if ($sidebar.hasClass('show')) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+
+            $overlay.on('click', function () {
+                closeSidebar();
+            });
+
+            $(window).on('resize', function () {
+                if ($(window).width() > mobileWidth) {
+                    closeSidebar();
+                }
+            });
+
+            $('.nav-link-custom').on('click', function () {
+                if ($(window).width() <= mobileWidth) {
+                    closeSidebar();
+                }
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

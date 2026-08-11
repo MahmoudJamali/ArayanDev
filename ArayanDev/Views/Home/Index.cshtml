@@ -1,351 +1,939 @@
-﻿@using Business.Handlers.Courses.Queries
-@model List<CourseListItemDto>
-
-@{
+﻿@{
 	ViewData["Title"] = "Home Page";
 }
-<!--==============================
-Hero Area
-==============================-->
-<div class="th-hero-wrapper hero-1" id="hero">
-	<div class="hero-slider-1 th-carousel" data-fade="true" data-slide-show="1" data-md-slide-show="1" data-dots="true">
 
+<div class="container">
+	<!-- Header -->
+	<div class="header" id="mainHeader">
+		<div class="logo">
+			<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+				<defs>
+					<linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+						<stop offset="0%" style="stop-color:#00f0ff" />
+						<stop offset="100%" style="stop-color:#ff00d4" />
+					</linearGradient>
+				</defs>
+				<polygon points="50,5 95,30 95,70 50,95 5,70 5,30" fill="none" stroke="url(#logoGradient)" stroke-width="2" />
+				<polygon points="50,20 80,37 80,63 50,80 20,63 20,37" fill="none" stroke="url(#logoGradient)" stroke-width="1.5" opacity="0.6" />
+				<circle cx="50" cy="50" r="12" fill="url(#logoGradient)" opacity="0.3" />
+				<circle cx="50" cy="50" r="6" fill="url(#logoGradient)" />
+			</svg>
+		</div>
+		<h1 class="brand-name">Arayan Academy</h1>
+		<p class="tagline">Become A Legend ...</p>
+	</div>
 
-		<div class="th-hero-slide">
-			<div class="th-hero-bg" data-overlay="title" data-opacity="4" data-bg-src="/assets/img/hero/Arayan-Hero2.jpg"></div>
-			<div class="container">
-				<div class="row align-items-center justify-content-center">
-					<div class="col-md-6">
-						<div class="hero-style1">
-							<h5 class="hero-title top-center-title text-white fw-bolder fs-4" data-ani="slideinleft" data-ani-delay="0.1s">
-								... Become A Legend
-							</h5>
-							<br />
-							<h1 class="hero-title text-white fw-bolder fs-4" data-ani="slideinleft" data-ani-delay="1.0s">
-								آکادمی برنامه نویسی و طراحی سایت آرایان
-							</h1>
+	<!-- Menu Grid -->
+	<div class="menu-grid" id="menuGrid">
 
-							<h1 class="hero-title text-white fw-bolder fs-1" data-ani="slideinleft" data-ani-delay="2.5s">
-							</h1>
-						</div>
-
-					</div>
-					<div class="col-md-6 text-lg-end text-center">
-						<div class="hero-img1 jump">
-							<img id="heroRandomImg" src="/assets/img/hero/banner2002.jpg" alt="hero">
-						</div>
-					</div>
-
-				</div>
-			</div>
-			<div class="hero-shape shape1">
-				<img src="/assets/img/hero/shape_1_1.png" alt="shape">
-			</div>
-			<div class="hero-shape shape2">
-				<img src="/assets/img/hero/shape_1_2.png" alt="shape">
-			</div>
-			<div class="hero-shape shape3"></div>
-
-			<div class="hero-shape shape4 shape-mockup jump-reverse" data-right="3%" data-bottom="2%">
-				<img src="/assets/img/hero/shape_1_3.png" alt="shape">
-			</div>
-			<div class="hero-shape shape5 shape-mockup jump-reverse" data-left="0" data-bottom="0">
-				<img src="/assets/img/hero/shape_1_4.png" alt="shape">
-			</div>
+		<div class="menu-item initial-load" data-section="services">
+			<div class="menu-badge">A</div>
+			<div class="menu-title">دوره ها</div>
 		</div>
 
+		<div class="menu-item initial-load" data-section="about">
+			<div class="menu-badge">R</div>
+			<div class="menu-title">درباره ما</div>
+		</div>
+
+		<div class="menu-item initial-load" data-section="introduction">
+			<div class="menu-badge">A</div>
+			<div class="menu-title">سفارش پروژه</div>
+		</div>
+
+		<div class="menu-item initial-load" data-section="testimonials">
+			<div class="menu-badge">Y</div>
+			<div class="menu-title">برنامه نویسان</div>
+		</div>
+
+		<div class="menu-item initial-load" data-section="contact">
+			<div class="menu-badge">A</div>
+			<div class="menu-title">ارتباط با ما</div>
+		</div>
+
+		<div class="menu-item initial-load" data-section="gallery">
+			<div class="menu-badge">N</div>
+			<div class="menu-title">سوالات متداول </div>
+		</div>
 
 	</div>
-</div>
-<!--======== / Hero Section ========-->
-<!--==============================
-About Area
- ==============================-->
 
-
-<div class="overflow-hidden" id="blog-sec" style="padding-top:35px;padding-bottom:35px;">
-	<div class="container">
-		<div class="row align-items-start" style="direction: rtl;">
-
-			<!-- ستون متن -->
-			<div class="col-lg-7">
-
-				<div class="title-area mb-2" style="margin-top:0;">
-					<h5 class="sec-title" style="margin-top:0;">
-						آکادمی برنامه نویسی و طراحی سایت
-						<span class="text-theme">آرایان</span>
-					</h5>
+	<!-- Content Sections -->
+	<div id="contentArea">
+		<!-- Introduction Section -->
+		<div class="content-section" id="introduction">
+			<div class="section-header-small">
+				<div class="small-logo">
+					<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+						<defs>
+							<linearGradient id="smallLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+								<stop offset="0%" style="stop-color:#00f0ff" />
+								<stop offset="100%" style="stop-color:#ff00d4" />
+							</linearGradient>
+						</defs>
+						<polygon points="50,10 85,32 85,68 50,90 15,68 15,32" fill="none" stroke="url(#smallLogoGrad)" stroke-width="3" />
+						<circle cx="50" cy="50" r="10" fill="url(#smallLogoGrad)" />
+					</svg>
 				</div>
+				<div class="small-brand">
+					<h3>ARAYAN</h3>
+					<p>Become A Legend</p>
+				</div>
+			</div>
+			<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
 
-				<div style="text-align:justify;font-size:1rem;line-height:2.1;font-weight:400;">
+			<!-- Hero Banner -->
+			<div class="intro-hero">
+				<div class="intro-hero-content">
 
-					<p>
+					<span class="intro-badge">همکاری  در انجام پروژه</span>
 
-						<span class="text-theme fw-bold fs-4">آکادمی آرایان</span><br> با هدف ایجاد بستری حرفه‌ای برای آموزش برنامه‌نویسی و طراحی سایت راه‌اندازی شده است. دوره‌های ما از سطح مبتدی تا پیشرفته به‌صورت آنلاین و حضوری برگزار می‌شوند. محور اصلی آموزش ما بر پایه زبان برنامه‌نویسی #C در پلتفرم ASP.NET CORE و محیط ویژوال استودیو می‌باشد.دوره جامع آموزش برنامه نویسی و طراحی سایت در دو سطح مقدماتی و پیشرفته برگزار می گردد . ابتدا در دوره مقدماتی زبان برنامه نویسی  #C  آموزش داده می شود سپس در دوره پیشرفته با آموزش طراحی سایت در پلتفرم ASP.NET در کنار شما هستیم .
+					<h3 class="intro-headline">
+						در کنار شما هستیم تا
+						<br>
+						<span>ایده‌هایتان</span> را به واقعیت تبدیل کنیم
+					</h3>
+
+					<p class="intro-subtext">
+						آرایان با تمرکز تخصصی بر طراحی و توسعه نرم‌افزارهای تحت وب با ASP.NET Core، آماده پذیرش و اجرای پروژه‌های واقعی برای شرکت‌ها، سازمان‌ها و کسب‌وکارهاست.
+						زمینه فعالیت ما شامل طراحی وب‌سایت‌های شرکتی و سازمانی، سامانه‌های تحت وب، پنل‌های مدیریتی و APIهای اختصاصی است.
+						پروژه‌ها با استفاده از C#، ASP.NET Core MVC و ASP.NET Core Web API و بر اساس استانداردهای حرفه‌ای توسعه می‌یابند.
+						فرآیند همکاری از تحلیل نیازمندی‌ها و طراحی راهکار تا توسعه، تست، استقرار و پشتیبانی پروژه را شامل می‌شود.
+						همچنین آماده همکاری تخصصی با شرکت‌ها و تیم‌های برنامه‌نویسی در توسعه و تکمیل پروژه‌های نرم‌افزاری هستیم.
+						هدف ما ارائه راهکارهای پایدار، قابل توسعه و متناسب با نیاز واقعی هر پروژه و ایجاد همکاری‌های حرفه‌ای و بلندمدت است.
+
 					</p>
 
-					<p>
-						<span class="text-theme fw-bold fs-4">اما چرا #C ؟</span><br>
-						زبان #C یکی از معتبرترین زبان‌های برنامه‌نویسی دنیاست که توسط شرکت مایکروسافت توسعه یافته و بر پایه چارچوب قدرتمند NET. کار می‌کند. این زبان با معماری شی‌گرا، امنیت بالا و عملکرد پایدار، برای توسعه نرم‌افزارهای ویندوز، وب‌سایت‌های مدرن و اپلیکیشن‌های موبایل استفاده می‌شود. طبق گزارش‌های معتبر #C همواره در میان محبوب‌ترین زبان‌های برنامه‌نویسی جهان قرار دارد. تقاضای بالا در بازار کار داخلی و بین‌المللی باعث شده برنامه‌نویسان ‎C# فرصت‌های شغلی متنوعی در سازمان ها و ادارات دولتی ، شرکت‌ها، استارتاپ‌ها و پروژه‌های فریلنسری داشته باشند. اگر به دنبال یادگیری یک زبان حرفه‌ای با آینده شغلی قوی هستید،C# یکی از بهترین انتخاب‌ها برای ورود جدی به دنیای برنامه‌نویسی است.
+					@* 		<div class="intro-cta-group">
+						<button class="intro-cta-primary">
+							ثبت سفارش پروژه
+						</button>
+
+ 						<button class="intro-cta-secondary">
+							مشاهده پروژه‌ها
+						</button> 
+					</div> *@
 
 				</div>
+				<div class="intro-hero-visual">
+					<div class="intro-floating-card card-1">
+						<span class="card-icon">⚡</span>
+						<span class="card-text">توسعه سریع و حرفه‌ای</span>
+					</div>
+					<div class="intro-floating-card card-2">
+						<span class="card-icon">🎯</span>
+						<span class="card-text">طراحی متناسب با نیاز شما</span>
+					</div>
+					<div class="intro-floating-card card-3">
+						<span class="card-icon">🔒</span>
+						<span class="card-text">امنیت و پایداری</span>
+					</div>
+					<div class="intro-orb"></div>
+				</div>
+			</div>
 
+			<!-- Metrics Strip -->
+			<div class="intro-metrics">
+				<div class="metric-item">
+					<span class="metric-value" data-target="23">0</span>
+					<span class="metric-label">پروژه های تحویل شده</span>
+				</div>
+				<div class="metric-divider"></div>
+				<div class="metric-item">
+					<span class="metric-value" data-target="100">0</span>
+					<span class="metric-suffix">%</span>
+					<span class="metric-label"> رضایت مشتری</span>
+				</div>
+				<div class="metric-divider"></div>
+				<div class="metric-item">
+					<span class="metric-value" data-target="12">0</span>
+					<span class="metric-label">حوزه‌های تخصصی</span>
+				</div>
+				<div class="metric-divider"></div>
+				<div class="metric-item">
+					<span class="metric-value">24/7</span>
+					<span class="metric-label">پشتیبانی مستمر</span>
+				</div>
+			</div>
 
+			<!-- Core Values -->
+			<!-- ارزش‌های کلیدی -->
+			<div class="intro-values">
+
+				<div class="value-card">
+					<div class="value-number">01</div>
+					<h3>توسعه حرفه‌ای و استاندارد</h3>
+					<p>
+						پروژه‌ها با استفاده از تکنولوژی‌های روز و استانداردهای حرفه‌ای
+						توسعه وب پیاده‌سازی می‌شوند تا محصولی پایدار، قابل توسعه و باکیفیت ارائه شود.
+					</p>
+				</div>
+
+				<div class="value-card">
+					<div class="value-number">02</div>
+					<h3>طراحی متناسب با نیاز شما</h3>
+					<p>
+						هر پروژه بر اساس نیاز، هدف و نوع کسب‌وکار شما بررسی و طراحی می‌شود
+						تا نتیجه نهایی متناسب با نیاز کاربران و اهداف پروژه باشد.
+					</p>
+				</div>
+
+				<div class="value-card">
+					<div class="value-number">03</div>
+					<h3>تعهد به نتیجه نهایی</h3>
+					<p>
+						از تحلیل و طراحی تا توسعه، تست و تحویل پروژه، تمام مراحل با تمرکز بر
+						کیفیت، عملکرد و رسیدن به نتیجه مطلوب برای مشتری انجام می‌شود.
+					</p>
+				</div>
 
 			</div>
 
-			<!-- ستون تصاویر -->
-			<div class="col-lg-5 text-center text-lg-end">
+			<!-- Tech Stack Preview -->
+			<div class="intro-tech">
+				<p class="tech-label">تکنولوژی‌ها و مهارت‌های ما</p>
 
-				<div style="display:flex;flex-direction:column;gap:18px;align-items:flex-end;margin-top:0;">
+				<div class="tech-marquee">
+					<div class="tech-track">
+						<span class="tech-item">ASP.NET Core</span>
+						<span class="tech-item">C#</span>
+						<span class="tech-item">MVC</span>
+						<span class="tech-item">WEB API</span>
+						<span class="tech-item">SQL Server</span>
+						<span class="tech-item">Entity Framework</span>
+						<span class="tech-item">HTML</span>
+						<span class="tech-item">CSS</span>
+						<span class="tech-item">JavaScript</span>
 
-					<div style="max-width:420px;border-radius:26px;overflow:hidden;box-shadow:0 18px 45px rgba(0,0,0,0.15);">
-						<img src="/assets/img/hero/banner1002.jpg" class="img-fluid" style="display:block;border-radius:26px;">
+						<span class="tech-item">ASP.NET Core</span>
+						<span class="tech-item">C#</span>
+						<span class="tech-item">SQL Server</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Services Section -->
+		<div class="content-section" id="services">
+			<div class="section-header-small">
+				<div class="small-logo">
+					<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+						<defs>
+							<linearGradient id="smallLogoGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+								<stop offset="0%" style="stop-color:#00f0ff" />
+								<stop offset="100%" style="stop-color:#ff00d4" />
+							</linearGradient>
+						</defs>
+						<polygon points="50,10 85,32 85,68 50,90 15,68 15,32" fill="none" stroke="url(#smallLogoGrad2)" stroke-width="3" />
+						<circle cx="50" cy="50" r="10" fill="url(#smallLogoGrad2)" />
+					</svg>
+				</div>
+				<div class="small-brand">
+					<h3>ARAYAN</h3>
+					<p>Become A Legend</p>
+				</div>
+			</div>
+			<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+
+			<div class="section-header">
+				<h2 class="section-title">دوره های آکادمی</h2>
+				<p class="section-subtitle">مهمترین دوره های آموزشی آکادمی</p>
+			</div>
+
+			<div class="tabs-container">
+				<div class="tab-buttons">
+					@* 					<button class="tab-btn " onclick="switchTab(this, 'wordpress')">  آموزش جامع طراحی سایت با WordPress</button>
+ *@					<button class="tab-btn active" onclick="switchTab(this, 'aspnetcore')"> برنامه نویسی و طراحی سایت با ASP.NET Core</button>
+					@* <button class="tab-btn" onclick="switchTab(this, 'scratch')">برنامه نویسی کودکان</button> *@
+				</div>
+
+				<div class="tab-content">
+					<div class="tab-pane active" id="aspnetcore">
+						<div class="services-list">
+							<div class="service-row">
+								<div class="service-row-icon">
+									<img src="images/csharp1.png" alt="آموزش زبان برنامه نویسی #C">
+								</div>
+								<div class="service-row-content">
+									<h4> آموزش زبان برنامه نویسی #C</h4>
+									<p> آموزش زبان برنامه‌نویسی #C نقطه شروع ورود به دنیای توسعه نرم‌افزار و طراحی وب با ASP.NET Core است. در این دوره از مفاهیم پایه تا مباحث کاربردی و شیءگرایی را به‌صورت پروژه‌محور فرا می‌گیرید و با اصول صحیح برنامه‌نویسی آشنا می‌شوید. هدف این دوره، ایجاد یک پایه علمی و عملی قدرتمند برای ورود به دوره‌های پیشرفته و توسعه پروژه‌های واقعی است. </p>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+							<div class="service-row">
+								<div class="service-row-icon">
+									<img src="images/sqlsever.png" alt="آموزش پایگاه داده SQL SERVER">
+								</div>
+								<div class="service-row-content">
+									<h4>آموزش پایگاه داده SQL SERVER</h4>
+									<p>در کنار آموزش زبان برنامه‌نویسی C#، مباحث پایگاه داده SQL Server نیز آموزش داده می‌شود. در این بخش با طراحی جداول، برقراری ارتباط بین داده‌ها، دستورات SQL و انجام عملیات CRUD (افزودن، ویرایش، حذف و نمایش اطلاعات) به‌صورت عملی آشنا خواهید شد. هدف این دوره، ایجاد توانایی طراحی و مدیریت پایگاه داده برای توسعه پروژه‌های واقعی ASP.NET Core است.</p>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+							<div class="service-row">
+								<div class="service-row-icon">
+									<img src="images/mvc1.png" alt="webdesign">
+								</div>
+								<div class="service-row-content">
+									<h4> طراحی سایت با ASP.NETCore MVC</h4>
+									<p>پس از گذراندان دوره آموزش زبان برنامه نویسی  #C ، حالا می توانید وارد دنیای طراحی سایت شوید . به همین منظور در دوره ASP.NET Core MVC با معماری استاندارد Model-View-Controller (MVC) آشنا می‌شوید و یاد می‌گیرید چگونه بخش‌های مختلف یک وب‌سایت به‌صورت منظم و حرفه‌ای با یکدیگر ارتباط برقرار می‌کنند. این دوره، منطق و بخش Back-End با زبان #C، رابط کاربری با HTML، CSS، JavaScript و Bootstrap و مدیریت اطلاعات با SQL Server پیاده‌سازی می‌شود. در پایان دوره، با ترکیب این مهارت‌ها قادر خواهید بود وب‌سایت‌های پویا، حرفه‌ای و قابل توسعه را مطابق استانداردهای روز طراحی و پیاده‌سازی کنید.</p>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+							<div class="service-row">
+								<div class="service-row-icon">
+									<img src="images/webapi.png" alt="webdesign">
+								</div>
+								<div class="service-row-content">
+									<h4>توسعه Backend با ASP.NET Core Web API</h4>
+
+									<p>
+										پس از گذراندن دوره آموزش زبان برنامه‌نویسی <strong>C#</strong>، می‌توانید مسیر تخصصی خود را در حوزه <strong>Backend</strong> با ASP.NET Core Web API ادامه دهید. برخلاف <strong>ASP.NET Core MVC</strong> که علاوه بر منطق برنامه، برای ساخت صفحات و رابط کاربری وب نیز استفاده می‌شود، Web API برای ایجاد سرویس‌ها و APIهایی است که داده‌ها و امکانات برنامه را در اختیار وب‌سایت‌ها، اپلیکیشن‌های موبایل و سایر نرم‌افزارها قرار می‌دهند. در این دوره با ساخت API، کار با HTTP و REST، اتصال به SQL Server، احراز هویت و پیاده‌سازی منطق سمت سرور آشنا می‌شوید و یاد می‌گیرید چگونه بخش Backend پروژه‌های واقعی و قابل توسعه را با ASP.NET Core طراحی و پیاده‌سازی کنید.
+									</p>
+
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+							<div class="service-row">
+								<div class="service-row-content">
+									<h4> ثبت‌نام در دوره جامع برنامه نویسی و طراحی سایت Asp.NetCore</h4>
+
+									<p>
+										مسیر یادگیری خود را از همین امروز شروع کنید و با ثبت‌نام در دوره جامع آموزش زبان برنامه نویسی #C و طراحی سایت Asp.NetCore MVC،
+										مهارت‌های برنامه‌نویسی و طراحی سایت را به‌صورت پروژه‌محور و مرحله‌به‌مرحله یاد بگیرید.
+									</p>
+
+									<button class="tab-btn active" onclick="window.location.href='/Courses/Register'">
+										شروع ثبت‌نام
+									</button>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane" id="wordpress">
+						<div class="services-list">
+							<div class="service-row">
+								<div class="service-row-icon">
+									<img src="images/digital-strategy.jpg" alt="wordpress">
+								</div>
+								<div class="service-row-content">
+									<h4>آموزش جامع WordPress</h4>
+									<p>طراحی سایت را با WordPress از صفر تا پیشرفته، بدون نیاز به یادگیری زبان‌های برنامه‌نویسی فرا بگیرید. در این دوره با استفاده از قالب‌ها و افزونه‌های آماده، به‌صورت کاملاً عملی نحوه طراحی، مدیریت و سفارشی‌سازی انواع وب‌سایت را آموزش می‌بینید و با چرخه کامل راه‌اندازی یک سایت حرفه‌ای آشنا می‌شوید. در پایان نیز با WooCommerce، ساخت و مدیریت یک فروشگاه اینترنتی حرفه‌ای را از ابتدا تا انتها یاد خواهید گرفت.</p>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+
+							<div class="service-row">
+								<div class="service-row-content">
+									<h4> ثبت‌نام در دوره طراحی سایت WordPress</h4>
+
+									<p>برای شرکت در دوره جامع آموزش طراحی سایت با WordPress از همینجا اقدام نمایید.   </p>
+
+									<button class="tab-btn active" onclick="window.location.href='/Courses/Register'">
+										شروع ثبت‌نام
+									</button>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+						</div>
 					</div>
 
+					@* 			<div class="tab-pane" id="scratch">
+						<div class="services-list">
+							<div class="service-row">
+								<div class="service-row-icon">
+									<img src="images/tech-audit.jpg" alt="Technology Audit">
+								</div>
+								<div class="service-row-content">
+									<h4>برنامه‌نویسی کودکان با Scratch</h4>
+									<p>Cدوره Scratch بهترین نقطه شروع برای ورود کودکان به دنیای برنامه‌نویسی است. در این دوره، دانش‌آموزان بدون نیاز به تایپ کد و با استفاده از بلوک‌های گرافیکی، ساخت بازی، انیمیشن و داستان‌های تعاملی را به‌صورت سرگرم‌کننده یاد می‌گیرند. این آموزش باعث تقویت خلاقیت، تفکر منطقی و مهارت حل مسئله می‌شود و برای کودکان و نوجوانان 7 تا 13 سال کاملاً مناسب است.</p>
+								</div>
+								<div class="service-row-arrow">→</div>
+							</div>
+						</div>
+					</div>*@
+
+
+				</div>
+			</div>
+		</div>
+
+		<!-- Gallery Section -->
+		@* 		<div class="content-section" id="gallery">
+			<div class="section-header-small">
+				<div class="small-logo">
+					<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+						<defs>
+						<linearGradient id="smallLogoGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" style="stop-color:#00f0ff" />
+							<stop offset="100%" style="stop-color:#ff00d4" />
+						</linearGradient>
+					</defs>
+					<polygon points="50,10 85,32 85,68 50,90 15,68 15,32" fill="none" stroke="url(#smallLogoGrad3)" stroke-width="3" />
+					<circle cx="50" cy="50" r="10" fill="url(#smallLogoGrad3)" />
+					</svg>
+				</div>
+				<div class="small-brand">
+					<h3>ARAYAN</h3>
+					<p>Become A Legend</p>
+				</div>
+			</div>
+			<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+
+			<div class="section-header">
+				<h2 class="section-title">سوالات متداول</h2>
+				<p class="section-subtitle">شاید برای شما هم سوال باشد</p>
+			</div>
+			```html *@
+		<!-- FAQ(gallery) Section -->
+		<div class="content-section" id="gallery">
+
+			<div class="section-header-small">
+				<div class="small-logo">
+					<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+						<defs>
+							<linearGradient id="smallLogoGradFaq"
+											x1="0%"
+											y1="0%"
+											x2="100%"
+											y2="100%">
+								<stop offset="0%" style="stop-color:#00f0ff" />
+								<stop offset="100%" style="stop-color:#ff00d4" />
+							</linearGradient>
+						</defs>
+
+						<polygon points="50,10 85,32 85,68 50,90 15,68 15,32"
+								 fill="none"
+								 stroke="url(#smallLogoGradFaq)"
+								 stroke-width="3" />
+
+						<circle cx="50"
+								cy="50"
+								r="10"
+								fill="url(#smallLogoGradFaq)" />
+					</svg>
 				</div>
 
+				<div class="small-brand">
+					<h3>ARAYAN</h3>
+					<p>Become A Legend</p>
+				</div>
 			</div>
 
-		</div>
-	</div>
-</div>
+			<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+
+			<div class="section-header">
+				<h2 class="section-title">سوالات متداول</h2>
+				<p class="section-subtitle">
+					پاسخ سوالات مهم درباره دوره‌های آموزشی آکادمی
+				</p>
+			</div>
+
+
+			<div class="faq-list">
 
 
 
-<!--==============================
-Servce Area
-==============================-->
-<section class="space pt-2"
-		 data-bg-src="assets/img/bg/course_bg_1.png"
-		 id="courses-sec">
-	<div class="container">
-		<div class="mb-35 text-center text-md-start">
-			<div class="row align-items-center justify-content-between">
-				<div class="col-md-8">
-					<div class="title-area mb-md-0">
-						<span class="sub-title"><i class="fal fa-book me-2"></i> مهمترین آموزش های آکادمی در طول دوره</span>
+				<!-- Question 1 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">01</span>
+						<h4>آیا شرکت در دوره ها محدودیت سنی خاصی دارد؟ </h4>
+					</div>
+
+					<div class="faq-answer">
 						<p>
-							در  دوره آموزش جامع برنامه نویسی و طراحی سایت با فراگیری آموزش‌های لازم، قادر به طراحی وب‌سایت و اپلیکیشن در پلتفرم Asp.Net خواهید شد.
-							برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
+							خیر ، با توجه به شرایط و امکانات موجود و سطح یادگیری نمی توان محدودیت خاصی قائل شد و از سنین 13 سال به بالا می توان در دوره ها شرکت نمود .
 						</p>
 					</div>
 				</div>
-				@*                 <div class="col-md-auto">
-                    <a href="course.html" class="th-btn">View All Courses<i class="fa-solid fa-arrow-right ms-2"></i></a>
-                </div> *@
+
+				<!-- Question 2 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">02</span>
+						<h4>آیا رشته تحصیلی خاصی مد نظر است یا همه می توانند در دوره ها شرکت کنند؟ </h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							خیر ، با توجه به برگزاری دوره ها از مبتدی تا پیشرفته ، رشته تحصیلی خاصی مد نظر نیست و بحث رشته های کامپیوتر و IT فقط مزیت محسوب می شود.
+						</p>
+					</div>
+				</div>
+
+				<!-- Question 3 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">03</span>
+						<h4>نحوه برگزاری دوره ها به چه شکل است ؟ </h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							دوره ها هم به صورت حضوری در آموزشگاه و هم به صورت آنلاین و مجازی برگزار می شود و در پایان مدرک مربوطه صادر می گردد.
+						</p>
+					</div>
+				</div>
+				<!-- Question 4 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">04</span>
+						<h4>برای شروع برنامه‌نویسی باید از کجا شروع کنم؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							اگر به‌تازگی وارد دنیای برنامه‌نویسی شده‌اید، پیشنهاد می‌کنیم
+							مسیر یادگیری را از زبان برنامه‌نویسی C# شروع کنید. در این دوره
+							با مفاهیم پایه برنامه‌نویسی، متغیرها، شرط‌ها، حلقه‌ها،
+							توابع و برنامه‌نویسی شیءگرا آشنا می‌شوید و پایه لازم برای
+							ورود به دنیای ASP.NET Core را به دست می‌آورید.
+						</p>
+					</div>
+				</div>
+
+
+				<!-- Question 5 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">05</span>
+						<h4>آیا برای یادگیری ASP.NET Core باید C# بلد باشم؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							بله. زبان اصلی برنامه‌نویسی در ASP.NET Core، زبان C# است.
+							به همین دلیل توصیه می‌شود ابتدا با مفاهیم اصلی C# و
+							برنامه‌نویسی شیءگرا آشنا شوید و سپس وارد دوره ASP.NET Core MVC
+							شوید. در آکادمی این مسیر به‌صورت مرحله‌به‌مرحله آموزش داده می‌شود.
+						</p>
+					</div>
+				</div>
+
+				<!-- Question 6 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">06</span>
+						<h4>در دوره ASP.NET Core MVC چه چیزهایی یاد می‌گیرم؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							در این دوره با معماری MVC، ساخت Controller و View،
+							Model Binding، Routing، کار با فرم‌ها، Bootstrap،
+							JavaScript، Entity Framework Core، SQL Server و
+							پیاده‌سازی عملیات CRUD آشنا می‌شوید و در نهایت یک پروژه
+							واقعی را به‌صورت مرحله‌به‌مرحله پیاده‌سازی خواهید کرد.
+						</p>
+					</div>
+				</div>
+
+
+				<!-- Question 7 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">07</span>
+						<h4>تفاوت ASP.NET Core MVC و Web API چیست؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							ASP.NET Core MVC بیشتر برای ساخت وب‌سایت و صفحات وب
+							استفاده می‌شود و شامل بخش رابط کاربری نیز هست؛ اما
+							ASP.NET Core Web API برای ساخت سرویس‌ها و APIهای سمت
+							سرور استفاده می‌شود تا اپلیکیشن‌های وب، موبایل و سایر
+							نرم‌افزارها بتوانند از داده‌ها و امکانات Backend استفاده کنند.
+						</p>
+					</div>
+				</div>
+
+
+				<!-- Question 8 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">08</span>
+						<h4>آیا در دوره‌ها پروژه واقعی نیز پیاده‌سازی می‌شود؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							بله. هدف اصلی دوره‌ها یادگیری عملی و پروژه‌محور است.
+							مطالب آموزشی در کنار مثال‌های کاربردی ارائه می‌شوند
+							و در طول مسیر با پیاده‌سازی پروژه، نحوه استفاده از
+							مهارت‌های مختلف در یک پروژه واقعی را یاد خواهید گرفت.
+						</p>
+					</div>
+				</div>
+
+
+				<!-- Question 9 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">09</span>
+						<h4>آیا برای یادگیری طراحی سایت باید HTML و CSS بلد باشم؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							داشتن آشنایی اولیه با HTML و CSS بسیار مفید است؛ اما
+							در مسیر آموزش، مفاهیم موردنیاز رابط کاربری نیز به‌صورت
+							کاربردی آموزش داده می‌شوند تا بتوانید صفحات وب را
+							به‌صورت حرفه‌ای طراحی و پیاده‌سازی کنید.
+						</p>
+					</div>
+				</div>
+
+
+				<!-- Question 10 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">10</span>
+						<h4>آیا در پایان دوره مدرک صادر می شود ؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							.بله، پس از تکمیل دوره‌های آموزشی، در صورت گذراندن آزمون‌ها و تکالیف مورد نیاز، گواهی پایان دوره از سوی آموزشگاه صادر می‌شود.
+						</p>
+					</div>
+				</div>
+
+
+				<!-- Question 11 -->
+				<div class="faq-item">
+					<div class="faq-question">
+						<span class="faq-number">11</span>
+						<h4>بعد از پایان دوره می‌توانم پروژه واقعی انجام دهم؟</h4>
+					</div>
+
+					<div class="faq-answer">
+						<p>
+							هدف دوره‌ها این است که علاوه بر یادگیری مفاهیم،
+							توانایی استفاده از آن‌ها در پروژه‌های واقعی را نیز
+							به دست آورید. با انجام تمرین‌ها و پروژه‌های عملی،
+							می‌توانید مهارت خود را تقویت کرده و برای ورود به
+							بازار کار و انجام پروژه‌های شخصی آماده شوید.
+						</p>
+					</div>
+				</div>
+
 			</div>
+
 		</div>
-		<div class="row slider-shadow th-carousel course-slider-1" data-slide-show="4" data-ml-slide-show="3" data-lg-slide-show="3" data-md-slide-show="2" data-sm-slide-show="1" data-arrows="true">
-			<div class="col-md-6 col-lg-4">
-				<div class="course-box">
-					<div class="course-img">
-						<img src="assets/img/course/AspAndC.png" alt="img">
-					</div>
-					<div class="course-content">
-						<div class="course-rating">
-							<div class="star-rating" role="img" aria-label="Rated 5.00 out of 5">
-								<span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span>
-							</div>
-						</div>
-						<h3 class="course-title">
-							<a href="course-details.html">
-								آموزش زبان برنامه نویسی #C
-							</a>
 
-						</h3>
 
+
+		@* 		<div class="filter-buttons">
+				<button class="filter-btn active" onclick="filterGallery('all', this)">All</button>
+				<button class="filter-btn" onclick="filterGallery('web', this)">Web</button>
+				<button class="filter-btn" onclick="filterGallery('mobile', this)">Mobile</button>
+				<button class="filter-btn" onclick="filterGallery('branding', this)">Branding</button>
+			</div> 
+
+			@* <div class="gallery-grid">
+				<div class="gallery-item" data-category="web">
+					<img src="images/coding-screen.jpg" alt="Project 1">
+					<div class="gallery-overlay">
+						<h4>E-Commerce Platform</h4>
+						<p>Web Development</p>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6 col-lg-4">
-				<div class="course-box">
-					<div class="course-img">
-						<img src="assets/img/course/aspnet_mvc.png" alt="img">
-					</div>
-					<div class="course-content">
-						<div class="course-rating">
-							<div class="star-rating" role="img" aria-label="Rated 5.00 out of 5">
-								<span style="width:100%">Rated <strong class="rating">5</strong> out of 5</span>
-							</div>
-						</div>
-						<h3 class="course-title">
-							<p>
-								طراحی سایت با ASP.NET MVC
-							</p>
-						</h3>
-
+				<div class="gallery-item" data-category="mobile">
+					<img src="images/ai-mobile-app.jpg" alt="Project 2">
+					<div class="gallery-overlay">
+						<h4>Fitness App</h4>
+						<p>Mobile Development</p>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6 col-lg-4">
-				<div class="course-box">
-					<div class="course-img">
-						<img src="assets/img/course/SQL-SERVER.png" alt="img">
-					</div>
-					<div class="course-content">
-						<div class="course-rating">
-							<div class="star-rating" role="img" aria-label="Rated 5.00 out of 5">
-								<span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span>
-							</div>
-						</div>
-						<h3 class="course-title">
-							<p>
-								آموزش پایگاه دادهSQL SERVER
-								</a>
-						</h3>
-
+				<div class="gallery-item" data-category="branding">
+					<img src="images/brand-identity.jpg" alt="Project 3">
+					<div class="gallery-overlay">
+						<h4>Brand Identity</h4>
+						<p>Design & Branding</p>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6 col-lg-4">
-				<div class="course-box">
-					<div class="course-img">
-						<img src="assets/img/course/UIUX.png" alt="img">
-					</div>
-					<div class="course-content">
-						<div class="course-rating">
-							<div class="star-rating" role="img" aria-label="Rated 5.00 out of 5">
-								<span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span>
-							</div>
-						</div>
-						<h3 class="course-title">
-							<p>
-								آموزش FrontEnd (رابط کاربری)
-								</a>
-						</h3>
-
+				<div class="gallery-item" data-category="web">
+					<img src="images/managed-service.jpg" alt="Project 4">
+					<div class="gallery-overlay">
+						<h4>Analytics Dashboard</h4>
+						<p>Web Application</p>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-6 col-lg-4">
-				<div class="course-box">
-					<div class="course-img">
-						<img src="assets/img/course/AllThings1.png" alt="img">
+				<div class="gallery-item" data-category="mobile">
+					<img src="images/ai-optimized-templates.jpg" alt="Project 5">
+					<div class="gallery-overlay">
+						<h4>Banking App</h4>
+						<p>Mobile Development</p>
 					</div>
-					<div class="course-content">
-						<div class="course-rating">
-							<div class="star-rating" role="img" aria-label="Rated 5.00 out of 5">
-								<span style="width:100%">Rated <strong class="rating">5.00</strong> out of 5</span>
-							</div>
-						</div>
-						<h3 class="course-title">
-							<p>
-								مشاوره و آموزش  تخصصی
-								</a>
-						</h3>
-
+				</div>
+				<div class="gallery-item" data-category="branding">
+					<img src="/images/digital-strategy.jpg" alt="Project 6">
+					<div class="gallery-overlay">
+						<h4>Startup Branding</h4>
+						<p>Design & Identity</p>
+					</div>
+				</div>
+				<div class="gallery-item" data-category="web">
+					<img src="images/managed-service.jpg" alt="Project 4">
+					<div class="gallery-overlay">
+						<h4>Analytics Dashboard</h4>
+						<p>Web Application</p>
+					</div>
+				</div>
+				<div class="gallery-item" data-category="mobile">
+						<img src="images/ai-optimized-templates.jpg" alt="Project 5">
+					<div class="gallery-overlay">
+						<h4>Banking App</h4>
+						<p>Mobile Development</p>
+					</div>
+				</div>
+				<div class="gallery-item" data-category="branding">
+					<img src="/images/digital-strategy.jpg" alt="Project 6">
+					<div class="gallery-overlay">
+						<h4>Startup Branding</h4>
+						<p>Design & Identity</p>
 					</div>
 				</div>
 
-			</div>
-		</div>
+			</div> *@
 
 
-
-		<div class="container mt-5">
-
-			<!-- عنوان مدرن و آبی -->
-			<div class="text-center mb-5">
-				<h2 class="fw-bold text-primary">
-					ثبت نام در دوره
-				</h2>
-
-			</div>
-
-			<div class="row justify-content-center">
-
-				@foreach (var course in Model)
-				{
-					<!-- پهن‌تر از قبل (قبلاً col-md-4 بود) -->
-					<div class="col-md-8 col-lg-6 mb-4 d-flex justify-content-center">
-
-						<!-- ارتفاع بیشتر با py بیشتر -->
-						<div class="card shadow-lg w-100 py-4">
-
-							<div class="card-body text-center">
-
-								<h4 class="card-title mb-3">
-									@course.Title
-								</h4>
-
-								<!-- دکمه همان اندازه، فقط وسط -->
-								<a href="/Course/Details/@course.Id"
-								   class="btn btn-primary px-4">
-									مشاهده جزئیات و ثبت نام در دوره
-								</a>
-
-							</div>
-
-						</div>
-					</div>
-				}
-
-			</div>
-		</div>
 
 	</div>
-</section>
+
+	<!-- Testimonials Section -->
+	<div class="content-section" id="testimonials">
+		<div class="section-header-small">
+			<div class="small-logo">
+				<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+					<defs>
+						<linearGradient id="smallLogoGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" style="stop-color:#00f0ff" />
+							<stop offset="100%" style="stop-color:#ff00d4" />
+						</linearGradient>
+					</defs>
+					<polygon points="50,10 85,32 85,68 50,90 15,68 15,32" fill="none" stroke="url(#smallLogoGrad4)" stroke-width="3" />
+					<circle cx="50" cy="50" r="10" fill="url(#smallLogoGrad4)" />
+				</svg>
+			</div>
+			<div class="small-brand">
+				<h3>ARAYAN</h3>
+				<p>Become A Legend</p>
+			</div>
+		</div>
+		<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+
+		<div class="section-header">
+			<h2 class="section-title">بوت کمپ برنامه نویسان</h2>
+			<p class="section-subtitle">دوستانی که برای کسب موفقیت ، آکادمی آرایان را انتخاب کردند</p>
+		</div>
+
+		<div class="testimonials-grid">
+			<div class="testimonial-card">
+				<p class="testimonial-text"></p>
+				<div class="testimonial-author">
+					<div class="author-avatar">
+						<img src="hs://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Client 1">
+					</div>
+					<div class="author-info">
+						<h5>Michael Chen</h5>
+						<p>CEO, TechVentures</p>
+					</div>
+				</div>
+			</div>
+			<div class="testimonial-card">
+				<p class="testimonial-text"></p>
+				<div class="testimonial-author">
+					<div class="author-avatar">
+						<img src="hts://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop" alt="Client 2">
+					</div>
+					<div class="author-info">
+						<h5>Sarah Johnson</h5>
+						<p>Product Director, InnovateCo</p>
+					</div>
+				</div>
+			</div>
+			<div class="testimonial-card">
+				<p class="testimonial-text"></p>
+				<div class="testimonial-author">
+					<div class="author-avatar">
+						<img src="hts://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Client 3">
+					</div>
+					<div class="author-info">
+						<h5>David Park</h5>
+						<p>Founder, StartupHub</p>
+					</div>
+				</div>
+			</div>
+			<div class="testimonial-card">
+				<p class="testimonial-text"> </p>
+				<div class="testimonial-author">
+					<div class="author-avatar">
+						<img src="s://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop" alt="Client 4">
+					</div>
+					<div class="author-info">
+						<h5>Emily Zhang</h5>
+						<p>COO, DataFlow Inc</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- About Section -->
+	<div class="content-section" id="about">
+		<div class="section-header-small">
+			<div class="small-logo">
+				<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+					<defs>
+						<linearGradient id="smallLogoGrad5" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" style="stop-color:#00f0ff" />
+							<stop offset="100%" style="stop-color:#ff00d4" />
+						</linearGradient>
+					</defs>
+					<polygon points="50,10 85,32 85,68 50,90 15,68 15,32" fill="none" stroke="url(#smallLogoGrad5)" stroke-width="3" />
+					<circle cx="50" cy="50" r="10" fill="url(#smallLogoGrad5)" />
+				</svg>
+			</div>
+			<div class="small-brand">
+				<h3>ARAYAN</h3>
+				<p>Become A Legend</p>
+			</div>
+		</div>
+		<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+
+		<div class="section-header">
+			<h5 class="section-title">درباره ما</h5>
+			<p class="section-subtitle">آکادمی آرایان</p>
+		</div>
+
+		<div class="about-content">
+			<div class="about-image">
+				<img src="images/About.png" alt="Our Team">
+			</div>
+			<div class="about-text" lang="fa" dir="rtl">
+
+				<h3>درباره آکادمی و تیم آرایان</h3>
+
+				<p>
+					<strong>آرایان</strong> با هدف آموزش تخصصی و اجرای پروژه‌های واقعی در حوزه برنامه‌نویسی و طراحی وب فعالیت می‌کند و خدمات خود را در دو حوزه اصلی ارائه می‌دهد: <strong>آموزش و انجام پروژه</strong>. تلاش ما این است که در کنار آموزش مهارت‌های کاربردی و پروژه‌محور، امکان اجرای ایده‌ها و نیازهای واقعی کسب‌وکارها و سازمان‌ها را نیز فراهم کنیم.
+				</p>
+
+				<h3>آموزش تخصصی برنامه‌نویسی و طراحی سایت</h3>
+
+				<p>
+					در بخش آموزشی، دوره‌های جامع <strong>ASP.NET Core</strong>  برگزار می‌شود. مسیر آموزش ASP.NET Core از یادگیری زبان برنامه‌نویسی <strong>C#</strong> آغاز شده و در ادامه، مباحث توسعه وب، ASP.NET Core MVC، ASP.NET Core Web API، پایگاه داده و سایر مهارت‌های موردنیاز برای ورود به دنیای توسعه وب به‌صورت پروژه‌محور آموزش داده می شود .
+				</p>
+
+				<h3>انجام پروژه‌</h3>
+
+				<p>
+					در بخش خدمات پروژه، آماده پذیرش و اجرای انواع پروژه‌های واقعی در حوزه طراحی و توسعه وب هستیم؛ از وب‌سایت‌های شرکتی، معرفی و فروشگاهی گرفته تا سامانه‌ها و پروژه‌های اختصاصی. پروژه‌ها متناسب با نیاز و ساختار هر مجموعه، با استفاده از <strong>ASP.NET Core</strong>  طراحی و پیاده‌سازی می‌شوند و فرآیند اجرای پروژه از بررسی نیازمندی‌ها و طراحی تا توسعه، تست و تحویل نهایی انجام خواهد شد.
+				</p>
+
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Contact Section -->
+	<div class="content-section" id="contact">
+		<div class="section-header-small">
+			<div class="small-logo">
+				<svg viewBox="0 0 100 100" xmlns="https://www.w3.org/2000/svg">
+					<defs>
+						<linearGradient id="smallLogoGrad6" x1="0%" y1="0%" x2="100%" y2="100%">
+							<stop offset="0%" style="stop-color:#00f0ff" />
+							<stop offset="100%" style="stop-color:#ff00d4" />
+						</linearGradient>
+					</defs>
+					<polygon points="50,10 85,32 85,68 50,90 15,68 15,32" fill="none" stroke="url(#smallLogoGrad6)" stroke-width="3" />
+					<circle cx="50" cy="50" r="10" fill="url(#smallLogoGrad6)" />
+				</svg>
+			</div>
+			<div class="small-brand">
+				<h3>ARAYAN</h3>
+				<p>Become A Legend</p>
+			</div>
+		</div>
+		<button class="back-btn" onclick="backToMenu()">← Back to Menu</button>
+
+		<div class="section-header">
+			<h2 class="section-title">راه های ارتباطی</h2>
+			<p class="section-subtitle">منتظر تماس ها و پیام های شما هستیم</p>
+		</div>
+
+		<div class="contact-grid">
+			<div class="contact-form">
+				<div class="form-group">
+					<input type="text" placeholder="Your Name">
+				</div>
+				<div class="form-group">
+					<input type="email" placeholder="Your Email">
+				</div>
+				<div class="form-group">
+					<input type="text" placeholder="Subject">
+				</div>
+				<div class="form-group">
+					<textarea placeholder="Your Message"></textarea>
+				</div>
+				<button class="submit-btn">Send Message</button>
+			</div>
+			<div class="contact-info">
+				<div class="contact-item">
+					<div class="contact-icon">📍</div>
+					<div class="contact-details">
+						<h4>Location</h4>
+						<p> ایلام ، میدان 22 بهمن ، خیابان فردوسی ، روبروی بانک مهر ، بن بست زاگرس ، پاساژ خلیج فارس ، طبقه سوم، آموزشگاه کامپیوتر و فناوری اطلاعات برتر </p>
+					</div>
+				</div>
+				<div class="contact-item">
+					<div class="contact-icon">📧</div>
+					<div class="contact-details">
+						<h4>Email</h4>
+						<p>arayanacademy26@Gmail.com</p>
+					</div>
+				</div>
+				<div class="contact-item">
+					<div class="contact-icon">📞</div>
+					<div class="contact-details">
+						<h4>Phone</h4>
+						<p>09100045628</p>
+					</div>
+				</div>
+				<div class="contact-item">
+					<div class="contact-icon">📷</div>
+					<div class="contact-details">
+						<h4>Instagram</h4>
+						<p>
+							<a href="https://instagram.com/arayanacademy"
+							   target="_blank"
+							   rel="noopener noreferrer">
+								arayanacademy
+							</a>
+						</p>
+					</div>
+				</div>
+
+				<div class="contact-item">
+					<div class="contact-icon">📣</div>
+					<div class="contact-details">
+						<h4>Rubika</h4>
+						<p>
+							<a href="https://rubika.ir/arayandev"
+							   target="_blank"
+							   rel="noopener noreferrer">
+								arayandev
+							</a>
+						</p>
+					</div>
+				</div>
 
 
-<div id="studentsContainer"></div>
 
-<script>
-	function loadStudents() {
-		var xhr = new XMLHttpRequest();
-		xhr.open('GET', '/Home/Students', true);
-
-		xhr.onload = function () {
-			if (xhr.status === 200) {
-
-				document.getElementById('studentsContainer').innerHTML = xhr.responseText;
-
-				var $slider = $('.event-slider-1');
-
-				// اگر قبلا اسلایدر ساخته شده بود حذفش کن
-				if ($slider.hasClass('slick-initialized')) {
-					$slider.slick('unslick');
-				}
-
-				// ساخت دوباره اسلایدر
-				$slider.slick({
-					slidesToShow: 5,
-					slidesToScroll: 1,
-					arrows: true,
-					dots: false,
-					rtl: true,
-
-					infinite: true,
-					autoplay: true,
-					autoplaySpeed: 2000,
-
-					responsive: [
-						{
-							breakpoint: 992,
-							settings: {
-								slidesToShow: 2
-							}
-						},
-						{
-							breakpoint: 576,
-							settings: {
-								slidesToShow: 1
-							}
-						}
-					]
-				});
-
-			}
-		};
-
-		xhr.send();
-	}
-
-	document.addEventListener("DOMContentLoaded", function () {
-		loadStudents();
-	});
-</script>
-
-
-
-
+			</div>
+		</div>
+	</div>
+</div>

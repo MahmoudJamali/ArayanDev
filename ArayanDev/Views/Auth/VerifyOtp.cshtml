@@ -12,220 +12,685 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <title>تأیید کد | آکادمی آرایان</title>
+
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
 
     <style>
 
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: tahoma;
-            background: linear-gradient(140deg,#eef2ff,#ffffff);
+            padding: 30px 20px;
+            font-family: "Vazirmatn", Tahoma, sans-serif;
+            color: #fff;
+            background: radial-gradient( circle at 20% 20%, rgba(0, 240, 255, 0.08), transparent 35% ), radial-gradient( circle at 80% 80%, rgba(255, 0, 212, 0.08), transparent 35% ), #070b14;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* کارت */
+
+            /* ==========================
+                   Background Grid
+                ========================== */
+
+            body::before {
+                content: "";
+                position: fixed;
+                inset: 0;
+                background-image: linear-gradient( rgba(255,255,255,.025) 1px, transparent 1px ), linear-gradient( 90deg, rgba(255,255,255,.025) 1px, transparent 1px );
+                background-size: 50px 50px;
+                mask-image: linear-gradient( to bottom, black, transparent 90% );
+                pointer-events: none;
+            }
+
+
+        /* ==========================
+                   Glow
+                ========================== */
+
+        .verify-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            opacity: .35;
+        }
+
+        .verify-orb-1 {
+            width: 300px;
+            height: 300px;
+            background: #00f0ff;
+            top: -120px;
+            left: -100px;
+        }
+
+        .verify-orb-2 {
+            width: 280px;
+            height: 280px;
+            background: #ff00d4;
+            bottom: -120px;
+            right: -100px;
+        }
+
+
+        /* ==========================
+                   Wrapper
+                ========================== */
+
+        .verify-wrapper {
+            width: 100%;
+            max-width: 430px;
+            position: relative;
+            z-index: 2;
+            animation: verifyAppear .7s ease-out;
+        }
+
+        @@keyframes verifyAppear {
+
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+
+        /* ==========================
+                   Brand
+                ========================== */
+
+        .verify-brand {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .verify-logo {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0,240,255,.35);
+            border-radius: 18px;
+            background: linear-gradient( 135deg, rgba(0,240,255,.08), rgba(255,0,212,.08) );
+            box-shadow: 0 0 25px rgba(0,240,255,.10), inset 0 0 20px rgba(255,255,255,.02);
+        }
+
+            .verify-logo svg {
+                width: 42px;
+                height: 42px;
+            }
+
+        .verify-brand h2 {
+            margin: 0;
+            font-size: 21px;
+            letter-spacing: 2px;
+            font-weight: 700;
+            background: linear-gradient( 90deg, #00f0ff, #fff, #ff00d4 );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .verify-brand p {
+            margin: 6px 0 0;
+            color: rgba(255,255,255,.45);
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+
+        /* ==========================
+                   Card
+                ========================== */
+
         .verify-card {
             width: 100%;
-            max-width: 420px;
-            background: #fff;
-            padding: 40px 28px;
+            padding: 38px 32px 32px;
             border-radius: 22px;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.08);
-            border: 1px solid #f1f1f1;
+            background: linear-gradient( 145deg, rgba(255,255,255,.055), rgba(255,255,255,.018) );
+            border: 1px solid rgba(255,255,255,.10);
+            box-shadow: 0 30px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .verify-card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 10%;
+                right: 10%;
+                height: 1px;
+                background: linear-gradient( 90deg, transparent, #00f0ff, #ff00d4, transparent );
+                opacity: .8;
+            }
+
+
+            /* ==========================
+                   Title
+                ========================== */
+
+            .verify-card h3 {
+                margin: 0 0 10px;
+                text-align: center;
+                font-size: 24px;
+                font-weight: 700;
+                color: #fff;
+            }
+
+        .verify-description {
+            margin: 0 0 25px;
+            text-align: center;
+            color: rgba(255,255,255,.48);
+            font-size: 13px;
+            line-height: 2;
+        }
+
+
+        /* ==========================
+                   Phone
+                ========================== */
+
+        .phone-label {
+            margin-bottom: 25px;
+            text-align: center;
+            color: rgba(255,255,255,.48);
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .phone-number {
+            display: block;
+            margin-top: 7px;
+            direction: ltr;
+            color: #00f0ff;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+
+        /* ==========================
+                   Validation
+                ========================== */
+
+        .validation-summary {
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background: rgba(255,70,100,.08);
+            border: 1px solid rgba(255,70,100,.20);
+            color: #ff8fa3;
+            font-size: 12px;
             text-align: center;
         }
 
-            /* تیتر */
-            .verify-card h3 {
-                margin-bottom: 10px;
-                font-weight: 700;
-                color: #3a0ca3;
-            }
 
-        /* شماره موبایل */
-        .phone-label {
-            font-size: 14px;
-            margin-bottom: 25px;
-            color: #666;
+        /* ==========================
+                   OTP
+                ========================== */
+
+        .otp-wrapper {
+            position: relative;
         }
 
-            .phone-label strong {
-                display: block;
-                margin-top: 5px;
-                color: #222;
-                font-size: 15px;
-            }
+        .otp-label {
+            display: block;
+            margin-bottom: 9px;
+            color: rgba(255,255,255,.72);
+            font-size: 13px;
+            text-align: right;
+        }
 
-        /* ورودی OTP */
         .otp-input {
             width: 100%;
-            height: 48px;
-            border-radius: 12px;
-            border: 1px solid #ddd;
-            background: #fff;
-            font-size: 22px;
+            height: 58px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(0,0,0,.20);
+            color: #fff;
+            font-family: Tahoma, sans-serif;
+            font-size: 25px;
+            font-weight: 600;
             text-align: center;
-            letter-spacing: 10px;
-            transition: .25s;
+            letter-spacing: 12px;
+            padding-left: 12px;
+            outline: none;
+            transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
         }
+
+            .otp-input::placeholder {
+                color: rgba(255,255,255,.18);
+                letter-spacing: 10px;
+            }
 
             .otp-input:focus {
-                border-color: #2575fc;
-                outline: none;
-                box-shadow: 0 0 0 3px rgba(37,117,252,.15);
+                border-color: rgba(0,240,255,.65);
+                background: rgba(0,240,255,.035);
+                box-shadow: 0 0 0 3px rgba(0,240,255,.08), 0 0 30px rgba(0,240,255,.08);
             }
 
-        /* دکمه تایید */
+
+        /* ==========================
+                   Confirm Button
+                ========================== */
+
         .action-btn {
             width: 100%;
-            height: 46px;
-            margin-top: 20px;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(45deg,#6a11cb,#2575fc);
+            height: 52px;
+            margin-top: 22px;
+            border: 1px solid rgba(0,240,255,.35);
+            border-radius: 13px;
+            background: linear-gradient( 90deg, rgba(0,240,255,.13), rgba(255,0,212,.13) );
             color: #fff;
-            font-size: 15px;
+            font-family: "Vazirmatn", Tahoma, sans-serif;
+            font-size: 14px;
             font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
         }
 
-        /* تایمر */
-        .timer {
-            margin-top: 18px;
-            font-size: 14px;
-            color: #777;
-        }
-
-        /* دکمه ارسال مجدد */
-        .resend-btn {
-            margin-top: 10px;
-            width: 100%;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #2575fc;
-            background: #fff;
-            color: #2575fc;
-            font-size: 14px;
-        }
-
-            .resend-btn:disabled {
-                opacity: .5;
-                border-color: #bbb;
-                color: #888;
+            .action-btn::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: linear-gradient( 90deg, transparent, rgba(255,255,255,.12), transparent );
+                transform: translateX(-100%);
+                transition: transform .5s ease;
             }
 
-        /* موبایل */
+            .action-btn:hover {
+                transform: translateY(-2px);
+                border-color: rgba(0,240,255,.7);
+                box-shadow: 0 8px 30px rgba(0,240,255,.12), 0 8px 30px rgba(255,0,212,.08);
+            }
+
+                .action-btn:hover::before {
+                    transform: translateX(100%);
+                }
+
+            .action-btn:active {
+                transform: translateY(0);
+            }
+
+
+        /* ==========================
+                   Timer
+                ========================== */
+
+        .timer {
+            margin-top: 22px;
+            padding: 13px;
+            border-radius: 12px;
+            background: rgba(255,255,255,.025);
+            border: 1px solid rgba(255,255,255,.06);
+            color: rgba(255,255,255,.45);
+            font-size: 12px;
+            text-align: center;
+        }
+
+            .timer #time {
+                color: #00f0ff;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+
+        /* ==========================
+                   Resend
+                ========================== */
+
+        .resend-btn {
+            width: 100%;
+            height: 48px;
+            margin-top: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(255,255,255,.025);
+            color: rgba(255,255,255,.75);
+            font-family: "Vazirmatn", Tahoma, sans-serif;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all .25s ease;
+        }
+
+            .resend-btn:not(:disabled):hover {
+                color: #ff00d4;
+                border-color: rgba(255,0,212,.45);
+                background: rgba(255,0,212,.05);
+                box-shadow: 0 0 20px rgba(255,0,212,.07);
+            }
+
+            .resend-btn:disabled {
+                cursor: not-allowed;
+                opacity: .35;
+            }
+
+
+        /* ==========================
+                   Back Home
+                ========================== */
+
+        .back-home {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: rgba(255,255,255,.45);
+            text-decoration: none;
+            font-size: 12px;
+            transition: color .25s ease;
+        }
+
+            .back-home:hover {
+                color: #00f0ff;
+            }
+
+
+        /* ==========================
+                   Mobile
+                ========================== */
+
         @@media (max-width:480px) {
-            body
 
-        {
-            padding: 15px;
+            body {
+                padding: 20px 15px;
+            }
+
+            .verify-card {
+                padding: 32px 22px 25px;
+                border-radius: 19px;
+            }
+
+                .verify-card h3 {
+                    font-size: 21px;
+                }
+
+            .verify-logo {
+                width: 56px;
+                height: 56px;
+            }
+
+            .otp-input {
+                height: 54px;
+                font-size: 22px;
+                letter-spacing: 9px;
+            }
         }
 
-        .verify-card {
-            padding: 30px 20px;
-            border-radius: 18px;
-        }
-
-        .otp-input {
-            font-size: 20px;
-            letter-spacing: 8px;
-        }
-
-        }
     </style>
 </head>
 
 <body>
 
-    <div class="verify-card">
+    <div class="verify-orb verify-orb-1"></div>
+    <div class="verify-orb verify-orb-2"></div>
 
-        <h3>تأیید کد</h3>
 
-        <div class="phone-label">
-            کد ارسال شده به شماره
-            <strong>@Model</strong>
+    <div class="verify-wrapper">
+
+
+        <!-- Brand -->
+        <div class="verify-brand">
+
+            <div class="verify-logo">
+
+                <svg viewBox="0 0 100 100"
+                     xmlns="http://www.w3.org/2000/svg">
+
+                    <defs>
+
+                        <linearGradient id="verifyLogoGrad"
+                                        x1="0%"
+                                        y1="0%"
+                                        x2="100%"
+                                        y2="100%">
+
+                            <stop offset="0%"
+                                  style="stop-color:#00f0ff" />
+
+                            <stop offset="100%"
+                                  style="stop-color:#ff00d4" />
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <polygon points="50,10 85,32 85,68 50,90 15,68 15,32"
+                             fill="none"
+                             stroke="url(#verifyLogoGrad)"
+                             stroke-width="3" />
+
+                    <circle cx="50"
+                            cy="50"
+                            r="10"
+                            fill="url(#verifyLogoGrad)" />
+
+                </svg>
+
+            </div>
+
+            <h2>ARAYAN</h2>
+
+            <p>Programming & Web Development</p>
+
         </div>
 
-        <div asp-validation-summary="All" class="text-danger mb-2"></div>
 
-        <form asp-controller="Auth"
-              asp-action="VerifyOtp"
-              asp-route-returnUrl="@ViewBag.ReturnUrl"
-              method="post">
+        <!-- Verify Card -->
+        <div class="verify-card">
 
-            <input type="hidden" name="phoneNumber" value="@Model" />
-            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <h3>تأیید کد ورود</h3>
 
-            <input id="otpBox"
-                   class="otp-input"
-                   type="text"
-                   name="otpCode"
-                   maxlength="6"
-                   placeholder="•••••"
-                   autocomplete="one-time-code"
-                   required />
+            <p class="verify-description">
+                کد تأیید ارسال‌شده به شماره موبایل خود را وارد کنید.
+            </p>
 
-            <button type="submit" class="action-btn">
-                تأیید
-            </button>
 
-        </form>
+            <div class="phone-label">
 
-        <div class="timer">
-            زمان باقی‌مانده: <span id="time">180</span> ثانیه
+                کد ارسال شده به شماره
+
+                <strong class="phone-number">
+                    @Model
+                </strong>
+
+            </div>
+
+
+            <div asp-validation-summary="All"
+                 class="validation-summary">
+            </div>
+
+
+            <!-- Verify Form -->
+            <form asp-controller="Auth"
+                  asp-action="VerifyOtp"
+                  asp-route-returnUrl="@ViewBag.ReturnUrl"
+                  method="post">
+
+                <input type="hidden"
+                       name="phoneNumber"
+                       value="@Model" />
+
+                <input type="hidden"
+                       name="returnUrl"
+                       value="@ViewBag.ReturnUrl" />
+
+
+                <div class="otp-wrapper">
+
+                    <label class="otp-label"
+                           for="otpBox">
+                        کد تأیید ۶ رقمی
+                    </label>
+
+                    <input id="otpBox"
+                           class="otp-input"
+                           type="text"
+                           name="otpCode"
+                           maxlength="6"
+                           inputmode="numeric"
+                           pattern="[0-9]*"
+                           placeholder="••••••"
+                           autocomplete="one-time-code"
+                           required />
+
+                </div>
+
+
+                <button type="submit"
+                        class="action-btn">
+
+                    تأیید و ورود
+
+                </button>
+
+            </form>
+
+
+            <!-- Timer -->
+            <div class="timer">
+
+                زمان باقی‌مانده:
+                <span id="time">180</span>
+                ثانیه
+
+            </div>
+
+
+            <!-- Resend -->
+            <form asp-controller="Auth"
+                  asp-action="SendOtp"
+                  method="post">
+
+                <input type="hidden"
+                       name="phoneNumber"
+                       value="@Model" />
+
+                <button id="resendBtn"
+                        type="submit"
+                        class="resend-btn"
+                        disabled>
+
+                    ارسال مجدد کد
+
+                </button>
+
+            </form>
+
         </div>
 
-        <form asp-controller="Auth"
-              asp-action="SendOtp"
-              method="post">
 
-            <input type="hidden" name="phoneNumber" value="@Model" />
+        <a href="/"
+           class="back-home">
 
-            <button id="resendBtn"
-                    type="submit"
-                    class="resend-btn"
-                    disabled>
-                ارسال مجدد کد
-            </button>
+            ← بازگشت به صفحه اصلی
 
-        </form>
+        </a>
 
     </div>
+
 
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/bootstrap.min.js"></script>
 
+
     <script>
+
+        const otpBox = document.getElementById("otpBox");
+
+        /*
+         * فقط اعداد مجاز هستند
+         */
+        otpBox.addEventListener("input", function () {
+
+            let value = this.value.replace(/[^0-9]/g, "");
+
+            if (value.length > 6) {
+                value = value.slice(0, 6);
+            }
+
+            this.value = value;
+
+        });
+
+
+        /*
+         * Timer
+         */
         let remaining = 180;
 
         const timeEl = document.getElementById("time");
         const resendBtn = document.getElementById("resendBtn");
 
         function updateTimer() {
+
             if (remaining <= 0) {
+
                 timeEl.innerText = "0";
+
                 resendBtn.disabled = false;
+
                 return;
             }
 
             timeEl.innerText = remaining;
+
             remaining--;
         }
 
+
         updateTimer();
+
+
         const timerInterval = setInterval(() => {
+
             updateTimer();
 
-            if (remaining < 0) {
+            if (remaining <= 0) {
                 clearInterval(timerInterval);
             }
-        }, 1000);
-    </script>
 
+        }, 1000);
+
+
+        /*
+         * Auto focus
+         */
+        window.addEventListener("load", function () {
+
+            setTimeout(() => {
+
+                otpBox.focus();
+
+            }, 500);
+
+        });
+
+    </script>
 
 </body>
 </html>

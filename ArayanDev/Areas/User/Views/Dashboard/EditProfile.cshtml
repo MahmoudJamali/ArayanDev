@@ -1,177 +1,738 @@
-﻿@using System.Globalization
+﻿
+@using System.Globalization
 @using Business.Handlers.Users.Commands
 @model EditProfileViewModel
 
-<div class="card shadow-sm">
-    <div class="card-header">
-        ویرایش اطلاعات
+<style>
+
+    .edit-profile-page {
+        direction: rtl;
+        color: #e8eaf0;
+    }
+
+    /* Header */
+
+    .edit-page-header {
+        margin-bottom: 25px;
+    }
+
+    .edit-page-title {
+        margin: 0;
+        color: #fff;
+        font-size: 27px;
+        font-weight: 700;
+    }
+
+    .edit-page-subtitle {
+        margin: 8px 0 0;
+        color: #858da0;
+        font-size: 13px;
+    }
+
+    /* Main Card */
+
+    .edit-profile-card {
+        overflow: hidden;
+        border-radius: 20px;
+        background: radial-gradient( circle at 100% 0%, rgba(124,58,237,.08), transparent 25% ), rgba(16,18,27,.94);
+        border: 1px solid rgba(255,255,255,.07);
+        box-shadow: 0 20px 50px rgba(0,0,0,.22);
+    }
+
+    .edit-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 24px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .edit-card-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        background: linear-gradient(135deg,#6a11cb,#2575fc);
+        box-shadow: 0 8px 20px rgba(37,117,252,.2);
+    }
+
+    .edit-card-title {
+        margin: 0;
+        color: #fff;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .edit-card-body {
+        padding: 28px;
+    }
+
+    /* Form */
+
+    .form-group-modern {
+        margin-bottom: 20px;
+    }
+
+    .form-label-modern {
+        display: block;
+        margin-bottom: 8px;
+        color: #aeb4c4;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .form-control-modern {
+        width: 100%;
+        min-height: 46px;
+        padding: 10px 14px;
+        color: #edf0f7 !important;
+        background: rgba(255,255,255,.035) !important;
+        border: 1px solid rgba(255,255,255,.09) !important;
+        border-radius: 11px;
+        outline: none;
+        transition: .25s ease;
+    }
+
+        .form-control-modern::placeholder {
+            color: #646b7d;
+        }
+
+        .form-control-modern:focus {
+            border-color: rgba(124,58,237,.65) !important;
+            background: rgba(255,255,255,.05) !important;
+            box-shadow: 0 0 0 3px rgba(124,58,237,.10) !important;
+        }
+
+    /* Select */
+
+    select.form-control-modern {
+        cursor: pointer;
+        appearance: auto;
+    }
+
+        select.form-control-modern option {
+            color: #222;
+            background: #fff;
+        }
+
+    /* Birthday */
+
+    .birthday-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 8px;
+    }
+
+    /* Profile Image */
+
+    .profile-image-section {
+        height: 100%;
+        min-height: 250px;
+        padding: 20px;
+        border-radius: 16px;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.06);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-preview {
+        position: relative;
+        width: 170px;
+        height: 170px;
+        margin-bottom: 18px;
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(145deg, rgba(124,58,237,.12), rgba(37,117,252,.08));
+        border: 3px solid rgba(124,58,237,.35);
+        box-shadow: 0 0 0 8px rgba(124,58,237,.04), 0 15px 35px rgba(0,0,0,.25);
+    }
+
+        .profile-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .preview-placeholder {
+        color: #70778a;
+        text-align: center;
+        font-size: 13px;
+    }
+
+        .preview-placeholder i {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 32px;
+            color: #5f6678;
+        }
+
+    .image-label {
+        color: #fff;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+
+    .image-hint {
+        color: #777f92;
+        font-size: 11px;
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .file-input-wrapper {
+        width: 100%;
+    }
+
+    .file-input-modern {
+        width: 100%;
+        color: #aeb4c4;
+        background: rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 10px;
+        padding: 7px;
+        font-size: 12px;
+    }
+
+        .file-input-modern::file-selector-button {
+            margin-left: 8px;
+            padding: 7px 12px;
+            color: #fff;
+            background: linear-gradient(135deg,#6a11cb,#2575fc);
+            border: 0;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+    /* Footer Actions */
+
+    .form-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-top: 15px;
+        padding-top: 22px;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .save-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-width: 150px;
+        padding: 12px 22px;
+        border: 0;
+        border-radius: 11px;
+        color: #fff;
+        background: linear-gradient(135deg,#6a11cb,#2575fc);
+        box-shadow: 0 10px 25px rgba(37,117,252,.18);
+        font-size: 13px;
+        font-weight: 600;
+        transition: .25s ease;
+    }
+
+        .save-btn:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(37,117,252,.28);
+        }
+
+    .cancel-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 110px;
+        padding: 11px 18px;
+        border-radius: 11px;
+        color: #9da4b5;
+        background: rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.08);
+        text-decoration: none;
+        font-size: 13px;
+        transition: .25s ease;
+    }
+
+        .cancel-btn:hover {
+            color: #fff;
+            background: rgba(255,255,255,.07);
+        }
+
+    /* Responsive */
+
+    @@media (max-width: 767px) {
+
+        .edit-card-body {
+            padding: 20px;
+        }
+
+        .edit-page-title {
+            font-size: 23px;
+        }
+
+        .profile-image-section {
+            min-height: auto;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .save-btn,
+        .cancel-btn {
+            width: 100%;
+        }
+    }
+
+    @@media (max-width: 480px) {
+
+        .birthday-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-card-header {
+            padding: 17px;
+        }
+
+        .edit-card-body {
+            padding: 16px;
+        }
+
+        .profile-preview {
+            width: 145px;
+            height: 145px;
+        }
+    }
+
+</style>
+
+
+<div class="edit-profile-page">
+
+    <!-- Page Header -->
+
+    <div class="edit-page-header">
+
+        <h1 class="edit-page-title">
+            ویرایش پروفایل
+        </h1>
+
+        <p class="edit-page-subtitle">
+            اطلاعات حساب کاربری خود را مدیریت و به‌روزرسانی کنید.
+        </p>
+
     </div>
 
-    <div class="card-body">
 
-        <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+    <!-- Main Card -->
 
-            <input type="hidden" asp-for="UserId" />
+    <div class="edit-profile-card">
 
-            <div class="row">
+        <!-- Card Header -->
 
-                <div class="col-md-4 mb-3">
-                    <label>نام</label>
-                    <input asp-for="Name" class="form-control" />
-                </div>
+        <div class="edit-card-header">
 
-                <div class="col-md-4 mb-3">
-                    <label>نام خانوادگی</label>
-                    <input asp-for="Family" class="form-control" />
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label>کد ملی</label>
-                    <input asp-for="NationalCode" class="form-control" />
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label>شهر</label>
-                    <input asp-for="City" class="form-control" />
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label>تاریخ تولد (شمسی)</label>
-
-                    <div class="row">
-
-                        <div class="col-4">
-                            <select asp-for="BirthYear" class="form-control">
-                                <option value="">سال</option>
-
-                                @for (int y = 1330; y <= 1410; y++)
-                                {
-                                    <option value="@y">@y</option>
-                                }
-
-                            </select>
-                        </div>
-
-                        <div class="col-4">
-                            <select asp-for="BirthMonth" class="form-control">
-                                <option value="">ماه</option>
-
-                                <option value="1">فروردین</option>
-                                <option value="2">اردیبهشت</option>
-                                <option value="3">خرداد</option>
-                                <option value="4">تیر</option>
-                                <option value="5">مرداد</option>
-                                <option value="6">شهریور</option>
-                                <option value="7">مهر</option>
-                                <option value="8">آبان</option>
-                                <option value="9">آذر</option>
-                                <option value="10">دی</option>
-                                <option value="11">بهمن</option>
-                                <option value="12">اسفند</option>
-
-                            </select>
-                        </div>
-
-                        <div class="col-4">
-                            <select asp-for="BirthDayNumber" class="form-control">
-                                <option value="">روز</option>
-
-                                @for (int d = 1; d <= 31; d++)
-                                {
-                                    <option value="@d">@d</option>
-                                }
-
-                            </select>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label>مدرک تحصیلی</label>
-                    <input asp-for="EducationDegree" class="form-control" />
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label>رشته</label>
-                    <input asp-for="Major" class="form-control" />
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label>ایمیل</label>
-                    <input asp-for="Email" class="form-control" />
-                </div>
-
-                <div class="col-md-8 mb-3">
-                    <label>آدرس</label>
-                    <input asp-for="Address" class="form-control" />
-                </div>
-
-                <div class="col-md-3 mb-3 text-center">
-
-                    <div style="width:200px;height:200px;
-                                border:2px solid #ddd;
-                                border-radius:50%;
-                                overflow:hidden;
-                                display:flex;
-                                align-items:center;
-                                justify-content:center;
-                                background:#f8f9fa">
-
-                        <img id="imagePreview"
-                             src="@(string.IsNullOrEmpty(Model.CurrentProfileImage) ? "" : Url.Content(Model.CurrentProfileImage))"
-                             style="width:100%;height:100%;object-fit:cover;
-                                    @(string.IsNullOrEmpty(Model.CurrentProfileImage) ? "display:none" : "")" />
-
-                        <span id="previewText"
-                              style="color:#999;
-                                     @(string.IsNullOrEmpty(Model.CurrentProfileImage) ? "" : "display:none")">
-                            بدون تصویر
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <div class="col-md-9 mb-3">
-                    <label class="form-label">عکس پروفایل</label>
-                    <input asp-for="ProfileImage"
-                           id="profileImageInput"
-                           type="file"
-                           class="form-control"
-                           accept="image/*" />
-                </div>
-
+            <div class="edit-card-icon">
+                <i class="far fa-user-edit"></i>
             </div>
 
-            <button type="submit" class="btn btn-success">
-                ذخیره تغییرات
-            </button>
+            <div>
+                <h2 class="edit-card-title">
+                    اطلاعات شخصی
+                </h2>
+            </div>
 
-        </form>
+        </div>
+
+
+        <!-- Card Body -->
+
+        <div class="edit-card-body">
+
+            <form asp-action="EditProfile"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden" asp-for="UserId" />
+
+
+                <div class="row">
+
+
+                    <!-- Name -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                نام
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control-modern"
+                                   placeholder="نام خود را وارد کنید" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Family -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                نام خانوادگی
+                            </label>
+
+                            <input asp-for="Family"
+                                   class="form-control-modern"
+                                   placeholder="نام خانوادگی" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- National Code -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                کد ملی
+                            </label>
+
+                            <input asp-for="NationalCode"
+                                   class="form-control-modern"
+                                   placeholder="کد ملی" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- City -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                شهر
+                            </label>
+
+                            <input asp-for="City"
+                                   class="form-control-modern"
+                                   placeholder="شهر محل سکونت" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Birthday -->
+
+                    <div class="col-lg-8">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                تاریخ تولد (شمسی)
+                            </label>
+
+                            <div class="birthday-wrapper">
+
+                                <select asp-for="BirthYear"
+                                        class="form-control-modern">
+
+                                    <option value="">سال</option>
+
+                                    @for (int y = 1330; y <= 1410; y++)
+                                    {
+                                        <option value="@y">
+                                            @y
+                                        </option>
+                                    }
+
+                                </select>
+
+
+                                <select asp-for="BirthMonth"
+                                        class="form-control-modern">
+
+                                    <option value="">ماه</option>
+
+                                    <option value="1">فروردین</option>
+                                    <option value="2">اردیبهشت</option>
+                                    <option value="3">خرداد</option>
+                                    <option value="4">تیر</option>
+                                    <option value="5">مرداد</option>
+                                    <option value="6">شهریور</option>
+                                    <option value="7">مهر</option>
+                                    <option value="8">آبان</option>
+                                    <option value="9">آذر</option>
+                                    <option value="10">دی</option>
+                                    <option value="11">بهمن</option>
+                                    <option value="12">اسفند</option>
+
+                                </select>
+
+
+                                <select asp-for="BirthDayNumber"
+                                        class="form-control-modern">
+
+                                    <option value="">روز</option>
+
+                                    @for (int d = 1; d <= 31; d++)
+                                    {
+                                        <option value="@d">
+                                            @d
+                                        </option>
+                                    }
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Education -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                مدرک تحصیلی
+                            </label>
+
+                            <input asp-for="EducationDegree"
+                                   class="form-control-modern"
+                                   placeholder="مثلاً کارشناسی" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Major -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                رشته تحصیلی
+                            </label>
+
+                            <input asp-for="Major"
+                                   class="form-control-modern"
+                                   placeholder="رشته تحصیلی" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Email -->
+
+                    <div class="col-lg-4 col-md-6">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                ایمیل
+                            </label>
+
+                            <input asp-for="Email"
+                                   class="form-control-modern"
+                                   type="email"
+                                   placeholder="example@email.com"
+                                   dir="ltr" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Address -->
+
+                    <div class="col-lg-8 col-md-12">
+
+                        <div class="form-group-modern">
+
+                            <label class="form-label-modern">
+                                آدرس
+                            </label>
+
+                            <input asp-for="Address"
+                                   class="form-control-modern"
+                                   placeholder="آدرس محل سکونت" />
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Profile Image -->
+
+                    <div class="col-lg-4 col-md-12">
+
+                        <div class="profile-image-section">
+
+                            <div class="profile-preview">
+
+                                <img id="imagePreview"
+                                     src="@(string.IsNullOrEmpty(Model.CurrentProfileImage)
+                                         ? ""
+                                         : Url.Content(Model.CurrentProfileImage))"
+                                     alt="تصویر پروفایل"
+                                     style="@(string.IsNullOrEmpty(Model.CurrentProfileImage)
+                                         ? "display:none;"
+                                         : "")" />
+
+                                <span id="previewText"
+                                      class="preview-placeholder"
+                                      style="@(string.IsNullOrEmpty(Model.CurrentProfileImage)
+                                         ? ""
+                                         : "display:none;")">
+
+                                    <i class="far fa-user"></i>
+
+                                    بدون تصویر
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="image-label">
+                                تصویر پروفایل
+                            </div>
+
+                            <div class="image-hint">
+                                تصویر مناسب برای پروفایل خود انتخاب کنید.
+                            </div>
+
+
+                            <div class="file-input-wrapper">
+
+                                <input asp-for="ProfileImage"
+                                       id="profileImageInput"
+                                       type="file"
+                                       class="file-input-modern"
+                                       accept="image/*" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Actions -->
+
+                <div class="form-actions">
+
+                    <a asp-area="User"
+                       asp-controller="Dashboard"
+                       asp-action="Index"
+                       class="cancel-btn">
+
+                        <i class="far fa-arrow-right"></i>
+
+                        انصراف
+
+                    </a>
+
+
+                    <button type="submit"
+                            class="save-btn">
+
+                        <i class="far fa-save"></i>
+
+                        ذخیره تغییرات
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
+
 </div>
+
 
 @section Scripts {
 
     <script>
 
-        document.getElementById('profileImageInput')
-            .addEventListener('change', function (event) {
+        const profileInput =
+            document.getElementById('profileImageInput');
+
+        const preview =
+            document.getElementById('imagePreview');
+
+        const previewText =
+            document.getElementById('previewText');
+
+
+        if (profileInput) {
+
+            profileInput.addEventListener('change', function (event) {
 
                 const file = event.target.files[0];
-                const preview = document.getElementById('imagePreview');
-                const previewText = document.getElementById('previewText');
 
-                if (!file) return;
+                if (!file) {
+                    return;
+                }
+
+
+                // بررسی تصویر
+
+                if (!file.type.startsWith('image/')) {
+
+                    alert('لطفاً یک فایل تصویری انتخاب کنید.');
+
+                    profileInput.value = '';
+
+                    return;
+                }
+
 
                 const reader = new FileReader();
+
 
                 reader.onload = function (e) {
 
                     preview.src = e.target.result;
+
                     preview.style.display = 'block';
 
                     if (previewText) {
@@ -180,10 +741,14 @@
 
                 };
 
+
                 reader.readAsDataURL(file);
 
             });
 
+        }
+
     </script>
 
 }
+

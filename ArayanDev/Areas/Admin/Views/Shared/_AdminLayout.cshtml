@@ -1,269 +1,1005 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+    var fullName = User.FindFirst("FullName")?.Value;
+    var phone = User.FindFirst(System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
+
+    var displayName = !string.IsNullOrWhiteSpace(fullName)
+        ? fullName
+        : (!string.IsNullOrWhiteSpace(phone) ? phone : "مدیر سیستم");
+}
+
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
+
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پنل مدیریت</title>
 
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="/assets/css/style.css" rel="stylesheet" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
 
+    <title>@ViewData["Title"] - Arayan Academy</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="/assets/css/bootstrap.rtl.min.css" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="/assets/css/fontawesome.min.css" />
+
+    <!-- Admin Theme -->
     <style>
+
+        :root {
+            --admin-bg: #070711;
+            --admin-bg-2: #0b0b18;
+            --sidebar-bg: rgba(13, 13, 28, .88);
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary: #2563eb;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255,255,255,.08);
+            --card-bg: rgba(255,255,255,.035);
+            --sidebar-width: 270px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
         body {
-            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            background: radial-gradient( circle at 10% 10%, rgba(124,58,237,.12), transparent 30% ), radial-gradient( circle at 90% 80%, rgba(37,99,235,.10), transparent 30% ), var(--admin-bg);
+            color: var(--text);
+            font-family: Tahoma, "Segoe UI", sans-serif;
             overflow-x: hidden;
         }
 
-        .admin-wrapper {
-            min-height: 100vh;
+        /* =========================================
+                   BACKGROUND
+                ========================================= */
+
+        .admin-background {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
         }
 
-        .sidebar {
-            width: 260px;
-            height: 100vh;
-            background-color: #343a40;
+        .admin-orb {
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: .14;
+        }
+
+        .admin-orb-1 {
+            top: -150px;
+            right: 250px;
+            background: #7c3aed;
+        }
+
+        .admin-orb-2 {
+            bottom: -150px;
+            left: 200px;
+            background: #2563eb;
+        }
+
+        .admin-grid {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient( rgba(255,255,255,.025) 1px, transparent 1px ), linear-gradient( 90deg, rgba(255,255,255,.025) 1px, transparent 1px );
+            background-size: 45px 45px;
+            mask-image: linear-gradient( to bottom, black, transparent 90% );
+        }
+
+        /* =========================================
+                   SIDEBAR
+                ========================================= */
+
+        .admin-sidebar {
             position: fixed;
-            right: 0;
-            top: 0;
-            z-index: 1040;
-            padding-top: 20px;
-            box-shadow: -3px 0 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            top: 15px;
+            right: 15px;
+            bottom: 15px;
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow: 0 25px 70px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: .35s ease;
+        }
+
+        /* =========================================
+                   BRAND
+                ========================================= */
+
+        .admin-brand {
+            padding: 26px 22px;
+            border-bottom: 1px solid var(--border);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .admin-brand-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient( 135deg, #7c3aed, #2563eb );
+            color: white;
+            font-size: 20px;
+            box-shadow: 0 0 25px rgba(124,58,237,.35);
+        }
+
+        .admin-brand-text {
             display: flex;
             flex-direction: column;
         }
 
-        .sidebar-brand {
-            padding: 15px 25px;
-            font-size: 1.25rem;
-            color: #fff;
-            border-bottom: 1px solid #4b545c;
-            margin-bottom: 15px;
-            text-align: center;
-            font-weight: bold;
+        .admin-brand-title {
+            color: white;
+            font-size: 17px;
+            font-weight: 800;
+            line-height: 1.4;
         }
 
-        .sidebar nav {
+        .admin-brand-subtitle {
+            color: var(--text-muted);
+            font-size: 10px;
+            letter-spacing: .7px;
+        }
+
+        /* =========================================
+                   NAVIGATION
+                ========================================= */
+
+        .admin-nav {
             flex: 1;
+            padding: 22px 14px;
             overflow-y: auto;
         }
 
-        .nav-link-custom {
-            display: block;
-            padding: 12px 25px;
-            color: #c2c7d0;
+            .admin-nav::-webkit-scrollbar {
+                width: 4px;
+            }
+
+            .admin-nav::-webkit-scrollbar-thumb {
+                background: rgba(255,255,255,.1);
+                border-radius: 10px;
+            }
+
+        .nav-section-title {
+            color: #64748b;
+            font-size: 10px;
+            margin: 10px 12px 12px;
+            letter-spacing: 1px;
+        }
+
+        .admin-nav-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 13px 14px;
+            margin-bottom: 6px;
+            border-radius: 13px;
+            color: #aeb8ca;
             text-decoration: none;
-            transition: all 0.2s;
-            border-right: 4px solid transparent;
+            font-size: 13px;
+            transition: color .25s ease, background .25s ease, transform .25s ease;
         }
 
-            .nav-link-custom:hover {
-                background-color: rgba(255,255,255,0.1);
-                color: #fff;
-                border-right-color: #0d6efd;
+            .admin-nav-link i {
+                width: 22px;
+                text-align: center;
+                font-size: 15px;
+                color: #7f8aa3;
+                transition: .25s ease;
             }
 
-            .nav-link-custom.active {
-                background-color: #0d6efd;
-                color: #fff;
-                border-right-color: #fff;
+            .admin-nav-link:hover {
+                color: white;
+                background: rgba(124,58,237,.10);
+                transform: translateX(-3px);
             }
 
-        .sidebar-footer {
+                .admin-nav-link:hover i {
+                    color: var(--primary-light);
+                }
+
+            .admin-nav-link.active {
+                color: white;
+                background: linear-gradient( 90deg, rgba(124,58,237,.22), rgba(37,99,235,.08) );
+                box-shadow: inset 0 0 0 1px rgba(124,58,237,.18);
+            }
+
+                .admin-nav-link.active i {
+                    color: #a78bfa;
+                }
+
+                .admin-nav-link.active::before {
+                    content: "";
+                    position: absolute;
+                    right: 0;
+                    top: 9px;
+                    bottom: 9px;
+                    width: 3px;
+                    border-radius: 5px;
+                    background: linear-gradient( to bottom, #a78bfa, #2563eb );
+                    box-shadow: 0 0 12px rgba(124,58,237,.7);
+                }
+
+        /* =========================================
+                   SIDEBAR FOOTER
+                ========================================= */
+
+        .admin-sidebar-footer {
             padding: 15px;
-            background-color: #2c3136;
+            border-top: 1px solid var(--border);
         }
 
-        .main-content {
-            margin-right: 260px;
-            padding: 25px;
+        .admin-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            background: rgba(255,255,255,.035);
+        }
+
+        .admin-user-avatar {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient( 135deg, #7c3aed, #2563eb );
+            color: white;
+            font-size: 15px;
+        }
+
+        .admin-user-info {
+            min-width: 0;
+        }
+
+        .admin-user-name {
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .admin-user-role {
+            color: #64748b;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        .logout-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px;
+            border-radius: 11px;
+            color: #f87171;
+            text-decoration: none;
+            background: rgba(239,68,68,.06);
+            border: 1px solid rgba(239,68,68,.08);
+            font-size: 12px;
+            transition: .25s ease;
+        }
+
+            .logout-link:hover {
+                color: #fff;
+                background: rgba(239,68,68,.15);
+            }
+
+        /* =========================================
+                   MAIN
+                ========================================= */
+
+        .admin-main {
+            margin-right: calc(var(--sidebar-width) + 30px);
             min-height: 100vh;
-            width: calc(100% - 260px);
+            padding: 15px 15px 40px;
+            transition: .35s ease;
         }
 
-        .mobile-header {
-            display: none;
+        /* =========================================
+                   TOPBAR
+                ========================================= */
+
+        .admin-topbar {
+            min-height: 72px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: rgba(13,13,28,.72);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
             align-items: center;
             justify-content: space-between;
-            background: #fff;
-            padding: 12px 16px;
-            border-bottom: 1px solid #dee2e6;
-            position: sticky;
-            top: 0;
-            z-index: 1030;
+            box-shadow: 0 15px 45px rgba(0,0,0,.18);
         }
 
-        .mobile-header-title {
-            font-weight: 700;
-            color: #343a40;
-            margin: 0;
-            font-size: 1rem;
+        .topbar-title {
+            display: flex;
+            flex-direction: column;
         }
 
-        .menu-toggle {
-            border: none;
-            background: #0d6efd;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 14px;
-            line-height: 1;
-        }
-
-            .menu-toggle:focus {
-                outline: none;
-                box-shadow: none;
+            .topbar-title h1 {
+                margin: 0;
+                color: white;
+                font-size: 18px;
+                font-weight: 800;
             }
 
-        .sidebar-overlay {
+            .topbar-title span {
+                margin-top: 5px;
+                color: #64748b;
+                font-size: 10px;
+            }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+
+        .topbar-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            text-decoration: none;
+            background: rgba(255,255,255,.04);
+            border: 1px solid rgba(255,255,255,.06);
+            transition: .25s ease;
+        }
+
+            .topbar-btn:hover {
+                color: white;
+                background: rgba(124,58,237,.14);
+                border-color: rgba(124,58,237,.25);
+                transform: translateY(-2px);
+            }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        /* =========================================
+                   CONTENT
+                ========================================= */
+
+        .admin-content {
+            animation: adminFadeIn .45s ease both;
+        }
+
+        @@keyframes adminFadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+                   GENERAL CARDS
+                ========================================= */
+
+        .admin-content .card {
+            background: rgba(13,13,28,.72);
+            color: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,.18);
+            overflow: hidden;
+        }
+
+        .admin-content .card-header {
+            background: rgba(255,255,255,.025);
+            color: white;
+            border-bottom: 1px solid var(--border);
+            padding: 18px 20px;
+        }
+
+            .admin-content .card-header h5 {
+                margin: 0;
+                font-size: 15px;
+                font-weight: 700;
+            }
+
+        .admin-content .card-body {
+            padding: 20px;
+        }
+
+        /* =========================================
+                   TABLE
+                ========================================= */
+
+        .admin-content .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #cbd5e1;
+            margin-bottom: 0;
+            border-color: rgba(255,255,255,.06);
+        }
+
+            .admin-content .table thead th {
+                color: #94a3b8;
+                background: rgba(255,255,255,.025);
+                border-bottom: 1px solid rgba(255,255,255,.08);
+                font-size: 12px;
+                font-weight: 700;
+                padding: 14px;
+            }
+
+            .admin-content .table tbody td {
+                color: #cbd5e1;
+                padding: 14px;
+                font-size: 12px;
+                border-color: rgba(255,255,255,.05);
+                vertical-align: middle;
+            }
+
+            .admin-content .table tbody tr {
+                transition: .2s ease;
+            }
+
+                .admin-content .table tbody tr:hover {
+                    background: rgba(124,58,237,.045);
+                }
+
+        /* =========================================
+                   BUTTONS
+                ========================================= */
+
+        .admin-content .btn-primary {
+            border: none;
+            background: linear-gradient( 135deg, #7c3aed, #2563eb );
+            box-shadow: 0 8px 25px rgba(124,58,237,.22);
+        }
+
+            .admin-content .btn-primary:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 12px 30px rgba(124,58,237,.32);
+            }
+
+        /* =========================================
+                   MOBILE OVERLAY
+                ========================================= */
+
+        .admin-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.45);
-            z-index: 1035;
+            background: rgba(0,0,0,.65);
+            backdrop-filter: blur(3px);
+            z-index: 999;
         }
+
+        /* =========================================
+                   RESPONSIVE
+                ========================================= */
 
         @@media (max-width: 991.98px) {
-            .sidebar
 
-        {
-            transform: translateX(100%);
-        }
+            .admin-sidebar {
+                right: 12px;
+                transform: translateX( calc(100% + 30px) );
+            }
 
-        .sidebar.show {
-            transform: translateX(0);
-        }
+                .admin-sidebar.show {
+                    transform: translateX(0);
+                }
 
-        .sidebar-overlay.show {
-            display: block;
-        }
+            .admin-overlay.show {
+                display: block;
+            }
 
-        .mobile-header {
-            display: flex;
-        }
+            .admin-main {
+                margin-right: 0;
+                padding: 12px;
+            }
 
-        .main-content {
-            margin-right: 0;
-            width: 100%;
-            padding: 0;
-        }
+            .mobile-menu-btn {
+                display: flex;
+                width: 40px;
+                height: 40px;
+                border: 1px solid rgba(255,255,255,.08);
+                border-radius: 12px;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                background: rgba(255,255,255,.05);
+            }
 
-        .main-content-body {
-            padding: 16px;
-        }
+            .topbar-title h1 {
+                font-size: 15px;
+            }
 
+            .topbar-title span {
+                display: none;
+            }
         }
 
         @@media (max-width: 575.98px) {
-            .sidebar
 
-        {
-            width: 82%;
-            max-width: 300px;
+            :root {
+                --sidebar-width: 275px;
+            }
+
+            .admin-sidebar {
+                top: 8px;
+                right: 8px;
+                bottom: 8px;
+                border-radius: 20px;
+            }
+
+            .admin-main {
+                padding: 8px;
+            }
+
+            .admin-topbar {
+                min-height: 62px;
+                padding: 10px 12px;
+                border-radius: 16px;
+                margin-bottom: 12px;
+            }
+
+            .topbar-actions {
+                gap: 5px;
+            }
+
+            .topbar-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .admin-content .card {
+                border-radius: 16px;
+            }
+
+            .admin-content .card-body {
+                padding: 14px;
+            }
         }
 
-        .sidebar-brand {
-            font-size: 1.1rem;
-            padding: 14px 18px;
-        }
-
-        .nav-link-custom {
-            padding: 11px 18px;
-            font-size: 14px;
-        }
-
-        .main-content-body {
-            padding: 12px;
-        }
-
-        }
     </style>
 
     @await RenderSectionAsync("Styles", required: false)
+
 </head>
+
 <body>
-    <div class="admin-wrapper">
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-brand">
-                پنل مدیریت آموزش
-            </div>
+    <!-- Background -->
 
-            <nav class="mt-2">
-                <a href="/admin/dashboard" class="nav-link-custom active">داشبورد</a>
-                <a href="/admin/enrollments" class="nav-link-custom">لیست ثبت‌نام‌ها</a>
-                <a href="/admin/courses" class="nav-link-custom">مدیریت دوره‌ها</a>
-                <a href="/admin/users" class="nav-link-custom">مدیریت کاربران</a>
-                <a href="/" class="nav-link-custom">مشاهده سایت</a>
-            </nav>
+    <div class="admin-background">
 
-            <div class="sidebar-footer">
-                <a href="/Auth/Logout" class="text-danger text-decoration-none d-block text-center">
-                    خروج از سیستم
-                </a>
-            </div>
-        </aside>
+        <div class="admin-orb admin-orb-1"></div>
+        <div class="admin-orb admin-orb-2"></div>
 
-        <main class="main-content">
-            <div class="mobile-header">
-                <button type="button" class="menu-toggle" id="menuToggle">منو</button>
-                <h1 class="mobile-header-title">پنل مدیریت</h1>
-            </div>
+        <div class="admin-grid"></div>
 
-            <div class="main-content-body">
-                @RenderBody()
-            </div>
-        </main>
     </div>
 
+
+    <!-- Mobile Overlay -->
+
+    <div class="admin-overlay"
+         id="adminOverlay">
+    </div>
+
+
+    <!-- ======================================
+         SIDEBAR
+    ======================================= -->
+
+    <aside class="admin-sidebar"
+           id="adminSidebar">
+
+
+        <!-- Brand -->
+
+        <a asp-area=""
+           asp-controller="Home"
+           asp-action="Index"
+           class="admin-brand">
+
+            <div class="admin-brand-logo">
+
+                <i class="fas fa-code"></i>
+
+            </div>
+
+            <div class="admin-brand-text">
+
+                <span class="admin-brand-title">
+                    Arayan Academy
+                </span>
+
+                <span class="admin-brand-subtitle">
+                    ADMIN CONTROL PANEL
+                </span>
+
+            </div>
+
+        </a>
+
+
+        <!-- Navigation -->
+
+        <nav class="admin-nav">
+
+            <div class="nav-section-title">
+                مدیریت
+            </div>
+
+
+            <!-- Dashboard -->
+
+            <a asp-area="Admin"
+               asp-controller="Dashboard"
+               asp-action="Index"
+               class="admin-nav-link
+               @(currentController == "Dashboard" ? "active" : "")">
+
+                <i class="fas fa-grid-2"></i>
+
+                <span>
+                    داشبورد
+                </span>
+
+            </a>
+
+
+            <!-- Enrollments -->
+
+            <a asp-area="Admin"
+               asp-controller="Enrollments"
+               asp-action="Index"
+               class="admin-nav-link
+               @(currentController == "Enrollments" ? "active" : "")">
+
+                <i class="fas fa-user-plus"></i>
+
+                <span>
+                    ثبت‌نام‌ها
+                </span>
+
+            </a>
+
+
+            <!-- Courses -->
+
+            <a asp-area="Admin"
+               asp-controller="Courses"
+               asp-action="Index"
+               class="admin-nav-link
+               @(currentController == "Courses" ? "active" : "")">
+
+                <i class="fas fa-graduation-cap"></i>
+
+                <span>
+                    مدیریت دوره‌ها
+                </span>
+
+            </a>
+
+
+            <!-- Users -->
+
+            <a asp-area="Admin"
+               asp-controller="Users"
+               asp-action="Index"
+               class="admin-nav-link
+               @(currentController == "Users" ? "active" : "")">
+
+                <i class="fas fa-users"></i>
+
+                <span>
+                    مدیریت کاربران
+                </span>
+
+            </a>
+
+
+            <div class="nav-section-title mt-4">
+                سیستم
+            </div>
+
+
+            <!-- Website -->
+
+            <a asp-area=""
+               asp-controller="Home"
+               asp-action="Index"
+               class="admin-nav-link">
+
+                <i class="fas fa-globe"></i>
+
+                <span>
+                    مشاهده سایت
+                </span>
+
+            </a>
+
+
+        </nav>
+
+
+        <!-- Sidebar Footer -->
+
+        <div class="admin-sidebar-footer">
+
+
+            <div class="admin-user">
+
+                <div class="admin-user-avatar">
+
+                    <i class="fas fa-user-shield"></i>
+
+                </div>
+
+                <div class="admin-user-info">
+
+                    <div class="admin-user-name">
+                        @displayName
+                    </div>
+
+                    <div class="admin-user-role">
+                        مدیر سیستم
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <a href="/Auth/Logout"
+               class="logout-link">
+
+                <i class="fas fa-right-from-bracket"></i>
+
+                <span>
+                    خروج از سیستم
+                </span>
+
+            </a>
+
+
+        </div>
+
+    </aside>
+
+
+    <!-- ======================================
+         MAIN
+    ======================================= -->
+
+    <main class="admin-main">
+
+
+        <!-- Topbar -->
+
+        <header class="admin-topbar">
+
+
+            <div class="topbar-title">
+
+                <h1>
+                    @ViewData["Title"]
+                </h1>
+
+                <span>
+                    مدیریت و کنترل آکادمی آرایان
+                </span>
+
+            </div>
+
+
+            <div class="topbar-actions">
+
+
+                <!-- Website -->
+
+                <a asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index"
+                   class="topbar-btn"
+                   title="مشاهده سایت">
+
+                    <i class="fas fa-globe"></i>
+
+                </a>
+
+
+                <!-- Mobile Menu -->
+
+                <button type="button"
+                        class="mobile-menu-btn"
+                        id="adminMenuToggle">
+
+                    <i class="fas fa-bars"></i>
+
+                </button>
+
+            </div>
+
+
+        </header>
+
+
+        <!-- Page Content -->
+
+        <div class="admin-content">
+
+            @RenderBody()
+
+        </div>
+
+
+    </main>
+
+
+    <!-- Scripts -->
+
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
+
     <script src="/assets/js/bootstrap.min.js"></script>
 
+
     <script>
+
         $(function () {
-            var $sidebar = $('#sidebar');
-            var $overlay = $('#sidebarOverlay');
-            var mobileWidth = 991.98;
+
+            const sidebar =
+                $("#adminSidebar");
+
+            const overlay =
+                $("#adminOverlay");
+
+            const toggle =
+                $("#adminMenuToggle");
+
 
             function openSidebar() {
-                $sidebar.addClass('show');
-                $overlay.addClass('show');
-                $('body').css('overflow', 'hidden');
+
+                sidebar.addClass("show");
+
+                overlay.addClass("show");
+
+                $("body").css(
+                    "overflow",
+                    "hidden"
+                );
             }
+
 
             function closeSidebar() {
-                $sidebar.removeClass('show');
-                $overlay.removeClass('show');
-                $('body').css('overflow', '');
+
+                sidebar.removeClass("show");
+
+                overlay.removeClass("show");
+
+                $("body").css(
+                    "overflow",
+                    ""
+                );
             }
 
-            $('#menuToggle').on('click', function () {
-                if ($sidebar.hasClass('show')) {
-                    closeSidebar();
-                } else {
-                    openSidebar();
-                }
-            });
 
-            $overlay.on('click', function () {
-                closeSidebar();
-            });
+            toggle.on(
+                "click",
+                function () {
 
-            $(window).on('resize', function () {
-                if ($(window).width() > mobileWidth) {
-                    closeSidebar();
-                }
-            });
+                    if (
+                        sidebar.hasClass("show")
+                    ) {
 
-            $('.nav-link-custom').on('click', function () {
-                if ($(window).width() <= mobileWidth) {
-                    closeSidebar();
+                        closeSidebar();
+
+                    } else {
+
+                        openSidebar();
+
+                    }
+
                 }
-            });
+            );
+
+
+            overlay.on(
+                "click",
+                closeSidebar
+            );
+
+
+            $(".admin-nav-link").on(
+                "click",
+                function () {
+
+                    if (
+                        window.innerWidth <= 991
+                    ) {
+
+                        closeSidebar();
+
+                    }
+
+                }
+            );
+
+
+            $(window).on(
+                "resize",
+                function () {
+
+                    if (
+                        window.innerWidth > 991
+                    ) {
+
+                        closeSidebar();
+
+                    }
+
+                }
+            );
+
         });
+
     </script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+
+    @await RenderSectionAsync(
+            "Scripts",
+            required: false
+            )
+
 </body>
+
 </html>
+

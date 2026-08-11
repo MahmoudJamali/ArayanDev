@@ -2406,5 +2406,116 @@ textarea {
 	direction: rtl;
 }
 
+
+
+
+```css
+/* =========================================
+   Floating Account Button
+========================================= */
+.floating-account {
+	position: fixed;
+	right: 28px;
+	bottom: 28px;
+	width: 54px;
+	height: 54px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	text-decoration: none;
+	color: #ffffff;
+	background: linear-gradient( 145deg, rgba(0, 240, 255, 0.10), rgba(255, 0, 212, 0.10) );
+	border: 1px solid rgba(0, 240, 255, 0.35);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+	box-shadow: 0 0 20px rgba(0, 240, 255, 0.08), inset 0 0 15px rgba(255, 255, 255, 0.03);
+	z-index: 9999;
+	transition: width .35s ease, border-color .3s ease, background .3s ease, box-shadow .3s ease, transform .3s ease;
+}
+
+
+/* آیکون */
+
+.account-icon {
+	width: 23px;
+	height: 23px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #00f0ff;
+	transition: color .3s ease, transform .3s ease;
+}
+
+	.account-icon svg {
+		width: 100%;
+		height: 100%;
+	}
+
+
+/* Tooltip */
+
+.account-tooltip {
+	position: absolute;
+	right: 62px;
+	white-space: nowrap;
+	padding: 8px 13px;
+	border-radius: 9px;
+	background: rgba(10, 15, 25, .92);
+	border: 1px solid rgba(255,255,255,.10);
+	color: rgba(255,255,255,.85);
+	font-family: "Vazirmatn", Tahoma, sans-serif;
+	font-size: 11px;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateX(8px);
+	transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
+	pointer-events: none;
+}
+
+
+/* Hover */
+
+.floating-account:hover {
+	width: 58px;
+	transform: translateY(-3px);
+	border-color: rgba(0, 240, 255, .75);
+	background: linear-gradient( 135deg, rgba(0, 240, 255, .14), rgba(255, 0, 212, .14) );
+	box-shadow: 0 0 25px rgba(0, 240, 255, .18), 0 0 35px rgba(255, 0, 212, .08);
+}
+
+
+	.floating-account:hover .account-icon {
+		color: #ffffff;
+		transform: scale(1.08);
+	}
+
+
+	.floating-account:hover .account-tooltip {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(0);
+	}
+
+
+/* =========================================
+   Mobile
+========================================= */
+
+@@media (max-width: 768px) {
+
+	.floating-account {
+		right: 18px;
+		bottom: 18px;
+		width: 50px;
+		height: 50px;
+	}
+
+	.account-tooltip {
+		display: none;
+	}
+}
+
 ```
+
 

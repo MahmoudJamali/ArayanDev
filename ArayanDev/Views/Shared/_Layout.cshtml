@@ -1,105 +1,188 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>ArayanAcademy - Programming & Web Development </title>
-	@*   <link rel="preconnect" href="https1://fonts.googleapis.com">
-    <link rel="preconnect" href="https1://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis1.com/css2?family=Outfit:wght@200;300;400;500;600&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet"> *@
-	<link rel="stylesheet" href="/css/templatemo-nexaverse.css">
-	<!--
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	TemplateMo 603 Nexaverse
+    <title>ArayanAcademy - Programming & Web Development</title>
 
-	-->
+    <!-- Nexaverse -->
+    <link rel="stylesheet" href="/css/templatemo-nexaverse.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/assets/css/fontawesome.min.css">
+
+    <!-- Account Icon Style -->
+    <style>
+
+        /* =========================================
+                   Floating Account Icon
+                   ========================================= */
+
+        .floating-account {
+            position: fixed;
+            top: 28px;
+            left: 28px;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00f0ff;
+            text-decoration: none;
+            z-index: 9999;
+            transition: all .3s ease;
+        }
+
+            .floating-account .account-icon {
+                font-size: 21px;
+                transition: all .3s ease;
+            }
+
+            .floating-account:hover {
+                color: #ff00d4;
+                transform: translateY(-2px);
+            }
+
+                .floating-account:hover .account-icon {
+                    transform: scale(1.12);
+                }
+
+
+        /* Tooltip */
+
+        .account-tooltip {
+            position: absolute;
+            left: 48px;
+            top: 50%;
+            transform: translateY(-50%) translateX(-5px);
+            white-space: nowrap;
+            padding: 6px 11px;
+            background: rgba(10, 10, 25, .95);
+            border: 1px solid rgba(0, 240, 255, .20);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 11px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all .25s ease;
+            pointer-events: none;
+        }
+
+        .floating-account:hover .account-tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+
+
+        /* Mobile */
+
+        @@media (max-width: 768px) {
+
+            .floating-account {
+                top: 18px;
+                left: 18px;
+                width: 38px;
+                height: 38px;
+            }
+
+                .floating-account .account-icon {
+                    font-size: 19px;
+                }
+
+            .account-tooltip {
+                display: none;
+            }
+        }
+
+    </style>
+
 </head>
+
 <body>
-	<!-- Loading Screen -->
-	<div class="loading-screen" id="loadingScreen">
-		<div class="loader-ring"></div>
-		<div class="loading-text">Please Wait...</div>
-	</div>
 
-	<!-- Ambient Background -->
-	<div class="ambient-bg">
-		<div class="orb orb-1"></div>
-		<div class="orb orb-2"></div>
-		<div class="orb orb-3"></div>
-	</div>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
 
-	<!-- Grid Overlay -->
-	<div class="grid-overlay"></div>
+        <div class="loader-ring"></div>
 
-	<!-- Main Container -->
-	
+        <div class="loading-text">
+            Please Wait...
+        </div>
 
-	<main class="container-fluid p-0">
-		@RenderBody()
-	</main>
+    </div>
 
-	<!-- Footer -->
-	<footer class="footer" id="mainFooter">
-		<p>© 2026 حقوق کپی رایت محفوظ است. Design by <a href="https://arayanacademy.ir" target="_blank">ArayanAcademy</a></p>
-	</footer>
-	<script src="/js/templatemo-nexa-scripts.js"></script>
-	@RenderSection("Scripts", false)
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+
+    </div>
+
+
+    <!-- Grid Overlay -->
+    <div class="grid-overlay"></div>
+
+
+    <!-- =========================================
+         Account / Login
+         ========================================= -->
+    @{
+        var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+
+        var accountUrl = isAuthenticated
+        ? (User.IsInRole("Admin")
+        ? "/Admin/Dashboard"
+        : "/User/Dashboard")
+        : "/Auth/Login";
+    }
+
+    <a href="@accountUrl"
+       class="floating-account"
+       aria-label="@(isAuthenticated ? "پروفایل کاربری" : "ورود و ثبت نام")">
+
+        <i class="far fa-user account-icon"></i>
+
+        <span class="account-tooltip">
+            @(isAuthenticated ? "پروفایل کاربری" : "ورود / ثبت نام")
+        </span>
+
+    </a>
+
+
+    <!-- Main Container -->
+
+    <main class="container-fluid p-0">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- Footer -->
+
+    <footer class="footer" id="mainFooter">
+
+        <p>
+            © 2026 حقوق کپی رایت محفوظ است.
+            Design by
+            <a href="https://arayanacademy.ir" target="_blank">
+                ArayanAcademy
+            </a>
+        </p>
+
+    </footer>
+
+
+    <!-- Nexaverse JavaScript -->
+
+    <script src="/js/templatemo-nexa-scripts.js"></script>
+
+    @RenderSection("Scripts", false)
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -729,58 +729,16 @@
 			<h2 class="section-title">بوت کمپ برنامه نویسان</h2>
 			<p class="section-subtitle">دوستانی که برای کسب موفقیت ، آکادمی آرایان را انتخاب کردند</p>
 		</div>
+		<!-- Students will be loaded here -->
+		<!-- Students will be loaded here -->
+		<div id="students-section">
 
-		<div class="testimonials-grid">
-			<div class="testimonial-card">
-				<p class="testimonial-text"></p>
-				<div class="testimonial-author">
-					<div class="author-avatar">
-						<img src="hs://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop" alt="Client 1">
-					</div>
-					<div class="author-info">
-						<h5>Michael Chen</h5>
-						<p>CEO, TechVentures</p>
-					</div>
-				</div>
+			<div class="students-loading">
+				<span class="loading-spinner"></span>
+				<span>در حال دریافت اطلاعات دانشجویان...</span>
 			</div>
-			<div class="testimonial-card">
-				<p class="testimonial-text"></p>
-				<div class="testimonial-author">
-					<div class="author-avatar">
-						<img src="hts://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop" alt="Client 2">
-					</div>
-					<div class="author-info">
-						<h5>Sarah Johnson</h5>
-						<p>Product Director, InnovateCo</p>
-					</div>
-				</div>
-			</div>
-			<div class="testimonial-card">
-				<p class="testimonial-text"></p>
-				<div class="testimonial-author">
-					<div class="author-avatar">
-						<img src="hts://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop" alt="Client 3">
-					</div>
-					<div class="author-info">
-						<h5>David Park</h5>
-						<p>Founder, StartupHub</p>
-					</div>
-				</div>
-			</div>
-			<div class="testimonial-card">
-				<p class="testimonial-text"> </p>
-				<div class="testimonial-author">
-					<div class="author-avatar">
-						<img src="s://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop" alt="Client 4">
-					</div>
-					<div class="author-info">
-						<h5>Emily Zhang</h5>
-						<p>COO, DataFlow Inc</p>
-					</div>
-				</div>
-			</div>
+
 		</div>
-	</div>
 
 	<!-- About Section -->
 	<div class="content-section" id="about">
@@ -937,3 +895,196 @@
 		</div>
 	</div>
 </div>
+
+
+	@section Scripts {
+
+		<script>
+
+			document.addEventListener("DOMContentLoaded", function () {
+
+				const studentsContainer =
+					document.getElementById("students-section");
+
+				if (!studentsContainer) {
+					return;
+				}
+
+
+				/*
+				 * =========================================
+				 * دریافت دانشجویان
+				 * =========================================
+				 */
+
+				fetch("/Home/Students")
+					.then(response => {
+
+						if (!response.ok) {
+							throw new Error("خطا در دریافت دانشجویان");
+						}
+
+						return response.text();
+					})
+					.then(html => {
+
+						studentsContainer.innerHTML = html;
+
+						/*
+						 * بسیار مهم:
+						 * بعد از لود Partial،
+						 * carousel را راه‌اندازی می‌کنیم.
+						 */
+
+						initStudentsCarousel();
+
+					})
+					.catch(error => {
+
+						console.error(error);
+
+						studentsContainer.innerHTML = `
+							<div class="students-empty">
+								دریافت اطلاعات دانشجویان با خطا مواجه شد.
+							</div>
+						`;
+
+					});
+
+			});
+
+
+			/*
+			 * =========================================
+			 * Students Carousel
+			 * =========================================
+			 */
+
+			function initStudentsCarousel() {
+
+				const slides =
+					Array.from(
+						document.querySelectorAll(
+							"#studentsGrid .student-slide"
+						)
+					);
+
+
+				/*
+				 * اگر دانشجویی نداریم
+				 */
+
+				if (slides.length === 0) {
+					return;
+				}
+
+
+				/*
+				 * همیشه فقط 4 کارت
+				 */
+
+				const visibleCount = 4;
+
+
+				/*
+				 * اگر 4 نفر یا کمتر داریم،
+				 * همه را نمایش بده و تمام.
+				 */
+
+				if (slides.length <= visibleCount) {
+
+					slides.forEach(function (slide) {
+
+						slide.classList.add("active");
+
+					});
+
+					return;
+				}
+
+
+				/*
+				 * موقعیت فعلی
+				 */
+
+				let startIndex = 0;
+
+
+				/*
+				 * نمایش 4 نفر
+				 */
+
+				function showStudents() {
+
+					/*
+					 * ابتدا همه مخفی
+					 */
+
+					slides.forEach(function (slide) {
+
+						slide.classList.remove("active");
+
+					});
+
+
+					/*
+					 * سپس 4 نفر نمایش داده شوند
+					 */
+
+					for (
+						let i = 0;
+						i < visibleCount;
+						i++
+					) {
+
+						const index =
+							(startIndex + i) % slides.length;
+
+
+						slides[index]
+							.classList
+							.add("active");
+
+					}
+
+				}
+
+
+				/*
+				 * نمایش اولیه
+				 */
+
+				showStudents();
+
+
+				/*
+				 * چرخش خودکار
+				 * هر 3 ثانیه
+				 */
+
+				setInterval(function () {
+
+					startIndex++;
+
+
+					/*
+					 * رسیدن به انتهای لیست
+					 */
+
+					if (
+						startIndex >= slides.length
+					) {
+
+						startIndex = 0;
+
+					}
+
+
+					showStudents();
+
+				}, 3000);
+
+			}
+
+		</script>
+	}

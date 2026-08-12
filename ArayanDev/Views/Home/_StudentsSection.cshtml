@@ -2,170 +2,267 @@
 @model HomeStudentsViewModel
 
 <style>
+
+    /* =========================================
+           Students Carousel
+           ========================================= */
+
+    .students-carousel {
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .students-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 20px;
+        width: 100%;
+    }
+
+    /*
+           فقط 4 کارت نمایش داده می‌شوند.
+           بقیه توسط JavaScript مخفی هستند.
+        */
+
+    .student-slide {
+        display: none;
+        min-width: 0;
+    }
+
+        .student-slide.active {
+            display: block;
+            animation: studentFadeIn .6s ease forwards;
+        }
+
+
+    /* =========================================
+           Student Card
+           ========================================= */
+
     .student-card {
-        background: #fff;
-        border-radius: 20px;
-        padding: 16px 12px;
+        width: 100%;
+        background: rgba(15, 20, 35, .72);
+        border: 1px solid rgba(0, 240, 255, .12);
+        border-radius: 18px;
+        padding: 22px 15px;
         text-align: center;
-        min-height: 185px;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
+        min-height: 230px;
         position: relative;
         overflow: hidden;
-        margin: 10px 0;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
     }
 
         .student-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+            transform: translateY(-7px);
+            border-color: rgba(0, 240, 255, .45);
+            box-shadow: 0 10px 35px rgba(0, 240, 255, .08), 0 0 30px rgba(255, 0, 212, .05);
         }
+
+
+        /* =========================================
+           Decorative Light
+           ========================================= */
 
         .student-card::before {
             content: "";
             position: absolute;
-            top: -30px;
-            left: -30px;
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, rgba(255, 127, 235, 0.18), rgba(106, 184, 255, 0.18));
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            top: -45px;
+            left: -45px;
+            background: radial-gradient( circle, rgba(0, 240, 255, .18), transparent 70% );
+            pointer-events: none;
         }
 
         .student-card::after {
             content: "";
             position: absolute;
-            bottom: -25px;
-            right: -25px;
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(255, 209, 102, 0.18), rgba(255, 102, 196, 0.18));
-            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            bottom: -50px;
+            right: -50px;
+            background: radial-gradient( circle, rgba(255, 0, 212, .16), transparent 70% );
+            pointer-events: none;
         }
 
 
+    /* =========================================
+           Profile Image
+           ========================================= */
 
     .student-img {
-        width: 110px;
-        height: 110px;
+        width: 105px;
+        height: 105px;
         object-fit: cover;
         border-radius: 50%;
         display: block;
-        margin: 0 auto 12px auto;
-        box-shadow: 0 0 0 4px #a855f7; /* حلقه بنفش */
+        margin: 0 auto 15px;
+        border: 3px solid rgba(0, 240, 255, .65);
+        box-shadow: 0 0 0 4px rgba(0, 240, 255, .06), 0 0 25px rgba(0, 240, 255, .12);
+        position: relative;
+        z-index: 2;
     }
 
 
-
-
-
-
+    /* =========================================
+           Name
+           ========================================= */
 
     .student-name {
+        color: #fff;
         font-size: 15px;
-        font-weight: 800;
-        color: #2f2f2f;
-        margin-bottom: 4px;
+        font-weight: 700;
+        margin-bottom: 6px;
         position: relative;
         z-index: 2;
     }
+
 
     .student-title {
-        font-size: 13px;
-        color: #6c757d;
-        line-height: 1.6;
+        color: rgba(255, 255, 255, .55);
+        font-size: 12px;
         position: relative;
         z-index: 2;
     }
 
+
+    /* =========================================
+           Status Dot
+           ========================================= */
+
     .student-dot {
-        width: 12px;
-        height: 12px;
-        background: #ff66c4;
+        width: 9px;
+        height: 9px;
         border-radius: 50%;
+        background: #00f0ff;
         position: absolute;
-        top: 12px;
-        right: 12px;
-        z-index: 2;
-        box-shadow: 0 0 0 rgba(255, 102, 196, 0.5);
-        animation: studentGlow 1.8s infinite;
-    }
-
-    .event-slider-1 .slick-track {
-        display: flex !important;
-        justify-content: center;
+        top: 15px;
+        right: 15px;
+        z-index: 3;
+        animation: studentPulse 1.8s infinite;
     }
 
 
-    @@keyframes studentGlow {
+    /* =========================================
+           Animation
+           ========================================= */
+
+    @@keyframes studentFadeIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(15px) scale(.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+
+    @@keyframes studentPulse {
+
         0% {
-            box-shadow: 0 0 0 0 rgba(255, 102, 196, 0.45);
+            box-shadow: 0 0 0 0 rgba(0, 240, 255, .45);
         }
 
         70% {
-            box-shadow: 0 0 0 10px rgba(255, 102, 196, 0);
+            box-shadow: 0 0 0 10px rgba(0, 240, 255, 0);
         }
 
         100% {
-            box-shadow: 0 0 0 0 rgba(255, 102, 196, 0);
+            box-shadow: 0 0 0 0 rgba(0, 240, 255, 0);
         }
     }
+
+
+    /* =========================================
+           Mobile
+           ========================================= */
+
+    @@media (max-width: 576px) {
+
+        .students-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .student-card {
+            min-height: 185px;
+            padding: 15px 5px;
+            border-radius: 14px;
+        }
+
+        .student-img {
+            width: 65px;
+            height: 65px;
+            margin-bottom: 10px;
+        }
+
+        .student-name {
+            font-size: 11px;
+        }
+
+        .student-title {
+            font-size: 8px;
+        }
+
+        .student-dot {
+            width: 7px;
+            height: 7px;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
 </style>
 
 
-<section class="space pt-2" data-bg-src="/assets/img/bg/event-bg_1.png">
-    <div class="shape-mockup event-shape1 jump" data-top="0" data-left="-60px">
-        <img src="/assets/img/team/team-shape_1_1.png" alt="img">
-    </div>
+@if (Model?.Students != null && Model.Students.Any())
+{
+    <div class="students-carousel">
 
-    <div class="container">
-        <div class="title-area text-center">
-            <span class="sub-title">
-                <i class="fal fa-screen-users me-3"></i>
-                دوستانی که برای شروع برنامه نویسی با ما همراه شدن
-            </span>
+        <div class="students-grid" id="studentsGrid">
+
+            @foreach (var item in Model.Students)
+            {
+                <div class="student-slide">
+
+                    <div class="student-card">
+
+                        <div class="student-dot"></div>
+
+                        <img class="student-img"
+                             src="@(string.IsNullOrWhiteSpace(item.ProfileImage)
+                                      ? "/uploads/profile/DefaultStudentProfile.png"
+                                      : item.ProfileImage)"
+                             alt="@($"{item.Name} {item.Family}")"
+                             onerror="this.onerror=null;this.src='/uploads/profile/DefaultStudentProfile.png';" />
+
+                        <div class="student-name">
+                            @item.Name @item.Family
+                        </div>
+
+                        <div class="student-title">
+                            برنامه‌نویسی و طراحی سایت
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
         </div>
 
-        @if (Model?.Students != null && Model.Students.Any())
-        {
-            <div class="slider-shadow event-slider-1 th-carousel"
-                 data-slide-show="5"
-                 data-lg-slide-show="5"
-                 data-md-slide-show="2"
-                 data-sm-slide-show="1"
-                 data-xs-slide-show="1"
-                 data-arrows="true">
-
-                @foreach (var item in Model.Students)
-                {
-                    <div class="px-2">
-                        <div class="student-card">
-                            <div class="student-dot"></div>
-
-                            <div class="student-img-wrap">
-    <div class="student-img-inner">
-        <img class="student-img"
-             src="@(string.IsNullOrWhiteSpace(item.ProfileImage) 
-                    ? "/uploads/profile/DefaultStudentProfile.png" 
-                    : item.ProfileImage)"
-             alt="@($"{item.Name} {item.Family}")"
-             onerror="this.onerror=null;this.src='/uploads/profile/DefaultStudentProfile.png';" />
     </div>
-</div>
-
-
-
-                            <div class="student-name">
-                                @item.Name @item.Family
-                            </div>
-
-                            <div class="student-title">
-                                برنامه‌نویسی و طراحی سایت
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        }
-
+}
+else
+{
+    <div class="students-empty">
+        دانشجویی برای نمایش وجود ندارد.
     </div>
-</section>
+}

@@ -18,6 +18,13 @@ namespace ArayanDev.Controllers
             _mediator = mediator;
         }
 
+
+        public async Task<IActionResult> Courses()
+        {
+            var courses = await _mediator.Send(new GetCoursesQuery());
+
+            return PartialView("_CoursesSection", courses);
+        }
         // کاربر مهمان آزادانه وارد صفحه جزئیات می‌شود
         public async Task<IActionResult> Details(Guid id)
         {

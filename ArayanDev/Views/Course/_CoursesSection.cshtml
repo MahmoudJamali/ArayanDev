@@ -1,0 +1,50 @@
+﻿@using Business.Handlers.Courses.Queries
+@model List<CourseListItemDto>
+
+<div class="services-list">
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var course in Model)
+        {
+            <div class="service-row">
+
+                <div class="service-row-content">
+
+                    <h4>
+                        @course.Title
+                    </h4>
+
+                    <p>
+                        مسیر یادگیری خود را از همین امروز شروع کنید و با ثبت‌نام در دوره
+                        جامع آموزش زبان برنامه نویسی #C و طراحی سایت Asp.NetCore MVC،
+                        مهارت‌های برنامه‌نویسی و طراحی سایت را به‌صورت پروژه‌محور و
+                        مرحله‌به‌مرحله یاد بگیرید.
+                    </p>
+
+                    <button class="tab-btn active"
+                            onclick="window.location.href='/Course/Details/@course.Id'">
+
+                        مشاهده جزئیات و ثبت‌نام در دوره
+
+                    </button>
+
+                </div>
+
+                <div class="service-row-arrow">
+                    →
+                </div>
+
+            </div>
+        }
+    }
+    else
+    {
+        <div class="service-row">
+            <div class="service-row-content">
+                <h4>در حال حاضر دوره‌ای موجود نیست</h4>
+            </div>
+        </div>
+    }
+
+</div>

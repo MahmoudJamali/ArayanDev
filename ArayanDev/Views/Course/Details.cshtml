@@ -1,147 +1,543 @@
-﻿<style>
-    /* عکس یک‌سوم ارتفاع */
-    .course-img-top {
-        height: 220px !important;
-        object-fit: cover;
-        border-radius: .75rem .75rem 0 0;
-    }
+﻿@model CourseDetailsViewModel
 
-    /* متن دوره */
-    .course-content {
+<style>
+
+    /* =========================================
+           Course Details
+           ========================================= */
+
+    .course-details-page {
+        width: 100%;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 70px 25px 100px;
         direction: rtl;
         text-align: right;
-        line-height: 2;
-        font-size: 15px;
-        color: #444;
     }
 
-        .course-content p {
-            margin-bottom: 18px;
+    /* =========================================
+           Header
+           ========================================= */
+
+    .course-details-header {
+        text-align: center;
+        margin-bottom: 45px;
+    }
+
+    .course-details-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 15px;
+        border-radius: 30px;
+        border: 1px solid rgba(0, 240, 255, .25);
+        background: rgba(0, 240, 255, .05);
+        color: #00f0ff;
+        font-size: 12px;
+        margin-bottom: 18px;
+    }
+
+        .course-details-badge i {
+            font-size: 10px;
         }
 
-        .course-content ul {
-            padding-right: 20px;
-            margin-bottom: 20px;
-        }
-
-        .course-content li {
-            margin-bottom: 8px;
-        }
-
-    .section-title {
+    .course-details-title {
+        color: #fff;
+        font-size: 34px;
         font-weight: 800;
-        color: #6f42c1;
-        margin-bottom: 10px;
-        display: block;
-        font-size: 17px;
+        line-height: 1.5;
+        margin: 0 auto;
+        max-width: 850px;
     }
 
-    .highlight-box {
-        background: #f8f6ff;
-        border-right: 4px solid #6f42c1;
-        padding: 15px 18px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+    .course-details-subtitle {
+        color: rgba(255,255,255,.55);
+        font-size: 14px;
+        line-height: 2;
+        max-width: 700px;
+        margin: 15px auto 0;
     }
 
-    /* باکس قوانین */
-    #rules-box {
-        background: #f3f3ff;
-        border: 1px solid #d8d6ff;
+    /* =========================================
+           Main Box
+           ========================================= */
+
+    .course-details-box {
+        position: relative;
+        overflow: hidden;
+        border-radius: 24px;
+        border: 1px solid rgba(0,240,255,.13);
+        background: linear-gradient( 145deg, rgba(15,20,35,.92), rgba(8,12,25,.88) );
+        box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 0 40px rgba(0,240,255,.035);
     }
 
-        #rules-box label {
-            font-size: 15px;
-            cursor: pointer;
+        .course-details-box::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            top: -130px;
+            left: -100px;
+            background: radial-gradient( circle, rgba(0,240,255,.12), transparent 70% );
+            pointer-events: none;
         }
+
+        .course-details-box::after {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            bottom: -160px;
+            right: -100px;
+            background: radial-gradient( circle, rgba(255,0,212,.10), transparent 70% );
+            pointer-events: none;
+        }
+
+    /* =========================================
+           Course Image
+           ========================================= */
+
+    .course-image-wrapper {
+        height: 280px;
+        overflow: hidden;
+        position: relative;
+    }
+
+        .course-image-wrapper::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient( to bottom, transparent 35%, rgba(8,12,25,.95) 100% );
+        }
+
+    .course-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* =========================================
+           Content
+           ========================================= */
+
+    .course-details-content {
+        position: relative;
+        z-index: 2;
+        padding: 35px 45px 45px;
+    }
+
+    .course-description {
+        color: rgba(255,255,255,.72);
+        font-size: 14px;
+        line-height: 2.2;
+        text-align: justify;
+        margin-bottom: 25px;
+    }
+
+    /* =========================================
+           Section
+           ========================================= */
+
+    .course-info-box {
+        position: relative;
+        padding: 23px 25px;
+        margin-top: 22px;
+        border-radius: 16px;
+        border: 1px solid rgba(0,240,255,.10);
+        background: rgba(255,255,255,.025);
+    }
+
+        .course-info-box::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 15px;
+            bottom: 15px;
+            width: 3px;
+            border-radius: 5px;
+            background: linear-gradient( to bottom, #00f0ff, #ff00d4 );
+        }
+
+    .course-info-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 17px;
+    }
+
+        .course-info-title i {
+            color: #00f0ff;
+            font-size: 15px;
+        }
+
+    /* =========================================
+           Lists
+           ========================================= */
+
+    .course-content-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .course-content-list li {
+            position: relative;
+            padding-right: 27px;
+            margin-bottom: 13px;
+            color: rgba(255,255,255,.65);
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+            .course-content-list li:last-child {
+                margin-bottom: 0;
+            }
+
+            .course-content-list li::before {
+                content: "✓";
+                position: absolute;
+                right: 0;
+                top: 2px;
+                width: 18px;
+                height: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                color: #00f0ff;
+                font-size: 10px;
+                border: 1px solid rgba(0,240,255,.25);
+                background: rgba(0,240,255,.06);
+            }
+
+    /* =========================================
+           Register Area
+           ========================================= */
+
+    .course-register-area {
+        margin-top: 35px;
+        padding-top: 30px;
+        border-top: 1px solid rgba(255,255,255,.08);
+        text-align: center;
+    }
+
+    .course-register-text {
+        color: rgba(255,255,255,.5);
+        font-size: 12px;
+        margin-bottom: 17px;
+    }
+
+    .course-register-btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        min-width: 220px;
+        padding: 13px 28px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,240,255,.45);
+        background: linear-gradient( 135deg, rgba(0,240,255,.14), rgba(255,0,212,.14) );
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 700;
+        transition: all .3s ease;
+        overflow: hidden;
+    }
+
+        .course-register-btn::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient( 90deg, transparent, rgba(255,255,255,.12), transparent );
+            transform: translateX(-100%);
+            transition: transform .6s ease;
+        }
+
+        .course-register-btn:hover {
+            color: #fff;
+            transform: translateY(-3px);
+            border-color: #00f0ff;
+            box-shadow: 0 10px 30px rgba(0,240,255,.12), 0 0 30px rgba(255,0,212,.06);
+        }
+
+            .course-register-btn:hover::before {
+                transform: translateX(100%);
+            }
+
+        .course-register-btn i {
+            color: #00f0ff;
+        }
+
+    /* =========================================
+           Enrolled
+           ========================================= */
+
+    .course-enrolled {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 13px 25px;
+        border-radius: 12px;
+        border: 1px solid rgba(0,255,170,.25);
+        background: rgba(0,255,170,.06);
+        color: #5fffc4;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+        .course-enrolled i {
+            font-size: 16px;
+        }
+
+    /* =========================================
+           Mobile
+           ========================================= */
+
+    @@media (max-width: 768px) {
+
+        .course-details-page {
+            padding: 45px 15px 70px;
+        }
+
+        .course-details-title {
+            font-size: 25px;
+        }
+
+        .course-details-subtitle {
+            font-size: 12px;
+        }
+
+        .course-image-wrapper {
+            height: 210px;
+        }
+
+        .course-details-content {
+            padding: 25px 20px 30px;
+        }
+
+        .course-description {
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        .course-info-box {
+            padding: 20px 18px;
+        }
+
+        .course-info-title {
+            font-size: 15px;
+        }
+
+        .course-content-list li {
+            font-size: 12px;
+        }
+
+        .course-register-btn {
+            width: 100%;
+        }
+
+        .course-back-wrapper {
+            margin-bottom: 35px;
+        }
+
+        .course-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            direction: rtl;
+        }
+    }
 
 </style>
 
-@model CourseDetailsViewModel
 
-<div class="container my-5 text-end" dir="rtl">
+<div class="course-details-page">
 
-    <div class="row justify-content-center">
+    <!-- Header -->
+    <div class="course-details-header">
+        <!-- Back Button -->
+        <div class="course-back-wrapper">
+            <button class="back-btn course-back-btn" onclick="history.back()">
+                ← Back to Menu
+            </button>
+        </div>
 
-        <div class="col-lg-7 col-md-9">
+        <div class="course-details-badge">
+            <i class="fas fa-graduation-cap"></i>
+            دوره تخصصی آکادمی آرایان
+        </div>
 
-            <div class="card shadow-lg border-0" style="border-radius: 15px;">
+        <h1 class="course-details-title">
+            @Model.Course.Title
+        </h1>
 
-                <!-- تصویر -->
-                <img src="/assets/img/course/course2.jpg"
-                     class="course-img-top"
-                     alt="@Model.Course.Title">
+        <p class="course-details-subtitle">
+            مسیر یادگیری خود را با آموزش پروژه‌محور و تخصصی آکادمی آرایان آغاز کنید.
+        </p>
 
-                <div class="card-body px-4 py-5">
+    </div>
+    <!-- Main Course Box -->
+    <div class="course-details-box">
 
-                    <!-- عنوان -->
-                    <h3 class="fw-bold text-center mb-4" style="color:#333;">
-                        @Model.Course.Title
-                    </h3>
+        <!-- Course Image -->
+        <div class="course-image-wrapper">
 
-                    <!-- توضیحات -->
-                    <div class="course-content">
+            <img src="/assets/img/hero/Arayan-Hero2.jpg"
+                 class="course-image"
+                 alt="@Model.Course.Title">
 
-                        <p style="text-align: justify; direction: rtl;">
-                            در این دوره با فراگیری آموزش‌ها لازم، قادر به طراحی وب‌سایت و اپلیکیشن در پلتفرم Asp.Net خواهید شد.
-                            برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
-                        </p>
+        </div>
 
 
-                        <ul>
-                            <li>زبان برنامه‌نویسی پیشرفته #C</li>
-                            <li>مفاهیم داده و SQL</li>
-                            <li>MVC – Razor – Entity Framework</li>
-                            <li>سایر مفاهیم تخصصی و پیشرفته</li>
-                        </ul>
+        <!-- Content -->
+        <div class="course-details-content">
 
-                        <div class="highlight-box">
-                            <span class="section-title">نحوه برگزاری دوره</span>
+            <p class="course-description">
 
-                            <p>
-                                <i class="fas fa-check-circle me-1"></i>یک جلسه برای سطح‌سنجی برگزار می‌شود.<br>
-                                <i class="fas fa-check-circle me-1"></i>دوره در دو سطح مقدماتی و پیشرفته برگزار می‌گردد.<br>
-                                <i class="fas fa-check-circle me-1"></i> کل دوره مقدماتی و پیشرفته  طی 24 جلسه برگزار می‌گردد.<br>
-                                <i class="fas fa-check-circle me-1"></i>کلاس‌ها به صورت آنلاین یا حضوری بنا به انتخاب شما برگزار می گردد.<br>
-                                <i class="fas fa-check-circle me-1"></i>مدت هر جلسه 75 دقیقه است.<br>
-                                <i class="fas fa-check-circle me-1"></i>هر هفته سه جلسه برگزار می گردد.<br>
-                            
-                            </p>
-                        </div>
+                در این دوره با فراگیری آموزش‌های لازم، قادر به طراحی وب‌سایت و
+                اپلیکیشن در پلتفرم ASP.NET خواهید شد.
+                برای رسیدن به این هدف شما نیازمند یادگیری موارد زیر هستید:
 
-                        <div class="highlight-box">
-                            <span class="section-title">هزینه دوره</span>
+            </p>
 
-                            <p>
-                                <i class="fas fa-check-circle me-1"></i>برای اطلاع از هزینه دوره و بهرمندی از تخفیف ویژه لطفا با آکادمی / مدرس تماس حاصل نمایید. .<br>
-                                <i class="fas fa-check-circle me-1"></i>امکان پرداخت هزینه دوره طی 2 قسط
-                            </p>
-                        </div>
-                    </div>
 
-                    <div class="d-flex justify-content-center mt-4">
+            <!-- Course Topics -->
+            <div class="course-info-box">
 
-                        @if (Model.IsEnrolled)
-                        {
-                            <button class="btn btn-success enrolled-btn px-4" disabled>
-                                شما با موفقیت در این دوره ثبت نام کرده‌اید
-                                <i class="fas fa-check-circle me-1"></i>
-                            </button>
-                        }
-                        else
-                        {
-                            <a id="enrollBtn"
-                               class="btn btn-primary px-5 py-2"
-                               style="font-size:16px; font-weight:600;"
-                               href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
-                                ثبت‌نام در دوره
-                            </a>
-                        }
+                <div class="course-info-title">
 
-                    </div>
+                    <i class="fas fa-code"></i>
 
+                    سرفصل‌های اصلی دوره
 
                 </div>
+
+                <ul class="course-content-list">
+
+                    <li>
+                        زبان برنامه‌نویسی پیشرفته #C
+                    </li>
+
+                    <li>
+                        مفاهیم داده و SQL
+                    </li>
+
+                    <li>
+                        MVC – Razor – Entity Framework
+                    </li>
+
+                    <li>
+                        سایر مفاهیم تخصصی و پیشرفته
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- How Course Is Held -->
+            <div class="course-info-box">
+
+                <div class="course-info-title">
+
+                    <i class="fas fa-chalkboard-teacher"></i>
+
+                    نحوه برگزاری دوره
+
+                </div>
+
+                <ul class="course-content-list">
+
+                    <li>
+                        یک جلسه برای سطح‌سنجی برگزار می‌شود.
+                    </li>
+
+                    <li>
+                        دوره در دو سطح مقدماتی و پیشرفته برگزار می‌گردد.
+                    </li>
+
+                    <li>
+                        کل دوره مقدماتی و پیشرفته طی 24 جلسه برگزار می‌گردد.
+                    </li>
+
+                    <li>
+                        کلاس‌ها به صورت آنلاین یا حضوری بنا به انتخاب شما برگزار می‌گردد.
+                    </li>
+
+                    <li>
+                        مدت هر جلسه 75 دقیقه است.
+                    </li>
+
+                    <li>
+                        هر هفته سه جلسه برگزار می‌گردد.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- Price -->
+            <div class="course-info-box">
+
+                <div class="course-info-title">
+
+                    <i class="fas fa-wallet"></i>
+
+                    هزینه دوره
+
+                </div>
+
+                <ul class="course-content-list">
+
+                    <li>
+                        برای اطلاع از هزینه دوره و بهره‌مندی از تخفیف ویژه،
+                        لطفاً با آکادمی / مدرس تماس حاصل نمایید.
+                    </li>
+
+                    <li>
+                        امکان پرداخت هزینه دوره طی 2 قسط وجود دارد.
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+            <!-- Register -->
+            <div class="course-register-area">
+
+                @if (Model.IsEnrolled)
+                {
+                    <div class="course-enrolled">
+
+                        <i class="fas fa-check-circle"></i>
+
+                        شما با موفقیت در این دوره ثبت‌نام کرده‌اید
+
+                    </div>
+                }
+                else
+                {
+                    <p class="course-register-text">
+                        آماده شروع مسیر حرفه‌ای خود هستید؟
+                    </p>
+
+                    <a class="course-register-btn"
+                       href="@Url.Action("Enroll", "Course", new { courseId = Model.Course.Id })">
+
+                        ثبت‌نام در دوره
+
+                        <i class="fas fa-arrow-left"></i>
+
+                    </a>
+                }
 
             </div>
 
@@ -150,37 +546,3 @@
     </div>
 
 </div>
-
-
-
-
-<!-- اسکریپت فعال‌سازی دکمه بعد از تیک زدن -->
-<script>
-    const checkbox = document.getElementById("acceptRules");
-    const enrollBtn = document.getElementById("enrollBtn");
-    const rulesWarning = document.getElementById("rulesWarning");
-
-    if (checkbox) {
-
-        checkbox.addEventListener("change", function () {
-            if (this.checked) {
-                enrollBtn.classList.remove("disabled");
-                enrollBtn.style.pointerEvents = "auto";
-                enrollBtn.style.opacity = "1";
-                rulesWarning.classList.add("d-none");
-            } else {
-                enrollBtn.classList.add("disabled");
-                enrollBtn.style.pointerEvents = "none";
-                enrollBtn.style.opacity = "0.55";
-            }
-        });
-
-        enrollBtn.addEventListener("click", function (e) {
-            if (!checkbox.checked) {
-                e.preventDefault();
-                rulesWarning.classList.remove("d-none");
-            }
-        });
-
-    }
-</script>

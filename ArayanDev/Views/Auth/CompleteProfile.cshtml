@@ -1,203 +1,869 @@
 ﻿@model Business.Handlers.UserProfiles.Commands.CompleteProfileModel
 
-
 @{
     ViewData["Title"] = "تکمیل پروفایل";
 }
 
-<div class="container py-5" style="max-width:700px">
+<style>
 
-    <div class="card shadow border-0">
-        <div class="card-body p-4">
+    /* =========================================
+           Complete Profile Page
+           ========================================= */
 
-            <h3 class="text-center mb-4 fw-bold">
-                تکمیل پروفایل کاربری
-            </h3>
+    .profile-page {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px 20px 70px;
+        direction: rtl;
+    }
 
-            <form asp-controller="Auth"
-                  asp-action="CompleteProfile"
-                  asp-route-returnUrl="@ViewBag.ReturnUrl"
-                  method="post"
-                  enctype="multipart/form-data">
+    /* =========================================
+           Header
+           ========================================= */
+
+    .profile-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+        .profile-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient( 90deg, #00f0ff, #ff00d4 );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .profile-header p {
+            color: rgba(255,255,255,.55);
+            font-size: 14px;
+            margin: 0;
+        }
+
+    /* =========================================
+           Main Glass Box
+           ========================================= */
+
+    .profile-box {
+        position: relative;
+        overflow: hidden;
+        background: rgba(15,20,35,.76);
+        border: 1px solid rgba(0,240,255,.14);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 0 40px rgba(0,240,255,.04);
+    }
+
+        .profile-box::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            top: -120px;
+            left: -100px;
+            background: radial-gradient( circle, rgba(0,240,255,.14), transparent 70% );
+            pointer-events: none;
+        }
+
+        .profile-box::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            bottom: -120px;
+            right: -100px;
+            background: radial-gradient( circle, rgba(255,0,212,.12), transparent 70% );
+            pointer-events: none;
+        }
+
+    /* =========================================
+           Validation
+           ========================================= */
+
+    .profile-validation {
+        position: relative;
+        z-index: 3;
+        background: rgba(255,70,100,.08);
+        border: 1px solid rgba(255,70,100,.22);
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-bottom: 25px;
+        color: #ff8b9b;
+    }
+
+    /* =========================================
+           Form Groups
+           ========================================= */
+
+    .profile-field {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 22px;
+    }
+
+    .profile-label {
+        display: block;
+        color: rgba(255,255,255,.72);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .profile-input,
+    .profile-select {
+        width: 100%;
+        min-height: 48px;
+        padding: 11px 14px;
+        background: rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.10);
+        border-radius: 11px;
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: border-color .3s ease, box-shadow .3s ease, background .3s ease;
+    }
+
+        .profile-input::placeholder {
+            color: rgba(255,255,255,.3);
+        }
+
+        .profile-input:focus,
+        .profile-select:focus {
+            background: rgba(255,255,255,.055);
+            border-color: rgba(0,240,255,.55);
+            box-shadow: 0 0 0 3px rgba(0,240,255,.08), 0 0 20px rgba(0,240,255,.05);
+            color: #fff;
+        }
+
+        /* Select options */
+
+        .profile-select option {
+            background: #101525;
+            color: #fff;
+        }
+
+    /* Validation text */
+
+    .field-validation-error,
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        color: #ff718d !important;
+        font-size: 12px;
+    }
+
+    /* =========================================
+           Birth Date
+           ========================================= */
+
+    .birth-date-row {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr 1fr;
+        gap: 8px;
+    }
+
+    /* =========================================
+           Section Divider
+           ========================================= */
+
+    .profile-section-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0 25px;
+        color: #00f0ff;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+        .profile-section-title::after {
+            content: "";
+            height: 1px;
+            flex: 1;
+            background: linear-gradient( 90deg, rgba(0,240,255,.25), transparent );
+        }
+
+    /* =========================================
+           Profile Image Preview
+           ========================================= */
+
+    .profile-image-area {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        margin: 15px 0 25px;
+    }
+
+    .profile-image-wrapper {
+        width: 180px;
+        height: 180px;
+        margin: 0 auto 18px;
+        border-radius: 50%;
+        padding: 4px;
+        background: linear-gradient( 135deg, #00f0ff, #ff00d4 );
+        box-shadow: 0 0 25px rgba(0,240,255,.12), 0 0 35px rgba(255,0,212,.08);
+    }
+
+    .profile-image-inner {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        overflow: hidden;
+        background: #101525;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #imagePreview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: none;
+    }
+
+    #previewText {
+        color: rgba(255,255,255,.4);
+        font-size: 13px;
+    }
+
+    .profile-upload-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(0,240,255,.2);
+        background: rgba(0,240,255,.04);
+        color: rgba(255,255,255,.75);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .3s ease;
+    }
+
+        .profile-upload-label:hover {
+            color: #fff;
+            border-color: rgba(0,240,255,.55);
+            background: rgba(0,240,255,.08);
+            transform: translateY(-2px);
+        }
+
+    #profileImageInput {
+        display: none;
+    }
+
+    /* =========================================
+           Submit Button
+           ========================================= */
+
+    .profile-submit-wrapper {
+        position: relative;
+        z-index: 3;
+        margin-top: 30px;
+    }
+
+    .profile-submit-btn {
+        width: 100%;
+        min-height: 52px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient( 90deg, #00f0ff, #ff00d4 );
+        color: #061018;
+        font-size: 15px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: all .3s ease;
+        box-shadow: 0 8px 25px rgba(0,240,255,.12);
+    }
+
+        .profile-submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,240,255,.22), 0 0 25px rgba(255,0,212,.08);
+        }
+
+    /* =========================================
+           Mobile
+           ========================================= */
+
+    @@media (max-width: 768px) {
+
+        .profile-page {
+            padding: 20px 14px 50px;
+        }
+
+        .profile-box {
+            padding: 25px 18px;
+            border-radius: 20px;
+        }
+
+        .profile-header h2 {
+            font-size: 25px;
+        }
+
+        .birth-date-row {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .profile-image-wrapper {
+            width: 155px;
+            height: 155px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+
+        .profile-box {
+            padding: 22px 14px;
+        }
+
+        .profile-header h2 {
+            font-size: 23px;
+        }
+
+        .profile-input,
+        .profile-select {
+            min-height: 46px;
+            font-size: 13px;
+        }
+
+        .profile-image-wrapper {
+            width: 145px;
+            height: 145px;
+        }
+    }
+
+</style>
 
 
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="profile-page">
 
-                <div class="row">
+    <!-- =====================================
+         Header
+         ===================================== -->
 
-                    <!-- Name -->
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Name" class="form-label">نام</label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
+    <div class="profile-header">
 
-                    <!-- Family -->
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Family" class="form-label">نام خانوادگی</label>
-                        <input asp-for="Family" class="form-control" />
-                        <span asp-validation-for="Family" class="text-danger"></span>
-                    </div>
+        <h2>
+            تکمیل پروفایل کاربری
+        </h2>
 
-                    <!-- NationalCode -->
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="NationalCode" class="form-label">کد ملی</label>
-                        <input asp-for="NationalCode" class="form-control" maxlength="10" />
-                        <span asp-validation-for="NationalCode" class="text-danger"></span>
-                    </div>
+        <p>
+            اطلاعات خود را تکمیل کنید تا بتوانید از امکانات آکادمی استفاده کنید.
+        </p>
+
+    </div>
 
 
-                    <!-- BirthDay -->
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">تاریخ تولد</label>
+    <!-- =====================================
+         Main Box
+         ===================================== -->
 
-                        <div class="row g-2">
-                            <div class="col-4">
-                                <select asp-for="BirthDayDay" class="form-select">
-                                    <option value="">روز</option>
-                                    @for (int day = 1; day <= 31; day++)
-                                    {
-                                        <option value="@day">@day</option>
-                                    }
-                                </select>
-                            </div>
+    <div class="profile-box">
 
-                            <div class="col-4">
-                                <select asp-for="BirthDayMonth" class="form-select">
-                                    <option value="">ماه</option>
-                                    <option value="1">فروردین</option>
-                                    <option value="2">اردیبهشت</option>
-                                    <option value="3">خرداد</option>
-                                    <option value="4">تیر</option>
-                                    <option value="5">مرداد</option>
-                                    <option value="6">شهریور</option>
-                                    <option value="7">مهر</option>
-                                    <option value="8">آبان</option>
-                                    <option value="9">آذر</option>
-                                    <option value="10">دی</option>
-                                    <option value="11">بهمن</option>
-                                    <option value="12">اسفند</option>
-                                </select>
-                            </div>
+        <form asp-controller="Auth"
+              asp-action="CompleteProfile"
+              asp-route-returnUrl="@ViewBag.ReturnUrl"
+              method="post"
+              enctype="multipart/form-data">
 
-                            <div class="col-4">
-                                <select asp-for="BirthDayYear" class="form-select">
-                                    <option value="">سال</option>
-                                    @for (int year = 1405; year >= 1320; year--)
-                                    {
-                                        <option value="@year">@year</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
+            @Html.AntiForgeryToken()
 
-                        <span asp-validation-for="BirthDayDay" class="text-danger d-block"></span>
-                        <span asp-validation-for="BirthDayMonth" class="text-danger d-block"></span>
-                        <span asp-validation-for="BirthDayYear" class="text-danger d-block"></span>
+            <!-- Validation -->
 
-                        @if (ViewData.ModelState["BirthDay"]?.Errors.Count > 0)
-                        {
-                            <span class="text-danger d-block">
-                                @ViewData.ModelState["BirthDay"]?.Errors.First().ErrorMessage
-                            </span>
-                        }
-                    </div>
+            <div asp-validation-summary="ModelOnly"
+                 class="profile-validation">
+            </div>
 
 
-                    <!-- City -->
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="City" class="form-label">شهر</label>
-                        <input asp-for="City" class="form-control" />
-                        <span asp-validation-for="City" class="text-danger"></span>
-                    </div>
+            <!-- =================================
+                 Personal Information
+                 ================================= -->
 
-                    <!-- Education -->
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="EducationDegree" class="form-label">مدرک تحصیلی</label>
-                        <input asp-for="EducationDegree" class="form-control" />
-                        <span asp-validation-for="EducationDegree" class="text-danger"></span>
-                    </div>
+            <div class="profile-section-title">
 
-                    <!-- Major -->
-                    <div class="col-md-12 mb-3">
-                        <label asp-for="Major" class="form-label">رشته تحصیلی</label>
-                        <input asp-for="Major" class="form-control" />
-                        <span asp-validation-for="Major" class="text-danger"></span>
-                    </div>
-                    <!-- Address -->
-                    <div class="col-md-6 mb-3">
-                        <label asp-for="Address" class="form-label">آدرس</label>
-                        <input asp-for="Address" class="form-control" />
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
-                    <!-- Email -->
-                    <div class="col-md-12 mb-3">
-                        <label asp-for="Email" class="form-label">ایمیل (اختیاری)</label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                  
+                <i class="fas fa-user"></i>
 
-                    <div class="col-md-12 text-center mb-3">
-                        <div style="width:200px;height:200px;border-radius:50%;overflow:hidden;
-                border:2px solid #ddd;margin:auto;background:#f8f9fa;">
-                            <img id="imagePreview"
-                                 src="/images/default-avatar.png"
-                                 style="width:100%;height:100%;object-fit:cover;display:none;" />
-                            <span id="previewText" style="color:#888;">پیش‌نمایش عکس</span>
-                        </div>
-                    </div>
+                اطلاعات شخصی
 
-                    <div class="col-md-12 mb-3">
-                        <label asp-for="ProfileImage" class="form-label">عکس پروفایل</label>
-                        <input asp-for="ProfileImage"
-                               id="profileImageInput"
-                               type="file"
-                               class="form-control"
-                               accept="image/*" />
-                        <span asp-validation-for="ProfileImage" class="text-danger"></span>
+            </div>
+
+
+            <div class="row">
+
+
+                <!-- Name -->
+
+                <div class="col-md-6">
+
+                    <div class="profile-field">
+
+                        <label asp-for="Name"
+                               class="profile-label">
+
+                            نام
+
+                        </label>
+
+                        <input asp-for="Name"
+                               class="profile-input"
+                               placeholder="نام خود را وارد کنید" />
+
+                        <span asp-validation-for="Name"
+                              class="text-danger">
+                        </span>
+
                     </div>
 
                 </div>
-                <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
-                <button type="submit" class="btn btn-primary w-100 mt-3 py-2 fw-bold">
-                    ذخیره اطلاعات
+
+
+                <!-- Family -->
+
+                <div class="col-md-6">
+
+                    <div class="profile-field">
+
+                        <label asp-for="Family"
+                               class="profile-label">
+
+                            نام خانوادگی
+
+                        </label>
+
+                        <input asp-for="Family"
+                               class="profile-input"
+                               placeholder="نام خانوادگی خود را وارد کنید" />
+
+                        <span asp-validation-for="Family"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- National Code -->
+
+                <div class="col-md-6">
+
+                    <div class="profile-field">
+
+                        <label asp-for="NationalCode"
+                               class="profile-label">
+
+                            کد ملی
+
+                        </label>
+
+                        <input asp-for="NationalCode"
+                               class="profile-input"
+                               maxlength="10"
+                               placeholder="کد ملی ۱۰ رقمی" />
+
+                        <span asp-validation-for="NationalCode"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- City -->
+
+                <div class="col-md-6">
+
+                    <div class="profile-field">
+
+                        <label asp-for="City"
+                               class="profile-label">
+
+                            شهر
+
+                        </label>
+
+                        <input asp-for="City"
+                               class="profile-input"
+                               placeholder="شهر محل سکونت" />
+
+                        <span asp-validation-for="City"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     Birth Date
+                     ================================= -->
+
+                <div class="col-md-12">
+
+                    <div class="profile-field">
+
+                        <label class="profile-label">
+
+                            تاریخ تولد
+
+                        </label>
+
+
+                        <div class="birth-date-row">
+
+                            <!-- Day -->
+
+                            <select asp-for="BirthDayDay"
+                                    class="profile-select">
+
+                                <option value="">
+                                    روز
+                                </option>
+
+                                @for (int day = 1; day <= 31; day++)
+                                {
+                                    <option value="@day">
+                                        @day
+                                    </option>
+                                }
+
+                            </select>
+
+
+                            <!-- Month -->
+
+                            <select asp-for="BirthDayMonth"
+                                    class="profile-select">
+
+                                <option value="">
+                                    ماه
+                                </option>
+
+                                <option value="1">فروردین</option>
+                                <option value="2">اردیبهشت</option>
+                                <option value="3">خرداد</option>
+                                <option value="4">تیر</option>
+                                <option value="5">مرداد</option>
+                                <option value="6">شهریور</option>
+                                <option value="7">مهر</option>
+                                <option value="8">آبان</option>
+                                <option value="9">آذر</option>
+                                <option value="10">دی</option>
+                                <option value="11">بهمن</option>
+                                <option value="12">اسفند</option>
+
+                            </select>
+
+
+                            <!-- Year -->
+
+                            <select asp-for="BirthDayYear"
+                                    class="profile-select">
+
+                                <option value="">
+                                    سال
+                                </option>
+
+                                @for (int year = 1405; year >= 1320; year--)
+                                {
+                                    <option value="@year">
+                                        @year
+                                    </option>
+                                }
+
+                            </select>
+
+                        </div>
+
+
+                        <span asp-validation-for="BirthDayDay"
+                              class="text-danger">
+                        </span>
+
+                        <span asp-validation-for="BirthDayMonth"
+                              class="text-danger">
+                        </span>
+
+                        <span asp-validation-for="BirthDayYear"
+                              class="text-danger">
+                        </span>
+
+
+                        @if (ViewData.ModelState["BirthDay"]?.Errors.Count > 0)
+                        {
+                            <span class="text-danger">
+
+                                @ViewData.ModelState["BirthDay"]?
+                                .Errors.First().ErrorMessage
+
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- Education -->
+
+                <div class="col-md-6">
+
+                    <div class="profile-field">
+
+                        <label asp-for="EducationDegree"
+                               class="profile-label">
+
+                            مدرک تحصیلی
+
+                        </label>
+
+                        <input asp-for="EducationDegree"
+                               class="profile-input"
+                               placeholder="مثلاً دیپلم، کارشناسی..." />
+
+                        <span asp-validation-for="EducationDegree"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Major -->
+
+                <div class="col-md-6">
+
+                    <div class="profile-field">
+
+                        <label asp-for="Major"
+                               class="profile-label">
+
+                            رشته تحصیلی
+
+                        </label>
+
+                        <input asp-for="Major"
+                               class="profile-input"
+                               placeholder="رشته تحصیلی" />
+
+                        <span asp-validation-for="Major"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Address -->
+
+                <div class="col-md-12">
+
+                    <div class="profile-field">
+
+                        <label asp-for="Address"
+                               class="profile-label">
+
+                            آدرس
+
+                        </label>
+
+                        <input asp-for="Address"
+                               class="profile-input"
+                               placeholder="آدرس محل سکونت" />
+
+                        <span asp-validation-for="Address"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+
+                <div class="col-md-12">
+
+                    <div class="profile-field">
+
+                        <label asp-for="Email"
+                               class="profile-label">
+
+                            ایمیل
+                            <span style="color:rgba(255,255,255,.35);">
+                                (اختیاری)
+                            </span>
+
+                        </label>
+
+                        <input asp-for="Email"
+                               class="profile-input"
+                               placeholder="example@email.com"
+                               dir="ltr" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 Profile Image
+                 ================================= -->
+
+            <div class="profile-section-title">
+
+                <i class="fas fa-camera"></i>
+
+                تصویر پروفایل
+
+            </div>
+
+
+            <div class="profile-image-area">
+
+                <div class="profile-image-wrapper">
+
+                    <div class="profile-image-inner">
+
+                        <img id="imagePreview"
+                             src=""
+                             alt="پیش‌نمایش تصویر پروفایل" />
+
+                        <span id="previewText">
+                            پیش‌نمایش عکس
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <label for="profileImageInput"
+                       class="profile-upload-label">
+
+                    <i class="fas fa-cloud-upload-alt"></i>
+
+                    انتخاب تصویر پروفایل
+
+                </label>
+
+
+                <input asp-for="ProfileImage"
+                       id="profileImageInput"
+                       type="file"
+                       accept="image/*" />
+
+                <span asp-validation-for="ProfileImage"
+                      class="text-danger">
+                </span>
+
+            </div>
+
+
+            <!-- Return Url -->
+
+            <input type="hidden"
+                   name="returnUrl"
+                   value="@ViewBag.ReturnUrl" />
+
+
+            <!-- =================================
+                 Submit
+                 ================================= -->
+
+            <div class="profile-submit-wrapper">
+
+                <button type="submit"
+                        class="profile-submit-btn">
+
+                    <i class="fas fa-check-circle"></i>
+
+                    ذخیره اطلاعات و تکمیل پروفایل
+
                 </button>
 
-            </form>
+            </div>
 
-        </div>
+
+        </form>
+
     </div>
 
 </div>
 
+
 @section Scripts {
+
     <partial name="_ValidationScriptsPartial" />
 
+
     <script>
-        document.getElementById('profileImageInput')
+
+        document
+            .getElementById('profileImageInput')
             .addEventListener('change', function (event) {
 
-                const file = event.target.files[0];
-                const preview = document.getElementById('imagePreview');
-                const previewText = document.getElementById('previewText');
+                const file =
+                    event.target.files[0];
+
+                const preview =
+                    document.getElementById('imagePreview');
+
+                const previewText =
+                    document.getElementById('previewText');
+
 
                 if (!file) {
+
                     preview.src = '';
+
                     preview.style.display = 'none';
+
                     previewText.style.display = 'block';
+
                     return;
                 }
 
-                const reader = new FileReader();
+
+                const reader =
+                    new FileReader();
+
 
                 reader.onload = function (e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                    previewText.style.display = 'none';
+
+                    preview.src =
+                        e.target.result;
+
+                    preview.style.display =
+                        'block';
+
+                    previewText.style.display =
+                        'none';
+
                 };
 
+
                 reader.readAsDataURL(file);
+
             });
+
     </script>
+
 }

@@ -1,86 +1,439 @@
 ﻿@using Entities.Concrete
-@model Course  
+@model Course
 
 <style>
-    .course-img-top {
-        height: 220px !important;
-        object-fit: cover;
-        border-radius: .75rem .75rem 0 0;
+
+    /* =========================================
+           Course Enrollment
+           ========================================= */
+
+    .enroll-page {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px 20px 70px;
+        direction: rtl;
     }
 
-    .section-title {
-        font-weight: 800;
-        color: #6f42c1;
-        margin-bottom: 10px;
-        display: block;
+    /* Back Button */
+
+    .enroll-back-wrapper {
+        margin-bottom: 35px;
+        text-align: right;
+    }
+
+    .enroll-back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        direction: rtl;
+    }
+
+    /* Header */
+
+    .enroll-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+        .enroll-header h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            background: linear-gradient( 90deg, #00f0ff, #ff00d4 );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .enroll-header p {
+            color: rgba(255,255,255,.55);
+            font-size: 14px;
+            margin: 0;
+        }
+
+    /* Main Glass Box */
+
+    .enroll-box {
+        position: relative;
+        overflow: hidden;
+        background: rgba(15, 20, 35, .72);
+        border: 1px solid rgba(0, 240, 255, .14);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        box-shadow: 0 20px 60px rgba(0,0,0,.25), 0 0 40px rgba(0,240,255,.04);
+    }
+
+        /* Decorative glow */
+
+        .enroll-box::before {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            top: -90px;
+            left: -90px;
+            background: radial-gradient( circle, rgba(0,240,255,.15), transparent 70% );
+            pointer-events: none;
+        }
+
+        .enroll-box::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            bottom: -100px;
+            right: -90px;
+            background: radial-gradient( circle, rgba(255,0,212,.14), transparent 70% );
+            pointer-events: none;
+        }
+
+    /* Warning */
+
+    .enroll-warning {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(255,193,7,.07);
+        border: 1px solid rgba(255,193,7,.2);
+        border-radius: 14px;
+        padding: 16px 20px;
+        margin-bottom: 30px;
+        color: rgba(255,255,255,.75);
+        font-size: 14px;
+        line-height: 1.9;
+    }
+
+        .enroll-warning i {
+            color: #ffc107;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+    /* Course Information */
+
+    .course-info-box {
+        position: relative;
+        z-index: 2;
+        background: rgba(255,255,255,.025);
+        border: 1px solid rgba(255,255,255,.08);
+        border-radius: 18px;
+        padding: 25px;
+        margin-bottom: 30px;
+    }
+
+    .course-info-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #00f0ff;
         font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 22px;
     }
 
-    .highlight-box {
-        background: #f8f6ff;
-        border-right: 4px solid #6f42c1;
-        padding: 15px 18px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        .course-info-title i {
+            font-size: 18px;
+        }
+
+    .course-info-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        font-size: 14px;
     }
+
+        .course-info-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+    .course-info-label {
+        color: rgba(255,255,255,.5);
+    }
+
+    .course-info-value {
+        color: #fff;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    .course-price-free {
+        color: #00e6a7;
+        font-weight: 800;
+    }
+
+    .course-price {
+        color: #00f0ff;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    /* Buttons */
+
+    .enroll-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin-top: 35px;
+        position: relative;
+        z-index: 5;
+    }
+
+    .confirm-enroll-btn {
+        border: none;
+        border-radius: 12px;
+        padding: 13px 30px;
+        color: #061018;
+        font-size: 14px;
+        font-weight: 800;
+        cursor: pointer;
+        background: linear-gradient( 90deg, #00f0ff, #00d9ff );
+        box-shadow: 0 8px 25px rgba(0,240,255,.15);
+        transition: all .3s ease;
+    }
+
+        .confirm-enroll-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0,240,255,.28);
+        }
+
+    .cancel-enroll-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border: 1px solid rgba(255,255,255,.15);
+        background: rgba(255,255,255,.04);
+        color: rgba(255,255,255,.7);
+        border-radius: 12px;
+        padding: 12px 25px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all .3s ease;
+    }
+
+        .cancel-enroll-btn:hover {
+            color: #fff;
+            border-color: rgba(255,0,212,.35);
+            background: rgba(255,0,212,.07);
+            transform: translateY(-3px);
+        }
+
+
+    /* =========================================
+           Mobile
+           ========================================= */
+
+    @@media (max-width: 768px) {
+
+        .enroll-page {
+            padding: 15px 15px 50px;
+        }
+
+        .enroll-header h2 {
+            font-size: 25px;
+        }
+
+        .enroll-box {
+            padding: 25px 18px;
+            border-radius: 20px;
+        }
+
+        .enroll-warning {
+            font-size: 13px;
+            padding: 14px;
+        }
+
+        .course-info-box {
+            padding: 20px 16px;
+        }
+
+        .course-info-row {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .course-info-value {
+            text-align: right;
+        }
+
+        .enroll-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .confirm-enroll-btn,
+        .cancel-enroll-btn {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+        }
+    }
+
 </style>
 
-<div class="container my-5 text-end" dir="rtl">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-9">
-            <div class="card shadow-lg border-0" style="border-radius: 15px;">
 
-                <!-- تصویر پیش‌فرض یا اختصاصی دوره -->
-                <img src="/assets/img/course/course2.jpg"
-                     class="course-img-top"
-                     alt="@Model.Title">
+<div class="enroll-page">
 
-                <div class="card-body px-4 py-5">
-                    <!-- عنوان -->
-                    <h3 class="fw-bold text-center mb-4" style="color:#333;">
-                        تایید نهایی ثبت‌نام
-                    </h3>
+    <!-- =====================================
+         Back
+         ===================================== -->
 
-                    <div class="alert alert-warning text-center mb-4" role="alert">
-                        شما در حال نهایی کردن فرآیند ثبت‌نام در دوره زیر هستید. لطفا اطلاعات را بررسی نمایید.
-                    </div>
+    <div class="enroll-back-wrapper">
 
-                    <div class="highlight-box">
-                        <span class="section-title">مشخصات دوره انتخابی</span>
-                        <p class="mb-2"><strong>عنوان دوره:</strong> @Model.Title</p>
-                        
-                        <p class="mb-0">
-                            <strong>هزینه دوره:</strong> 
-                            @if (Model.IsFree || Model.Price == 0)
-                            {
-                                <span class="text-success fw-bold">رایگان</span>
-                            }
-                            else
-                            {
-                                <span class="fw-bold text-dark">@Model.Price.ToString("N0") تومان</span>
-                            }
-                        </p>
-                    </div>
+        <button class="back-btn enroll-back-btn"
+                onclick="history.back()">
 
-                    <!-- دکمه‌های تایید و انصراف -->
-                    <div class="d-flex justify-content-center gap-3 mt-4">
-                        <form asp-controller="Course" asp-action="ConfirmEnroll" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="courseId" value="@Model.Id" />
-                            
-                            <button type="submit" class="btn btn-success px-5 py-2 fw-bold" style="font-size:16px;">
-                                تایید و ثبت‌نام نهایی <i class="fas fa-check-circle ms-1"></i>
-                            </button>
-                        </form>
+            ← بازگشت به دوره
 
-                        <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.Id" 
-                           class="btn btn-outline-secondary px-4 py-2">
-                            انصراف و بازگشت
-                        </a>
-                    </div>
+        </button>
 
-                </div>
-            </div>
-        </div>
     </div>
+
+
+    <!-- =====================================
+         Header
+         ===================================== -->
+
+    <div class="enroll-header">
+
+        <h2>
+            تایید نهایی ثبت‌نام
+        </h2>
+
+        <p>
+            لطفاً اطلاعات دوره را بررسی کرده و ثبت‌نام خود را نهایی کنید.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================
+         Main Box
+         ===================================== -->
+
+    <div class="enroll-box">
+
+
+        <!-- Warning -->
+
+        <div class="enroll-warning">
+
+            <i class="fas fa-exclamation-circle"></i>
+
+            <span>
+                شما در حال نهایی کردن فرآیند ثبت‌نام در دوره زیر هستید.
+                لطفاً اطلاعات دوره را با دقت بررسی نمایید.
+            </span>
+
+        </div>
+
+
+        <!-- Course Information -->
+
+        <div class="course-info-box">
+
+            <div class="course-info-title">
+
+                <i class="fas fa-graduation-cap"></i>
+
+                <span>
+                    مشخصات دوره انتخابی
+                </span>
+
+            </div>
+
+
+            <div class="course-info-row">
+
+                <span class="course-info-label">
+                    عنوان دوره
+                </span>
+
+                <span class="course-info-value">
+                    @Model.Title
+                </span>
+
+            </div>
+
+
+            <div class="course-info-row">
+
+                <span class="course-info-label">
+                    هزینه دوره
+                </span>
+
+                <span class="course-info-value">
+
+                    @if (Model.IsFree || Model.Price == 0)
+                    {
+                        <span class="course-price-free">
+                            رایگان
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="course-price">
+                            @Model.Price.ToString("N0") تومان
+                        </span>
+                    }
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Actions -->
+
+        <div class="enroll-actions">
+
+            <form asp-controller="Course"
+                  asp-action="ConfirmEnroll"
+                  method="post">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden"
+                       name="courseId"
+                       value="@Model.Id" />
+
+                <button type="submit"
+                        class="confirm-enroll-btn">
+
+                    تایید و ثبت‌نام نهایی
+
+                    <i class="fas fa-check-circle"></i>
+
+                </button>
+
+            </form>
+
+
+            <a asp-controller="Course"
+               asp-action="Details"
+               asp-route-id="@Model.Id"
+               class="cancel-enroll-btn">
+
+                انصراف و بازگشت
+
+                <i class="fas fa-arrow-right"></i>
+
+            </a>
+
+        </div>
+
+
+    </div>
+
 </div>

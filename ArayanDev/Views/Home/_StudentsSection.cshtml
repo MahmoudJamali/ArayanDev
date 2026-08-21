@@ -238,10 +238,10 @@
 
                         <img class="student-img"
                              src="@(string.IsNullOrWhiteSpace(item.ProfileImage)
-                                      ? "/uploads/profile/DefaultStudentProfile.png"
+                                      ? "/uploads/profile/SocialLogo.png"
                                       : item.ProfileImage)"
                              alt="@($"{item.Name} {item.Family}")"
-                             onerror="this.onerror=null;this.src='/uploads/profile/DefaultStudentProfile.png';" />
+                             onerror="this.onerror=null;this.src='/uploads/profile/SocialLogo.png';" />
 
                         <div class="student-name">
                             @item.Name @item.Family
